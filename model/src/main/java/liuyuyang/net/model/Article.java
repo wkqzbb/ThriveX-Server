@@ -24,7 +24,7 @@ public class Article {
     @ApiModelProperty(value = "文章主要内容", example = "示例文章内容", required = true)
     private String content;
 
-    @ApiModelProperty(value = "文章封面链接", example = "/images/example.jpg")
+    @ApiModelProperty(value = "文章封面链接", example = "/images/example.jpg", required = true)
     private String cover;
 
     @ApiModelProperty(value = "文章浏览量", example = "100")
@@ -33,7 +33,7 @@ public class Article {
     @ApiModelProperty(value = "文章评论数量", example = "20")
     private Integer comment;
 
-    @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3")
+    @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3", required = true)
     private String cids;
 
     @ApiModelProperty(value = "文章标签", example = "Java, Spring")
