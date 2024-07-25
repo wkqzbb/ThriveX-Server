@@ -2,9 +2,10 @@ package liuyuyang.net.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import liuyuyang.net.model.Cate;
+import liuyuyang.net.model.Link;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface LinkMapper extends BaseMapper<Cate> {
+public interface LinkMapper extends BaseMapper<Link> {
 
 }
