@@ -3,7 +3,7 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liuyuyang.net.execption.GuiguException;
+import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.mapper.CateMapper;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.service.CateService;
@@ -29,7 +29,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
 
         // 删除之前先判断该数据中是否绑定了其他数据
         if (!data.isEmpty()) {
-            throw new GuiguException(400, "ID为：" + cid + "的分类中绑定了 " + data.size() + " 个二级分类，请解绑后重试");
+            throw new YuYangException(400, "ID为：" + cid + "的分类中绑定了 " + data.size() + " 个二级分类，请解绑后重试");
         }
 
         return true;

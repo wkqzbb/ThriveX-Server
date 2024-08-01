@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.execption.GuiguException;
+import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.CateService;
@@ -33,23 +33,23 @@ public class CateController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new GuiguException(400, e.getMessage());
+            throw new YuYangException(400, e.getMessage());
         }
     }
 
-    @DeleteMapping("/{cid}")
+    @DeleteMapping("/{id}")
     @ApiOperation("删除分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
-    public Result<String> del(@PathVariable Integer cid) {
+    public Result<String> del(@PathVariable Integer id) {
         // 判断该分类中是否绑定了二级分类
-        boolean e = cateService.exist(cid);
+        boolean e = cateService.exist(id);
 
         if (!e) return Result.error();
 
-        Cate data = cateService.getById(cid);
+        Cate data = cateService.getById(id);
         if (data == null) return Result.error("该数据不存在");
 
-        Boolean res = cateService.removeById(cid);
+        Boolean res = cateService.removeById(id);
 
         return res ? Result.success() : Result.error();
     }
@@ -57,8 +57,8 @@ public class CateController {
     @DeleteMapping("/batch")
     @ApiOperation("批量删除分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-    public Result batchDel(@RequestBody List<Integer> cids) {
-        for (Integer id : cids) {
+    public Result batchDel(@RequestBody List<Integer> ids) {
+        for (Integer id : ids) {
             boolean e = cateService.exist(id);
 
             if (!e) return Result.error();
@@ -78,15 +78,15 @@ public class CateController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new GuiguException(400, e.getMessage());
+            throw new YuYangException(400, e.getMessage());
         }
     }
 
-    @GetMapping("/{cid}")
+    @GetMapping("/{id}")
     @ApiOperation("获取分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<Cate> get(@PathVariable Integer cid) {
-        Cate data = cateService.getById(cid);
+    public Result<Cate> get(@PathVariable Integer id) {
+        Cate data = cateService.getById(id);
         return Result.success(data);
     }
 

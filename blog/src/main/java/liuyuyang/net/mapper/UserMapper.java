@@ -1,7 +1,6 @@
 package liuyuyang.net.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import liuyuyang.net.model.Cate;
 import liuyuyang.net.model.User;
 import org.apache.ibatis.annotations.Mapper;
 

@@ -4,7 +4,7 @@ import lombok.Data;
 
 // 自定义全局异常类
 @Data
-public class GuiguException extends RuntimeException {
+public class YuYangException extends RuntimeException {
 
     private Integer code;
 
@@ -16,7 +16,7 @@ public class GuiguException extends RuntimeException {
      * @param code
      * @param message
      */
-    public GuiguException(Integer code, String message) {
+    public YuYangException(Integer code, String message) {
         super(message);
         this.code = code;
         this.message = message;
@@ -24,7 +24,7 @@ public class GuiguException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "GuliException{" +
+        return "YuYangException{" +
                 "code=" + code +
                 ", message=" + this.getMessage() +
                 '}';

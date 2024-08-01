@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.execption.GuiguException;
+import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.User;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.UserService;
@@ -33,18 +33,18 @@ public class UserController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new GuiguException(400, e.getMessage());
+            throw new YuYangException(400, e.getMessage());
         }
     }
 
-    @DeleteMapping("/{cid}")
+    @DeleteMapping("/{id}")
     @ApiOperation("删除用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
-    public Result<String> del(@PathVariable Integer cid) {
-        User data = userService.getById(cid);
+    public Result<String> del(@PathVariable Integer id) {
+        User data = userService.getById(id);
         if (data == null) return Result.error("该数据不存在");
 
-        Boolean res = userService.removeById(cid);
+        Boolean res = userService.removeById(id);
 
         return res ? Result.success() : Result.error();
     }
@@ -52,8 +52,8 @@ public class UserController {
     @DeleteMapping("/batch")
     @ApiOperation("批量删除用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-    public Result batchDel(@RequestBody List<Integer> cids) {
-        Boolean res = userService.removeByIds(cids);
+    public Result batchDel(@RequestBody List<Integer> ids) {
+        Boolean res = userService.removeByIds(ids);
 
         return res ? Result.success() : Result.error();
     }
@@ -67,15 +67,15 @@ public class UserController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new GuiguException(400, e.getMessage());
+            throw new YuYangException(400, e.getMessage());
         }
     }
 
-    @GetMapping("/{cid}")
+    @GetMapping("/{id}")
     @ApiOperation("获取用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<User> get(@PathVariable Integer cid) {
-        User data = userService.getById(cid);
+    public Result<User> get(@PathVariable Integer id) {
+        User data = userService.getById(id);
         return Result.success(data);
     }
 

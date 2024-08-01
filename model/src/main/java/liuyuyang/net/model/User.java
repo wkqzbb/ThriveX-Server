@@ -19,7 +19,7 @@ public class User {
     private String username;
 
     @ApiModelProperty(value = "用户密码")
-    private Integer password;
+    private String password;
 
     @ApiModelProperty(value = "用户名称", example = "宇阳", required = true)
     private String name;
@@ -31,8 +31,8 @@ public class User {
     private String email;
 
     @ApiModelProperty(value = "用户角色", example = "admin")
-    private Integer role;
+    private String role;
 
     @ApiModelProperty(value = "用户创建时间", example = "2024-08-22 10:00:00")
-    private Date createtime;
+    private Date create_time;
 }
