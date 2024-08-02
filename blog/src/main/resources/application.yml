@@ -15,6 +15,7 @@ jwt:
 # API文档配置
 knife4j:
   enable: true
+
   # 自定义主页内容
   openapi:
     title: ThriveX 在线API文档

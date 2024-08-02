@@ -32,6 +32,11 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
      * @throws Exception
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 如果是GET请求，直接放行
+        if ("GET".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
+
         // 从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getTokenName());
 
