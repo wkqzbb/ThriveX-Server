@@ -10,6 +10,7 @@ import liuyuyang.net.result.Result;
 import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.Paging;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -96,5 +97,19 @@ public class UserController {
         Map<String, Object> result = Paging.filter(data);
 
         return Result.success(result);
+    }
+
+    @PostMapping("/register")
+    @ApiOperation("用户注册")
+    public Result register(@RequestBody User user) {
+        userService.register(user);
+        return Result.success();
+    }
+
+    @PostMapping("/login")
+    @ApiOperation("用户登录")
+    public Result login(@RequestBody User user) {
+        userService.login(user);
+        return Result.success();
     }
 }
