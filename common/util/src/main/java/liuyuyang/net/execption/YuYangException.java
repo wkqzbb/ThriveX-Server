@@ -2,8 +2,8 @@ package liuyuyang.net.execption;
 
 import lombok.Data;
 
-// 自定义全局异常类
 @Data
+// public class YuYangException extends RuntimeException {
 public class YuYangException extends RuntimeException {
 
     private Integer code;
@@ -30,3 +30,5 @@ public class YuYangException extends RuntimeException {
                 '}';
     }
 }
+
+// 自定义全局异常类

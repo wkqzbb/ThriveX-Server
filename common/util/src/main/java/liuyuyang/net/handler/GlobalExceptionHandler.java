@@ -8,12 +8,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    // 全局异常处理类
+    // 处理自定义的异常
+    @ResponseBody
+    @ExceptionHandler(YuYangException.class)
+    public Result<Object> yuyangException(YuYangException e) {
+        e.printStackTrace();
+        return Result.error(e.getMessage());
+    }
+
+    // 处理所有异常
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public Result<Object> error(YuYangException e) {
+    public Result<Object> exception(Exception e) {
         e.printStackTrace();
-
         return Result.error(e.getMessage());
     }
 }
