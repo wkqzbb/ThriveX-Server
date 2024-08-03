@@ -9,7 +9,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Result<T> {
     private Integer code; // 响应码，200 代表成功; 400 代表失败
-    private String msg; // 响应码 描述字符串
+    private String message; // 响应码 描述字符串
     private T data; // 返回的数据
 
     // 成功响应
@@ -17,8 +17,8 @@ public class Result<T> {
         return new Result<>(200, "success", null);
     }
 
-    public static <T> Result<T> success(String msg) {
-        return new Result<>(200, msg, null);
+    public static <T> Result<T> success(String message) {
+        return new Result<>(200, message, null);
     }
 
     public static <T> Result<T> success(T data) {
@@ -29,8 +29,8 @@ public class Result<T> {
         return new Result<>(200, "success", data);
     }
 
-    public static <T> Result<T> success(String msg, T data) {
-        return new Result<>(200, msg, data);
+    public static <T> Result<T> success(String message, T data) {
+        return new Result<>(200, message, data);
     }
 
     // 失败响应
@@ -38,7 +38,7 @@ public class Result<T> {
         return new Result<>(400, "error", null);
     }
 
-    public static <T> Result<T> error(String msg) {
-        return new Result<>(400, msg, null);
+    public static <T> Result<T> error(String message) {
+        return new Result<>(400, message, null);
     }
 }
