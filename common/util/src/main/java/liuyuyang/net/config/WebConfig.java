@@ -47,6 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 // 设置拦截的请求路径（ /** 表示拦截所有请求）并排除login
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/user/login");
+                .excludePathPatterns("/api/user/login")
+                .excludePathPatterns("/api/user/register");
     }
 }

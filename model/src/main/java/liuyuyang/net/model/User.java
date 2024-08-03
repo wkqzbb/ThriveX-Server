@@ -30,6 +30,9 @@ public class User {
     @ApiModelProperty(value = "用户邮箱", example = "liuyuyang1024@yeah.net")
     private String email;
 
+    @ApiModelProperty(value = "用户头像", example = "yuyang.jpg")
+    private String avatar;
+
     @ApiModelProperty(value = "用户角色", example = "admin")
     private String role;
 

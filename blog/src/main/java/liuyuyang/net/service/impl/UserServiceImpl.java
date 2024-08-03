@@ -7,6 +7,7 @@ import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.mapper.UserMapper;
 import liuyuyang.net.model.User;
 import liuyuyang.net.service.UserService;
+import liuyuyang.net.utils.JwtUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -32,16 +33,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void register(User user) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", user.getUsername());
+
+        User data = userMapper.selectOne(queryWrapper);
+
+        // 判断用户名是否存在
+        if (data != null) {
+            throw new YuYangException(400, "该用户已存在：" + user.getUsername());
+        }
+
         // 密码加密
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-
-        // 注册时候先判断用户名是否存在
 
         userMapper.insert(user);
     }
 
     @Override
-    public void login(User user) {
+    public User login(User user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", user.getUsername());
         queryWrapper.eq("password", DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
@@ -52,6 +61,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new YuYangException(400, "用户名或密码错误");
         }
 
-        // token 逻辑
+        return data;
     }
 }

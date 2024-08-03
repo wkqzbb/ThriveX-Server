@@ -6,14 +6,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.User;
+import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.UserService;
+import liuyuyang.net.utils.JwtUtil;
 import liuyuyang.net.utils.Paging;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +24,8 @@ import java.util.Map;
 @RequestMapping("/user")
 @Transactional
 public class UserController {
+    @Resource
+    private JwtProperties jwtProperties;
     @Resource
     private UserService userService;
 
@@ -93,23 +97,31 @@ public class UserController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result list(@PathVariable Integer page, @PathVariable Integer size) {
         Page<User> data = userService.list(page, size);
-
         Map<String, Object> result = Paging.filter(data);
-
         return Result.success(result);
     }
 
     @PostMapping("/register")
     @ApiOperation("用户注册")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result register(@RequestBody User user) {
         userService.register(user);
-        return Result.success();
+        return Result.success("注册成功");
     }
 
     @PostMapping("/login")
     @ApiOperation("用户登录")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
     public Result login(@RequestBody User user) {
-        userService.login(user);
-        return Result.success();
+        User data = userService.login(user);
+
+        Map<String, Object> claims = new HashMap<>();
+        String token = JwtUtil.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("user", data);
+
+        return Result.success("登录成功", result);
     }
 }

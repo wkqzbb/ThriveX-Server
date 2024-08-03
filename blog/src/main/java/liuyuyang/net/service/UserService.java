@@ -7,5 +7,5 @@ import liuyuyang.net.model.User;
 public interface UserService extends IService<User> {
     public Page<User> list(Integer page, Integer size);
     public void register(User user);
-    public void login(User user);
+    public User login(User user);
 }
