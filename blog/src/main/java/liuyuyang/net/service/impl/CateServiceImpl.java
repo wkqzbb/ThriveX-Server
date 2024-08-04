@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,29 +21,74 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
     private CateMapper cateMapper;
 
     @Override
-    public Boolean exist(Integer cid) {
+    public Boolean exist(Integer id) {
         QueryWrapper<Cate> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("level", cid);
+        queryWrapper.eq("level", id);
 
         List<Cate> data = cateMapper.selectList(queryWrapper);
-        System.out.println(data);
 
         // 删除之前先判断该数据中是否绑定了其他数据
         if (!data.isEmpty()) {
-            throw new YuYangException(400, "ID为：" + cid + "的分类中绑定了 " + data.size() + " 个二级分类，请解绑后重试");
+            throw new YuYangException(400, "ID为：" + id + "的分类中绑定了 " + data.size() + " 个二级分类，请解绑后重试");
         }
 
         return true;
     }
 
     @Override
-    public Page<Cate> list(Integer page, Integer size) {
-        QueryWrapper<Cate> queryWrapper = new QueryWrapper<>();
+    public Cate getOne(Integer id) {
+        Cate data = cateMapper.selectById(id);
 
-        // 分页查询
+        if (data == null) {
+            throw new YuYangException(400, "该分类不存在");
+        }
+
+        // 获取当前分类下的所有子分类
+        List<Cate> allCates = cateMapper.selectList(new QueryWrapper<>());
+        data.setChildren(buildCateTree(allCates, id));
+
+        return data;
+    }
+
+
+    @Override
+    public List<Cate> list() {
+        // 查询所有分类
+        List<Cate> data = cateMapper.selectList(new QueryWrapper<>());
+        // 构建分类树
+        List<Cate> result = buildCateTree(data, 0);
+        return result;
+    }
+
+    @Override
+    public Page<Cate> paging(Integer page, Integer size) {
+        // 查询所有分类
+        List<Cate> data = cateMapper.selectList(new QueryWrapper<>());
+        // 构建分类树
+        List<Cate> rootCates = buildCateTree(data, 0);
+
+        // 分页处理
+        int start = (page - 1) * size;
+        int end = Math.min(start + size, rootCates.size());
+        List<Cate> pagedCates = rootCates.subList(start, end);
+
+        // 返回分页结果
         Page<Cate> result = new Page<>(page, size);
-        cateMapper.selectPage(result, queryWrapper);
+        result.setRecords(pagedCates);
+        result.setTotal(rootCates.size());
 
         return result;
+    }
+
+    // 无限级递归
+    private List<Cate> buildCateTree(List<Cate> list, Integer lever) {
+        List<Cate> children = new ArrayList<>();
+        for (Cate cate : list) {
+            if (cate.getLevel().equals(lever)) {
+                cate.setChildren(buildCateTree(list, cate.getId()));
+                children.add(cate);
+            }
+        }
+        return children;
     }
 }
