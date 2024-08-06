@@ -43,16 +43,20 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         // 校验令牌
         try {
             log.info("jwt校验：{}", token);
+            // 处理Authorization的Bearer
+            if (token.startsWith("Bearer ")) token = token.substring(7);
+
             Claims claims = JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
             System.out.println("校验成功");
 
             // 放行
             return true;
         } catch (Exception ex) {
-            System.out.println("校验失败：" + ex.getMessage());
+            System.out.println("校验失败：" + ex);
             // 校验失败，响应401状态码
             response.setStatus(401);
-            throw new YuYangException(401, "身份验证失败");
+            // throw new YuYangException(401, "身份验证失败");
+            return false;
         }
     }
 }
