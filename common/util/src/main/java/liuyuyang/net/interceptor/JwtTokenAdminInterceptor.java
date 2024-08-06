@@ -37,6 +37,12 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        // 如果是预检请求，直接放行
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return true;
+        }
+
         // 从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getTokenName());
 
@@ -47,7 +53,6 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             if (token.startsWith("Bearer ")) token = token.substring(7);
 
             Claims claims = JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
-            System.out.println("校验成功");
 
             // 放行
             return true;
