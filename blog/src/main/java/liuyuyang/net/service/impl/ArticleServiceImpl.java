@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.model.Article;
+import liuyuyang.net.model.Cate;
 import liuyuyang.net.service.ArticleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ArticleMapper articleMapper;
 
     @Override
-    public Page<Article> list(Integer page, Integer size) {
+    public Page<Article> paging(Integer page, Integer size) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
 
         // 分页查询

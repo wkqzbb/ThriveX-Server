@@ -90,7 +90,7 @@ public class CateController {
         return Result.success(data);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @ApiOperation("获取分类列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<Cate>> list() {
@@ -101,8 +101,10 @@ public class CateController {
     @GetMapping("/{page}/{size}")
     @ApiOperation("分页查询分类列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(@PathVariable Integer page, @PathVariable Integer size) {
+    public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
         Page<Cate> data = cateService.paging(page, size);
+        System.out.println(777);
+        System.out.println(data);
 
         Map<String, Object> result = Paging.filter(data);
 

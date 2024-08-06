@@ -79,7 +79,7 @@ public class ArticleController {
         return Result.success(data);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @ApiOperation("获取文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<Article>> list() {
@@ -87,11 +87,11 @@ public class ArticleController {
         return Result.success(data);
     }
 
-    @GetMapping("/{page}/{size}")
+    @GetMapping
     @ApiOperation("分页查询文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result list(@PathVariable Integer page, @PathVariable Integer size) {
-        Page<Article> data = articleService.list(page, size);
+    public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
+        Page<Article> data = articleService.paging(page, size);
 
         Map<String, Object> result = Paging.filter(data);
 

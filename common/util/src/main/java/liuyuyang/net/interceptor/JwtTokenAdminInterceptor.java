@@ -60,8 +60,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             System.out.println("校验失败：" + ex);
             // 校验失败，响应401状态码
             response.setStatus(401);
-            // throw new YuYangException(401, "身份验证失败");
-            return false;
+            throw new YuYangException(401, "身份验证失败");
         }
     }
 }
