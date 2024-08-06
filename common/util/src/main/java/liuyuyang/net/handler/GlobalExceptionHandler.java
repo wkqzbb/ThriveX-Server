@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(YuYangException.class)
     public Result<Object> yuyangException(YuYangException e) {
         e.printStackTrace();
-        return Result.error(e.getMessage());
+        return Result.error(e.getCode(), e.getMessage());
     }
 
     // 处理所有异常
