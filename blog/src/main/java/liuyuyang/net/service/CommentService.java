@@ -9,8 +9,6 @@ import java.util.List;
 public interface CommentService extends IService<Comment> {
     public Comment get(Integer id);
     public List<Comment> getCommentList(Integer aid);
-
     public List<Comment> list();
-
     public Page<Comment> paging(Integer page, Integer size);
 }

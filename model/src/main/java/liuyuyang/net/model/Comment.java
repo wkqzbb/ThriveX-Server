@@ -36,6 +36,10 @@ public class Comment {
     @ApiModelProperty(value = "该评论所绑定的文章ID", example = "1", required = true)
     private Integer articleId;
 
+    @ApiModelProperty(value = "该评论所属的文章名称")
+    @TableField(exist = false)
+    private String articleTitle;
+
     @ApiModelProperty(value = "二级评论", example = "2", required = true)
     private Integer commentId;
 

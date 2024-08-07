@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.mapper.CommentMapper;
+import liuyuyang.net.model.Article;
+import liuyuyang.net.model.Cate;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.service.CommentService;
@@ -20,6 +23,8 @@ import java.util.List;
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
     @Resource
     private CommentMapper commentMapper;
+    @Resource
+    private ArticleMapper articleMapper;
 
     @Override
     public Comment get(Integer id) {
@@ -28,6 +33,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         if (data == null) {
             throw new YuYangException(400, "该评论不存在");
         }
+
+        // 文章标题
+        Article article = articleMapper.selectById(data.getArticleId());
+        data.setArticleTitle(article.getTitle());
 
         // 获取当前评论下的所有子评论
         List<Comment> comments = commentMapper.selectList(null);
@@ -39,28 +48,43 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public List<Comment> getCommentList(Integer aid) {
         // 查询所有评论
-        List<Comment> data = commentMapper.getCommentList(aid);
+        List<Comment> list = commentMapper.getCommentList(aid);
+
+        for (Comment comment : list) {
+            Article article = articleMapper.selectById(comment.getArticleId());
+            comment.setArticleTitle(article.getTitle());
+        }
+
         // 构建评论树
-        List<Comment> result = buildCommentTree(data, 0);
+        List<Comment> result = buildCommentTree(list, 0);
         return result;
     }
 
-
     @Override
     public List<Comment> list() {
-        // 查询所有评论
-        List<Comment> data = commentMapper.selectList(null);
-        // 构建评论树
-        List<Comment> result = buildCommentTree(data, 0);
-        return result;
+        // 查询所有分类
+        List<Comment> list = commentMapper.selectList(null);
+
+        for (Comment comment : list) {
+            Article article = articleMapper.selectById(comment.getArticleId());
+            comment.setArticleTitle(article.getTitle());
+        }
+
+        return list;
     }
 
     @Override
     public Page<Comment> paging(Integer page, Integer size) {
         // 查询所有评论
-        List<Comment> data = commentMapper.selectList(new QueryWrapper<>());
+        List<Comment> list = commentMapper.selectList(new QueryWrapper<>());
+
+        for (Comment comment : list) {
+            Article article = articleMapper.selectById(comment.getArticleId());
+            comment.setArticleTitle(article.getTitle());
+        }
+
         // 构建评论树
-        List<Comment> comments = buildCommentTree(data, 0);
+        List<Comment> comments = buildCommentTree(list, 0);
 
         // 分页处理
         int start = (page - 1) * size;
@@ -83,6 +107,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 comment.setChildren(buildCommentTree(list, comment.getId()));
                 children.add(comment);
             }
+
+            // 文章标题
+            Article article = articleMapper.selectById(comment.getArticleId());
+            comment.setArticleTitle(article.getTitle());
         }
         return children;
     }

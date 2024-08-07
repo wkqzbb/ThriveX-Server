@@ -30,9 +30,11 @@ public class Article {
     @ApiModelProperty(value = "文章封面链接", example = "/images/example.jpg", required = true)
     private String cover;
 
+    // @TableField(exist = false)
     @ApiModelProperty(value = "文章浏览量", example = "100")
     private Integer view;
 
+    // @TableField(exist = false)
     @ApiModelProperty(value = "文章评论数量", example = "20")
     private Integer comment;
 
