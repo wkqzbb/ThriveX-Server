@@ -75,7 +75,7 @@ public class ArticleController {
     @ApiOperation("获取文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<Article> get(@PathVariable Integer id) {
-        Article data = articleService.getById(id);
+        Article data = articleService.get(id);
         return Result.success(data);
     }
 
@@ -92,9 +92,7 @@ public class ArticleController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
         Page<Article> data = articleService.paging(page, size);
-
         Map<String, Object> result = Paging.filter(data);
-
         return Result.success(result);
     }
 }

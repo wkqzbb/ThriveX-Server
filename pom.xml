@@ -33,6 +33,7 @@
         <knife4j.version>4.4.0</knife4j.version>
         <jwt.version>0.7.0</jwt.version>
         <fastjson.version>1.2.29</fastjson.version>
+        <jackson.version>2.13.3</jackson.version>
     </properties>
 
     <!--配置dependencyManagement锁定依赖的版本-->
@@ -79,6 +80,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
             <!-- 自定义模块 -->

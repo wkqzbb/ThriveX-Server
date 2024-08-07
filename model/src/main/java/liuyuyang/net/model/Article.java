@@ -1,12 +1,15 @@
 package liuyuyang.net.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @TableName("article")
@@ -35,6 +38,9 @@ public class Article {
 
     @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3", required = true)
     private String cids;
+
+    @TableField(exist = false)
+    private List<Cate> cateList;
 
     @ApiModelProperty(value = "文章标签", example = "Java, Spring")
     private String tag;
