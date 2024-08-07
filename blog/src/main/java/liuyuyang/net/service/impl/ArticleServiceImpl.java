@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.Cate;
+import liuyuyang.net.model.Tag;
 import liuyuyang.net.service.ArticleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +33,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<Article> data = articleMapper.selectList(null);
 
         for (Article article : data) {
-            System.out.println(article);
-            // 查询该文章下所有绑定的分类
+            // 查询该文章下所有绑定的分类和标签
             List<Cate> cateList = articleMapper.getCateList(article.getId());
             article.setCateList(cateList);
-            article.setTagList(articleMapper.getTagList(article.getId()));
+
+            List<Tag> tagList = articleMapper.getTagList(article.getId());
+            article.setTagList(tagList);
         }
 
         return data;
@@ -48,7 +50,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 分页查询
         Page<Article> result = new Page<>(page, size);
+
         articleMapper.selectPage(result, queryWrapper);
+
+        for (Article article : result.getRecords()) {
+            // 查询该文章下所有绑定的分类和标签
+            List<Cate> cateList = articleMapper.getCateList(article.getId());
+            article.setCateList(cateList);
+
+            List<Tag> tagList = articleMapper.getTagList(article.getId());
+            article.setTagList(tagList);
+        }
 
         return result;
     }
