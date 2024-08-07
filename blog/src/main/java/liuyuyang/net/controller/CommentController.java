@@ -75,7 +75,7 @@ public class CommentController {
     @ApiOperation("获取评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<Comment> get(@PathVariable Integer id) {
-        Comment data = commentService.getById(id);
+        Comment data = commentService.get(id);
         return Result.success(data);
     }
 
@@ -91,7 +91,7 @@ public class CommentController {
     @ApiOperation("分页查询评论列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        Page<Comment> data = commentService.list(page, size);
+        Page<Comment> data = commentService.paging(page, size);
 
         Map<String, Object> result = Paging.filter(data);
 

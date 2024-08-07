@@ -27,7 +27,6 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
 
         List<Cate> data = cateMapper.selectList(queryWrapper);
 
-        // 删除之前先判断该数据中是否绑定了其他数据
         if (!data.isEmpty()) {
             throw new YuYangException(400, "ID为：" + id + "的分类中绑定了 " + data.size() + " 个二级分类，请解绑后重试");
         }
