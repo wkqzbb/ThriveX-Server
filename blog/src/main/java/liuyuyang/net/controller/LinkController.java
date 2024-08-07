@@ -91,7 +91,7 @@ public class LinkController {
     @ApiOperation("分页查询网站列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        Page<Link> data = linkService.list(page, size);
+        Page<Link> data = linkService.paging(page, size);
 
         Map<String, Object> result = Paging.filter(data);
 

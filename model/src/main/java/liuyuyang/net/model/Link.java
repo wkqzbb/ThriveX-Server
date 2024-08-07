@@ -1,6 +1,7 @@
 package liuyuyang.net.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,8 +19,10 @@ public class Link {
     private String description;
     @ApiModelProperty(value = "网站邮箱", example = "liuyuyang1024@yeah.net")
     private String email;
-    @ApiModelProperty(value = "网站类型", example = "技术类", required = true)
-    private String type;
+    @ApiModelProperty(value = "网站类型", example = "1", required = true)
+    private Integer typeId;
+    @TableField(exist = false)
+    private LinkType type;
     @ApiModelProperty(value = "网站图片", example = "http://127.0.0.1:5000/1.jpg", required = true)
     private String image;
     @ApiModelProperty(value = "网站链接", example = "/", required = true)

@@ -8,8 +8,8 @@ jwt:
   # 设置jwt签名加密时使用的秘钥
   secret-key: yuyang
   # 设置jwt过期时间
-#  ttl: 7200000
-  ttl: 20
+  ttl: 7200000
+#  ttl: 300
   # 设置前端传递过来的令牌名称
   token-name: Authorization
 

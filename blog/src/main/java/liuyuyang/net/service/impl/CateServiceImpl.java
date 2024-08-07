@@ -53,7 +53,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
     @Override
     public List<Cate> list() {
         // 查询所有分类
-        List<Cate> data = cateMapper.selectList(new QueryWrapper<>());
+        List<Cate> data = cateMapper.selectList(null);
         // 构建分类树
         List<Cate> result = buildCateTree(data, 0);
         return result;
@@ -62,7 +62,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
     @Override
     public Page<Cate> paging(Integer page, Integer size) {
         // 查询所有分类
-        List<Cate> data = cateMapper.selectList(new QueryWrapper<>());
+        List<Cate> data = cateMapper.selectList(null);
         // 构建分类树
         List<Cate> cates = buildCateTree(data, 0);
 
