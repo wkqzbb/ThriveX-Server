@@ -36,7 +36,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
     }
 
     @Override
-    public Cate getOne(Integer id) {
+    public Cate get(Integer id) {
         Cate data = cateMapper.selectById(id);
 
         if (data == null) {
@@ -44,8 +44,8 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
         }
 
         // 获取当前分类下的所有子分类
-        List<Cate> allCates = cateMapper.selectList(new QueryWrapper<>());
-        data.setChildren(buildCateTree(allCates, id));
+        List<Cate> cates = cateMapper.selectList(null);
+        data.setChildren(buildCateTree(cates, id));
 
         return data;
     }
@@ -65,17 +65,17 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
         // 查询所有分类
         List<Cate> data = cateMapper.selectList(new QueryWrapper<>());
         // 构建分类树
-        List<Cate> rootCates = buildCateTree(data, 0);
+        List<Cate> cates = buildCateTree(data, 0);
 
         // 分页处理
         int start = (page - 1) * size;
-        int end = Math.min(start + size, rootCates.size());
-        List<Cate> pagedCates = rootCates.subList(start, end);
+        int end = Math.min(start + size, cates.size());
+        List<Cate> pagedCates = cates.subList(start, end);
 
         // 返回分页结果
         Page<Cate> result = new Page<>(page, size);
         result.setRecords(pagedCates);
-        result.setTotal(rootCates.size());
+        result.setTotal(cates.size());
 
         return result;
     }

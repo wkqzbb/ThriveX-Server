@@ -86,7 +86,7 @@ public class CateController {
     @ApiOperation("获取分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<Cate> get(@PathVariable Integer id) {
-        Cate data = cateService.getOne(id);
+        Cate data = cateService.get(id);
         return Result.success(data);
     }
 

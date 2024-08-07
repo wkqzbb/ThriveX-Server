@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,12 +39,12 @@ public class Article {
     @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3", required = true)
     private String cateIds;
     @TableField(exist = false)
-    private List<Cate> cateList;
+    private List<Cate> cateList = new ArrayList<>();
 
     @ApiModelProperty(value = "该文章所绑定的标签ID", example = "1,2,3")
     private String tagIds;
     @TableField(exist = false)
-    private List<Tag> tagList;
+    private List<Tag> tagList = new ArrayList<>();
 
     @ApiModelProperty(value = "文章创建时间", example = "2024-03-22 10:00:00")
     private Date createTime;

@@ -28,5 +28,5 @@ public class Cate {
     @ApiModelProperty(value = "分类级别", example = "0", required = true)
     private Integer level;
     @TableField(exist = false)
-    private List<Cate> children;
+    private List<Cate> children = new ArrayList<>();
 }
