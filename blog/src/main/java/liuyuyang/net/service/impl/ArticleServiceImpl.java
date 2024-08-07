@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.Cate;
+import liuyuyang.net.model.Comment;
 import liuyuyang.net.model.Tag;
 import liuyuyang.net.service.ArticleService;
 import org.springframework.stereotype.Service;

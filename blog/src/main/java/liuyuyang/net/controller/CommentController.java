@@ -79,9 +79,17 @@ public class CommentController {
         return Result.success(data);
     }
 
+    @GetMapping("/article/{aid}")
+    @ApiOperation("获取指定文章中所有评论")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
+    public Result<List<Comment>> getCommentList(@PathVariable Integer aid) {
+        List<Comment> data = commentService.getCommentList(aid);
+        return Result.success(data);
+    }
+
     @GetMapping("/all")
     @ApiOperation("获取评论列表")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result<List<Comment>> list() {
         List<Comment> data = commentService.list();
         return Result.success(data);
@@ -89,7 +97,7 @@ public class CommentController {
 
     @GetMapping
     @ApiOperation("分页查询评论列表")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
         Page<Comment> data = commentService.paging(page, size);
 

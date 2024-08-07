@@ -36,11 +36,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return data;
     }
 
+    @Override
+    public List<Comment> getCommentList(Integer aid) {
+        // 查询所有评论
+        List<Comment> data = commentMapper.getCommentList(aid);
+        // 构建评论树
+        List<Comment> result = buildCommentTree(data, 0);
+        return result;
+    }
+
 
     @Override
     public List<Comment> list() {
         // 查询所有评论
-        List<Comment> data = commentMapper.selectList(new QueryWrapper<>());
+        List<Comment> data = commentMapper.selectList(null);
         // 构建评论树
         List<Comment> result = buildCommentTree(data, 0);
         return result;
