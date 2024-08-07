@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -37,14 +36,15 @@ public class Article {
     // private Integer comment;
 
     @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3", required = true)
-    private String cids;
-
+    private String cateIds;
     @TableField(exist = false)
     private List<Cate> cateList;
 
-    @ApiModelProperty(value = "文章标签", example = "Java, Spring")
-    private String tag;
+    @ApiModelProperty(value = "该文章所绑定的标签ID", example = "1,2,3")
+    private String tagIds;
+    @TableField(exist = false)
+    private List<Tag> tagList;
 
     @ApiModelProperty(value = "文章创建时间", example = "2024-03-22 10:00:00")
-    private Date create_time;
+    private Date createTime;
 }

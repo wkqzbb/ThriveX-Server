@@ -23,6 +23,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public Article get(Integer id) {
         Article data = articleMapper.selectById(id);
         data.setCateList(articleMapper.getCateList(id));
+        data.setTagList(articleMapper.getTagList(id));
         return data;
     }
 
@@ -31,9 +32,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<Article> data = articleMapper.selectList(null);
 
         for (Article article : data) {
+            System.out.println(article);
             // 查询该文章下所有绑定的分类
             List<Cate> cateList = articleMapper.getCateList(article.getId());
             article.setCateList(cateList);
+            article.setTagList(articleMapper.getTagList(article.getId()));
         }
 
         return data;
