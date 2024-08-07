@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -44,6 +45,7 @@ public class Comment {
     private Integer commentId;
 
     @TableField(exist = false)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Comment> children = new ArrayList<>();
 
     @ApiModelProperty(value = "评论是否审核通过", example = "1")

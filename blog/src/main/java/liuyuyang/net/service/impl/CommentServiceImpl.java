@@ -70,7 +70,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             comment.setArticleTitle(article.getTitle());
         }
 
-        return list;
+        // 构建评论树
+        List<Comment> result = buildCommentTree(list, 0);
+
+        return result;
     }
 
     @Override
