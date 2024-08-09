@@ -27,8 +27,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
+        // 指定统一API访问前缀
         configurer.addPathPrefix("/api", c -> {
             RequestMapping requestMapping = c.getAnnotation(RequestMapping.class);
+
             if (requestMapping != null && requestMapping.value().length > 0) {
                 String path = requestMapping.value()[0];
                 return !EXCLUDED_PATHS.contains(path);
@@ -39,6 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 拦截指定请求
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/user/login")

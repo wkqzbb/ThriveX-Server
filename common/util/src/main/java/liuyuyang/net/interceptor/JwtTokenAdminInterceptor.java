@@ -40,6 +40,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
         // 从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getTokenName());
+        System.out.println(token);
 
         // 校验令牌
         try {
@@ -51,7 +52,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
                     if (token.startsWith("Bearer ")) token = token.substring(7);
                     JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
                     return true;
-                }else{
+                } else {
                     return true;
                 }
             }
