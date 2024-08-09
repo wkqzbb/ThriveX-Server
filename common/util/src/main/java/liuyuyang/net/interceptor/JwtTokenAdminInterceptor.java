@@ -32,11 +32,6 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
      * @throws Exception
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 如果是GET请求，直接放行
-        if ("GET".equalsIgnoreCase(request.getMethod())) {
-            return true;
-        }
-
         // 如果是预检请求，直接放行
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
@@ -49,6 +44,18 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         // 校验令牌
         try {
             log.info("jwt校验：{}", token);
+
+            // 如果是GET请求没有传token就直接放行，传了token就必须经过验证
+            if ("GET".equalsIgnoreCase(request.getMethod())) {
+                if (token != null) {
+                    if (token.startsWith("Bearer ")) token = token.substring(7);
+                    JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
+                    return true;
+                }else{
+                    return true;
+                }
+            }
+
             // 处理Authorization的Bearer
             if (token.startsWith("Bearer ")) token = token.substring(7);
 

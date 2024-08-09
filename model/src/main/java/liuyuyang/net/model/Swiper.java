@@ -16,6 +16,8 @@ public class Swiper {
     private String title;
     @ApiModelProperty(value = "轮播图", example = "http://127.0.0.1:5000/1.jpg", required = true)
     private String image;
+    @ApiModelProperty(value = "轮播图描述", example = "这是一个轮播图的描述")
+    private String description;
     @ApiModelProperty(value = "轮播图链接", example = "/")
     private String url;
 }

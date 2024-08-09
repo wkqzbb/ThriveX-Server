@@ -5,7 +5,9 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
+import liuyuyang.net.model.LinkType;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.LinkService;
 import liuyuyang.net.utils.Paging;
@@ -23,6 +25,8 @@ import java.util.Map;
 public class LinkController {
     @Resource
     private LinkService linkService;
+    @Resource
+    private LinkTypeMapper linkTypeMapper;
 
     @PostMapping
     @ApiOperation("新增网站")
@@ -87,9 +91,17 @@ public class LinkController {
         return Result.success(data);
     }
 
+    @GetMapping("/type")
+    @ApiOperation("获取网站类型列表")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
+    public Result<List<LinkType>> typeList() {
+        List<LinkType> data = linkTypeMapper.selectList(null);
+        return Result.success(data);
+    }
+
     @GetMapping
     @ApiOperation("分页查询网站列表")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
         Page<Link> data = linkService.paging(page, size);
 
