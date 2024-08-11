@@ -1,16 +1,21 @@
 package liuyuyang.net.controller;
 
+// import org.springframework.beans.BeanUtils;
+
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.mapper.ConfigMapper;
-import liuyuyang.net.model.Config;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
+import liuyuyang.net.dto.LayoutDTO;
+import liuyuyang.net.dto.WebDTO;
+import liuyuyang.net.mapper.ProjectMapper;
+import liuyuyang.net.model.Project;
 import liuyuyang.net.result.Result;
+import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Api(tags = "项目管理")
 @RestController
@@ -18,24 +23,65 @@ import java.util.List;
 @Transactional
 public class ProjectController {
     @Resource
-    private ConfigMapper configMapper;
+    private ProjectMapper projectMapper;
+
+    @PatchMapping("/layout")
+    @ApiOperation("修改网站")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
+    public Result<String> editWeb(@RequestBody WebDTO data) {
+        Project project = new Project();
+        BeanUtils.copyProperties(data, project);
+        project.setId(1);
+        projectMapper.updateById(project);
+        return Result.success();
+    }
+
+    @GetMapping("/web")
+    @ApiOperation("获取网站配置")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
+    public Result getWeb() {
+        Project config = projectMapper.selectById(1);
+
+        WebDTO data = new WebDTO();
+
+        // data.setCovers(config.getCovers());
+        // data.setDarkLogo(config.getDarkLogo());
+        // data.setDescription(config.getDescription());
+        // data.setFavicon(config.getFavicon());
+        // data.setFont(config.getFont());
+        // data.setFooter(config.getFooter());
+        // data.setKeyword(config.getKeyword());
+        // data.setLightLogo(config.getLightLogo());
+        // data.setSocial(config.getSocial());
+        // data.setSubhead(config.getSubhead());
+        // data.setTitle(config.getTitle());
+        // data.setUrl(config.getUrl());
+
+        BeanUtils.copyProperties(config, data);
+
+        return Result.success(data);
+    }
 
     @PatchMapping("/layout")
     @ApiOperation("修改布局")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result editLayout(@RequestBody Config config) {
-        config.setId(1);
-        System.out.println(config);
-        configMapper.updateById(config);
-
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
+    public Result<String> editLayout(@RequestBody LayoutDTO data) {
+        Project project = new Project();
+        BeanUtils.copyProperties(data, project);
+        project.setId(1);
+        projectMapper.updateById(project);
         return Result.success();
     }
 
     @GetMapping("/layout")
     @ApiOperation("获取布局配置")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result getLayout() {
-        Config data = configMapper.selectById(1);
+        Project config = projectMapper.selectById(1);
+
+        LayoutDTO data = new LayoutDTO();
+        BeanUtils.copyProperties(config, data);
+
         return Result.success(data);
     }
 }
