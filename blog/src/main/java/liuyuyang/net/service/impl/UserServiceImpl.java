@@ -3,6 +3,7 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import liuyuyang.net.dto.user.EditPassDTO;
 import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.mapper.UserMapper;
 import liuyuyang.net.model.User;
@@ -21,14 +22,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
 
     @Override
-    public Page<User> list(Integer page, Integer size) {
+    public Page<User> paging(Integer page, Integer size) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 
         // 分页查询
         Page<User> result = new Page<>(page, size);
         userMapper.selectPage(result, queryWrapper);
 
+        for (User user : result.getRecords()) {
+            user.setPassword("只有聪明的人才能看到密码");
+        }
+
         return result;
+    }
+
+    @Override
+    public void editPass(EditPassDTO data) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", data.getUsername());
+        queryWrapper.eq("password", DigestUtils.md5DigestAsHex(data.getOldPassword().getBytes()));
+
+        User user = userMapper.selectOne(queryWrapper);
+
+        if (user == null) {
+            throw new YuYangException(400, "用户名或旧密码错误");
+        }
+
+        user.setPassword(DigestUtils.md5DigestAsHex(data.getNewPassword().getBytes()));
+        userMapper.updateById(user);
     }
 
     @Override

@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -51,6 +50,6 @@ public class Comment {
     @ApiModelProperty(value = "评论是否审核通过", example = "1")
     private Integer auditStatus;
 
-    @ApiModelProperty(value = "评论创建时间", example = "2024-03-22 10:00:00")
-    private Date createTime;
+    @ApiModelProperty(value = "评论创建时间", example = "1723533206613", required = true)
+    private String createTime;
 }

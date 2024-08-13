@@ -27,6 +27,6 @@ public class Link {
     private String image;
     @ApiModelProperty(value = "网站链接", example = "/", required = true)
     private String url;
-    @ApiModelProperty(value = "网站创建时间", example = "2024-07-25 13:21:55", required = true)
+    @ApiModelProperty(value = "网站创建时间", example = "1723533206613", required = true)
     private String createTime;
 }

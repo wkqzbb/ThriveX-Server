@@ -18,7 +18,7 @@ public class User {
     @ApiModelProperty(value = "用户账号", example = "liuyuyang", required = true)
     private String username;
 
-    @ApiModelProperty(value = "用户密码")
+    @ApiModelProperty(value = "用户密码", required = true)
     private String password;
 
     @ApiModelProperty(value = "用户名称", example = "宇阳", required = true)
@@ -33,9 +33,9 @@ public class User {
     @ApiModelProperty(value = "用户头像", example = "yuyang.jpg")
     private String avatar;
 
-    @ApiModelProperty(value = "用户角色", example = "admin")
+    @ApiModelProperty(value = "用户角色", example = "admin", required = true)
     private String role;
 
-    @ApiModelProperty(value = "用户创建时间", example = "2024-08-22 10:00:00")
-    private Date create_time;
+    @ApiModelProperty(value = "用户创建时间", example = "1723533206613", required = true)
+    private String createTime;
 }

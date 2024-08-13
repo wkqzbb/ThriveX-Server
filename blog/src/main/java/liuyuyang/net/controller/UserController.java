@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.dto.user.EditPassDTO;
+import liuyuyang.net.dto.user.UserInfoDTO;
 import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.User;
 import liuyuyang.net.properties.JwtProperties;
@@ -11,6 +13,7 @@ import liuyuyang.net.result.Result;
 import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.JwtUtil;
 import liuyuyang.net.utils.Paging;
+import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,14 +69,13 @@ public class UserController {
     @PatchMapping
     @ApiOperation("编辑用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-    public Result<String> edit(@RequestBody User user) {
-        try {
-            boolean res = userService.updateById(user);
+    public Result<String> edit(@RequestBody UserInfoDTO data) {
+        User user = userService.getById(data.getId());
+        BeanUtils.copyProperties(data, user);
 
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new YuYangException(400, e.getMessage());
-        }
+        boolean res = userService.updateById(user);
+
+        return res ? Result.success() : Result.error();
     }
 
     @GetMapping("/{id}")
@@ -81,6 +83,7 @@ public class UserController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<User> get(@PathVariable Integer id) {
         User data = userService.getById(id);
+        data.setPassword("只有聪明的人才能看到密码");
         return Result.success(data);
     }
 
@@ -88,15 +91,20 @@ public class UserController {
     @ApiOperation("获取用户列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<User>> list() {
-        List<User> data = userService.list();
-        return Result.success(data);
+        List<User> list = userService.list();
+
+        for (User user : list) {
+            user.setPassword("只有聪明的人才能看到密码");
+        }
+
+        return Result.success(list);
     }
 
     @GetMapping
     @ApiOperation("分页查询用户列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        Page<User> data = userService.list(page, size);
+        Page<User> data = userService.paging(page, size);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }
@@ -123,5 +131,13 @@ public class UserController {
         result.put("user", data);
 
         return Result.success("登录成功", result);
+    }
+
+    @PatchMapping("/editPass")
+    @ApiOperation("修改用户密码")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
+    public Result<String> editPass(@RequestBody EditPassDTO data) {
+        userService.editPass(data);
+        return Result.success("密码修改成功");
     }
 }

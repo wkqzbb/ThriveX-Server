@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -27,7 +26,7 @@ public class Article {
     @ApiModelProperty(value = "文章主要内容", example = "示例文章内容", required = true)
     private String content;
 
-    @ApiModelProperty(value = "文章封面链接", example = "/images/example.jpg", required = true)
+    @ApiModelProperty(value = "文章封面链接", example = "/images/example.jpg")
     private String cover;
 
     // @TableField(exist = false)
@@ -48,6 +47,6 @@ public class Article {
     @TableField(exist = false)
     private List<Tag> tagList = new ArrayList<>();
 
-    @ApiModelProperty(value = "文章创建时间", example = "2024-03-22 10:00:00")
-    private Date createTime;
+    @ApiModelProperty(value = "文章创建时间", example = "1723533206613", required = true)
+    private String createTime;
 }

@@ -1,11 +1,8 @@
 package liuyuyang.net.controller;
 
-// import org.springframework.beans.BeanUtils;
-
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import liuyuyang.net.dto.LayoutDTO;
 import liuyuyang.net.dto.WebDTO;
 import liuyuyang.net.mapper.ProjectMapper;
@@ -25,7 +22,7 @@ public class ProjectController {
     @Resource
     private ProjectMapper projectMapper;
 
-    @PatchMapping("/layout")
+    @PatchMapping("/web")
     @ApiOperation("修改网站")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> editWeb(@RequestBody WebDTO data) {
