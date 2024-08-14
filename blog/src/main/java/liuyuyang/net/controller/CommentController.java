@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.result.Result;
@@ -90,8 +91,8 @@ public class CommentController {
     @GetMapping("/all")
     @ApiOperation("获取评论列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result<List<Comment>> list() {
-        List<Comment> data = commentService.list();
+    public Result<List<Comment>> list(@ApiParam(value = "默认为recursion模式，表示将子分类都递归到children中。如果设置了list模式，则直接返回所有评论") @RequestParam(defaultValue = "recursion") String pattern ) {
+        List<Comment> data = commentService.list(pattern);
         return Result.success(data);
     }
 

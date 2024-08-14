@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -61,9 +62,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public List<Comment> list() {
+    public List<Comment> list(String pattern) {
         // 查询所有分类
         List<Comment> list = commentMapper.selectList(null);
+
+        // 如果参数是list则直接不进行递归处理
+        if (Objects.equals(pattern, "list")) return list;
 
         for (Comment comment : list) {
             Article article = articleMapper.selectById(comment.getArticleId());
