@@ -59,4 +59,19 @@ public class Project {
 
     @ApiModelProperty(value = "打字机文本", example = "[\"这是第一段文本\", \"这是第二段文本\", \"...\"]")
     private String swiperText;
+
+    @ApiModelProperty(value = "操作系统名称", example = "Windows 10")
+    private String osName;
+
+    @ApiModelProperty(value = "操作系统版本", example = "10.0")
+    private String osVersion;
+
+    @ApiModelProperty(value = "总内存量 (MB)", example = "16384")
+    private Long totalMemory;
+
+    @ApiModelProperty(value = "可用内存量 (MB)", example = "8192")
+    private Long availableMemory;
+
+    @ApiModelProperty(value = "内存使用率 (%)", example = "50.0")
+    private Double memoryUsage;
 }

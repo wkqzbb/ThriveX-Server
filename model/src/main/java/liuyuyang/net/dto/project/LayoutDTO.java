@@ -1,4 +1,4 @@
-package liuyuyang.net.dto;
+package liuyuyang.net.dto.project;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

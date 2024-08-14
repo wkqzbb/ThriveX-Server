@@ -61,6 +61,11 @@
             <artifactId>rome</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+        </dependency>
+
         <!-- 自定义依赖 -->
         <dependency>
             <groupId>liuyuyang.net</groupId>

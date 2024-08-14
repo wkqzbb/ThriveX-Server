@@ -36,6 +36,7 @@
         <jackson.version>2.13.3</jackson.version>
         <spring-beans.version>5.3.21</spring-beans.version>
         <rome.version>1.18.0</rome.version>
+        <oshi.version>6.2.2</oshi.version>
     </properties>
 
     <!--配置dependencyManagement锁定依赖的版本-->
@@ -100,6 +101,12 @@
                 <groupId>com.rometools</groupId>
                 <artifactId>rome</artifactId>
                 <version>${rome.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
             </dependency>
 
             <!-- 自定义模块 -->
