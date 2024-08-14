@@ -1,12 +1,17 @@
 package liuyuyang.net.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import liuyuyang.net.mapper.LinkMapper;
+import liuyuyang.net.mapper.LinkTypeMapper;
+import liuyuyang.net.mapper.TagMapper;
 import liuyuyang.net.model.Link;
+import liuyuyang.net.model.LinkType;
 import liuyuyang.net.model.Rss;
+import liuyuyang.net.model.Tag;
 import liuyuyang.net.service.RssService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +29,8 @@ import java.util.stream.Collectors;
 public class RssServiceImpl implements RssService {
     @Resource
     private LinkMapper linkMapper;
+    @Resource
+    private LinkTypeMapper linkTypeMapper;
 
     @Override
     public List<Rss> list() {
@@ -34,6 +41,10 @@ public class RssServiceImpl implements RssService {
         List<String> feedUrls = linkList.stream().map(Link::getRss).collect(Collectors.toList());
 
         for (String feedUrl : feedUrls) {
+            QueryWrapper<Link> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("rss", feedUrl);
+            Link link = linkMapper.selectOne(queryWrapper);
+
             try {
                 // 创建一个URL对象
                 URL url = new URL(feedUrl);
@@ -46,7 +57,12 @@ public class RssServiceImpl implements RssService {
 
                 // 遍历提要中的条目
                 for (SyndEntry data : feed.getEntries()) {
+                    LinkType lt = linkTypeMapper.selectById(link.getTypeId());
+
                     Rss rss = new Rss();
+                    rss.setImage(link.getImage());
+                    rss.setEmail(link.getEmail());
+                    rss.setType(lt.getName());
                     rss.setAuthor(data.getAuthor());
                     rss.setTitle(data.getTitle());
                     rss.setDescription(data.getDescription().getValue());
@@ -56,7 +72,6 @@ public class RssServiceImpl implements RssService {
                 }
             } catch (Exception e) {
                 System.err.println("解析失败: " + feedUrl);
-                e.printStackTrace();
             }
         }
 

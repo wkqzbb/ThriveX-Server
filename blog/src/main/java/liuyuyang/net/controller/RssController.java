@@ -20,7 +20,7 @@ public class RssController {
     @Resource
     private RssService rssService;
 
-    @GetMapping
+    @GetMapping("/all")
     @ApiOperation("获取订阅内容")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<List<Rss>> list() {
