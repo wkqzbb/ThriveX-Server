@@ -15,7 +15,7 @@ public class Link {
     private Integer id;
     @ApiModelProperty(value = "网站标题", example = "这是一个网站", required = true)
     private String title;
-    @ApiModelProperty(value = "网站描述", example = "这是一个网站的描述")
+    @ApiModelProperty(value = "网站描述", example = "这是一个网站的描述", required = true)
     private String description;
     @ApiModelProperty(value = "网站邮箱", example = "liuyuyang1024@yeah.net")
     private String email;
@@ -27,6 +27,8 @@ public class Link {
     private String image;
     @ApiModelProperty(value = "网站链接", example = "/", required = true)
     private String url;
+    @ApiModelProperty(value = "订阅地址", example = "/")
+    private String rss;
     @ApiModelProperty(value = "网站创建时间", example = "1723533206613", required = true)
     private String createTime;
 }
