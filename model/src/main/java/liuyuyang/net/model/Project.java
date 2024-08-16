@@ -1,6 +1,7 @@
 package liuyuyang.net.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
@@ -60,18 +61,23 @@ public class Project {
     @ApiModelProperty(value = "打字机文本", example = "[\"这是第一段文本\", \"这是第二段文本\", \"...\"]")
     private String swiperText;
 
+    @TableField(exist = false)
     @ApiModelProperty(value = "操作系统名称", example = "Windows 10")
     private String osName;
 
-    @ApiModelProperty(value = "操作系统版本", example = "10.0")
+    @TableField(exist = false)
+    @ApiModelProperty(value = "操作系统版本", example = "10.0.19042")
     private String osVersion;
 
+    @TableField(exist = false)
     @ApiModelProperty(value = "总内存量 (MB)", example = "16384")
-    private Long totalMemory;
+    private Integer totalMemory;
 
+    @TableField(exist = false)
     @ApiModelProperty(value = "可用内存量 (MB)", example = "8192")
-    private Long availableMemory;
+    private Integer availableMemory;
 
+    @TableField(exist = false)
     @ApiModelProperty(value = "内存使用率 (%)", example = "50.0")
-    private Double memoryUsage;
+    private Float memoryUsage;
 }
