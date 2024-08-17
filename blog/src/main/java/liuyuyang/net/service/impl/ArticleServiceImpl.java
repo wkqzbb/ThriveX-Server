@@ -10,6 +10,8 @@ import liuyuyang.net.model.Cate;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.model.Tag;
 import liuyuyang.net.service.ArticleService;
+import liuyuyang.net.vo.OrderVO;
+import liuyuyang.net.vo.PageVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +36,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<Article> list() {
+    public List<Article> list(OrderVO orderVO) {
         List<Article> data = articleMapper.selectList(null);
 
         for (Article article : data) {
@@ -48,15 +50,33 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             article.setComment(commentMapper.getCommentList(article.getId()).size());
         }
 
+        switch (orderVO.getSort()) {
+            case "asc":
+                data.sort((a1, a2) -> a1.getCreateTime().compareTo(a2.getCreateTime()));
+                break;
+            case "desc":
+                data.sort((a1, a2) -> a2.getCreateTime().compareTo(a1.getCreateTime()));
+                break;
+        }
+
         return data;
     }
 
     @Override
-    public Page<Article> paging(Integer page, Integer size) {
+    public Page<Article> paging(OrderVO orderVO, PageVo pageVO) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
 
+        switch (orderVO.getSort()) {
+            case "asc":
+                queryWrapper.orderByAsc("create_time");
+                break;
+            case "desc":
+                queryWrapper.orderByDesc("create_time");
+                break;
+        }
+
         // 分页查询
-        Page<Article> result = new Page<>(page, size);
+        Page<Article> result = new Page<>(pageVO.getPage(), pageVO.getSize());
 
         articleMapper.selectPage(result, queryWrapper);
 

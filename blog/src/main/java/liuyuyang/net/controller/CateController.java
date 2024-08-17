@@ -104,8 +104,6 @@ public class CateController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
         Page<Cate> data = cateService.paging(page, size);
-        System.out.println(777);
-        System.out.println(data);
 
         Map<String, Object> result = Paging.filter(data);
 
