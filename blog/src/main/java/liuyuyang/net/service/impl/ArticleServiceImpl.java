@@ -7,12 +7,11 @@ import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.mapper.CommentMapper;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.Cate;
-import liuyuyang.net.model.Comment;
 import liuyuyang.net.model.Tag;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.vo.FilterVo;
-import liuyuyang.net.vo.OrderVO;
 import liuyuyang.net.vo.PageVo;
+import liuyuyang.net.vo.SortVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +36,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<Article> list(FilterVo filterVo, OrderVO orderVo) {
+    public List<Article> list(FilterVo filterVo, SortVO sortVo) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-
-        if (filterVo.getKey() != null) {
+        if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {
             queryWrapper.like("title", "%" + filterVo.getKey() + "%");
         }
 
@@ -52,6 +50,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             queryWrapper.le("create_time", filterVo.getEndDate());
         }
 
+        if (filterVo.getCateIds() != null && !filterVo.getCateIds().isEmpty()) {
+            queryWrapper.in("cate_ids", filterVo.getCateIds());
+        }
+
+        if (filterVo.getTagId() != null && !filterVo.getTagId().isEmpty()) {
+            queryWrapper.like("tag_ids", "%" + filterVo.getTagId() + "%");
+        }
+
+        System.out.println(queryWrapper.getSqlSelect());
         List<Article> data = articleMapper.selectList(queryWrapper);
 
         for (Article article : data) {
@@ -65,7 +72,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             article.setComment(commentMapper.getCommentList(article.getId()).size());
         }
 
-        switch (orderVo.getSort()) {
+        switch (sortVo.getSort()) {
             case "asc":
                 data.sort((a1, a2) -> a1.getCreateTime().compareTo(a2.getCreateTime()));
                 break;
@@ -78,10 +85,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public Page<Article> paging(FilterVo filterVo, OrderVO orderVo, PageVo pageVo) {
+    public Page<Article> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
 
-        switch (orderVo.getSort()) {
+        switch (sortVo.getSort()) {
             case "asc":
                 queryWrapper.orderByAsc("create_time");
                 break;

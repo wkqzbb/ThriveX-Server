@@ -9,13 +9,13 @@ public class FilterVo {
     @ApiModelProperty(value = "根据关键词进行模糊查询")
     private String key;
 
-    // @ApiParam(value = "根据分类进行查询")
-    // String cateIds;
-    // @ApiParam(value = "根据标签进行模糊查询")
-    // String tagIds;
+    @ApiParam(value = "根据分类进行查询")
+    String cateIds;
+    @ApiParam(value = "根据标签进行模糊查询")
+    String tagId;
 
     @ApiParam(value = "根据开始时间进行查询")
-    private Integer startDate;
+    private String startDate;
     @ApiParam(value = "根据结束时间进行查询")
-    private Integer endDate;
+    private String endDate;
 }

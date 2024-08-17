@@ -4,15 +4,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.FilterVo;
-import liuyuyang.net.vo.OrderVO;
 import liuyuyang.net.vo.PageVo;
+import liuyuyang.net.vo.SortVO;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,16 +85,16 @@ public class ArticleController {
     @GetMapping("/all")
     @ApiOperation("获取文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Article>> list(FilterVo filterVo, OrderVO orderVo) {
-        List<Article> data = articleService.list(filterVo, orderVo);
+    public Result<List<Article>> list(FilterVo filterVo, SortVO sortVo) {
+        List<Article> data = articleService.list(filterVo, sortVo);
         return Result.success(data);
     }
 
     @GetMapping
     @ApiOperation("分页查询文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(FilterVo filterVo, OrderVO orderVo, PageVo pageVo) {
-        Page<Article> data = articleService.paging(filterVo, orderVo, pageVo);
+    public Result paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+        Page<Article> data = articleService.paging(filterVo, sortVo, pageVo);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }
