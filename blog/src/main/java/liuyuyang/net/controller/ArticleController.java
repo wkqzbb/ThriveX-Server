@@ -10,6 +10,7 @@ import liuyuyang.net.model.Article;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.utils.Paging;
+import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.OrderVO;
 import liuyuyang.net.vo.PageVo;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,16 +86,16 @@ public class ArticleController {
     @GetMapping("/all")
     @ApiOperation("获取文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Article>> list(OrderVO orderVO) {
-        List<Article> data = articleService.list(orderVO);
+    public Result<List<Article>> list(FilterVo filterVo, OrderVO orderVo) {
+        List<Article> data = articleService.list(filterVo, orderVo);
         return Result.success(data);
     }
 
     @GetMapping
     @ApiOperation("分页查询文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(OrderVO orderVO, PageVo pageVO) {
-        Page<Article> data = articleService.paging(orderVO, pageVO);
+    public Result paging(FilterVo filterVo, OrderVO orderVo, PageVo pageVo) {
+        Page<Article> data = articleService.paging(filterVo, orderVo, pageVo);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }
