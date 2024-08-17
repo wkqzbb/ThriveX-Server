@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -49,13 +50,16 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
         return data;
     }
 
-
     @Override
-    public List<Cate> list() {
+    public List<Cate> list(String pattern) {
         // 查询所有分类
-        List<Cate> data = cateMapper.selectList(null);
+        List<Cate> list = cateMapper.selectList(null);
+
+        // 如果参数是list则直接不进行递归处理
+        if (Objects.equals(pattern, "list")) return list;
+
         // 构建分类树
-        List<Cate> result = buildCateTree(data, 0);
+        List<Cate> result = buildCateTree(list, 0);
         return result;
     }
 
