@@ -38,7 +38,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public List<Article> list(FilterVo filterVo, OrderVO orderVo) {
-        List<Article> data = articleMapper.selectList(null);
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+
+        if (filterVo.getKey() != null) {
+            queryWrapper.like("title", "%" + filterVo.getKey() + "%");
+        }
+
+        if (filterVo.getStartDate() != null && filterVo.getEndDate() != null) {
+            queryWrapper.between("create_time", filterVo.getStartDate(), filterVo.getEndDate());
+        } else if (filterVo.getStartDate() != null) {
+            queryWrapper.ge("create_time", filterVo.getStartDate());
+        } else if (filterVo.getEndDate() != null) {
+            queryWrapper.le("create_time", filterVo.getEndDate());
+        }
+
+        List<Article> data = articleMapper.selectList(queryWrapper);
 
         for (Article article : data) {
             // 查询该文章下所有绑定的分类和标签以及评论数量
