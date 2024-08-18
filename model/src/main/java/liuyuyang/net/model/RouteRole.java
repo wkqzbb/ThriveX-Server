@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@TableName("routes_role")
+@TableName("route_role")
 public class RouteRole {
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "ID")

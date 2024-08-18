@@ -1,12 +1,11 @@
 package liuyuyang.net.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 @TableName("user")
@@ -33,8 +32,11 @@ public class User {
     @ApiModelProperty(value = "用户头像", example = "yuyang.jpg")
     private String avatar;
 
-    @ApiModelProperty(value = "用户角色", example = "admin", required = true)
-    private String role;
+    @ApiModelProperty(value = "用户角色ID", example = "1", required = true)
+    private String roleId;
+    @TableField(exist = false)
+    @ApiModelProperty(value = "用户角色信息", example = "...", required = true)
+    private Role role;
 
     @ApiModelProperty(value = "用户创建时间", example = "1723533206613", required = true)
     private String createTime;

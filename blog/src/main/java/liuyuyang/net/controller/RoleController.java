@@ -26,13 +26,8 @@ public class RoleController {
     @ApiOperation("新增角色")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestBody Role role) {
-        try {
-            boolean res = roleService.save(role);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new YuYangException(400, e.getMessage());
-        }
+        boolean res = roleService.save(role);
+        return res ? Result.success() : Result.error();
     }
 
     @DeleteMapping("/{id}")
@@ -43,7 +38,6 @@ public class RoleController {
         if (data == null) return Result.error("该数据不存在");
 
         Boolean res = roleService.removeById(id);
-
         return res ? Result.success() : Result.error();
     }
 
@@ -52,7 +46,6 @@ public class RoleController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
         Boolean res = roleService.removeByIds(ids);
-
         return res ? Result.success() : Result.error();
     }
 
@@ -60,13 +53,8 @@ public class RoleController {
     @ApiOperation("编辑角色")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result<String> edit(@RequestBody Role role) {
-        try {
-            boolean res = roleService.updateById(role);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new YuYangException(400, e.getMessage());
-        }
+        boolean res = roleService.updateById(role);
+        return res ? Result.success() : Result.error();
     }
 
     @GetMapping("/{id}")
@@ -91,5 +79,16 @@ public class RoleController {
     public Result<List<Route>> getRouteList(Integer id) {
         List<Route> list = roleService.getRouteList(id);
         return Result.success(list);
+    }
+
+    @PatchMapping("/bindingRoute/{id}")
+    @ApiOperation("分配角色权限")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
+    public Result<String> bindingRoute(@PathVariable Integer id, @RequestBody List<Integer> ids) {
+        System.out.println(id);
+        System.out.println(ids);
+        System.out.println(77777);
+        roleService.bindingRoute(id, ids);
+        return Result.success();
     }
 }
