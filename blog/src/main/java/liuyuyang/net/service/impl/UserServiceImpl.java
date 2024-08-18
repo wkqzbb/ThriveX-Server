@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.dto.user.EditPassDTO;
 import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.mapper.RoleMapper;
 import liuyuyang.net.mapper.UserMapper;
+import liuyuyang.net.model.Role;
 import liuyuyang.net.model.User;
 import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.JwtUtil;
@@ -20,6 +22,19 @@ import javax.annotation.Resource;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RoleMapper roleMapper;
+
+    @Override
+    public User get(Integer id) {
+        User data = userMapper.selectById(id);
+        data.setPassword("只有聪明的人才能看到密码");
+
+        Role role = roleMapper.selectById(data.getRoleId());
+        data.setRole(role);
+
+        return data;
+    }
 
     @Override
     public Page<User> paging(Integer page, Integer size) {

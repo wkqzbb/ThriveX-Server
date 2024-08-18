@@ -7,9 +7,11 @@ import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.dto.user.EditPassDTO;
 import liuyuyang.net.dto.user.UserInfoDTO;
 import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.model.Role;
 import liuyuyang.net.model.User;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.result.Result;
+import liuyuyang.net.service.RoleService;
 import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.JwtUtil;
 import liuyuyang.net.utils.Paging;
@@ -31,6 +33,8 @@ public class UserController {
     private JwtProperties jwtProperties;
     @Resource
     private UserService userService;
+    @Resource
+    private RoleService roleService;
 
     @PostMapping
     @ApiOperation("新增用户")
@@ -82,8 +86,7 @@ public class UserController {
     @ApiOperation("获取用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<User> get(@PathVariable Integer id) {
-        User data = userService.getById(id);
-        data.setPassword("只有聪明的人才能看到密码");
+        User data = userService.get(id);
         return Result.success(data);
     }
 
@@ -126,9 +129,12 @@ public class UserController {
         Map<String, Object> claims = new HashMap<>();
         String token = JwtUtil.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
 
+        Role role = roleService.getById(data.getRoleId());
+
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
         result.put("user", data);
+        result.put("role", role);
 
         return Result.success("登录成功", result);
     }
