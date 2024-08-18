@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.Role;
+import liuyuyang.net.model.Route;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.RoleService;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,5 +83,13 @@ public class RoleController {
     public Result<List<Role>> list() {
         List<Role> data = roleService.list();
         return Result.success(data);
+    }
+
+    @GetMapping("/route")
+    @ApiOperation("获取指定角色的路由列表")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
+    public Result<List<Route>> getRouteList(Integer id) {
+        List<Route> list = roleService.getRouteList(id);
+        return Result.success(list);
     }
 }
