@@ -59,9 +59,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         System.out.println(queryWrapper.getSqlSelect());
-        List<Article> data = articleMapper.selectList(queryWrapper);
+        List<Article> list = articleMapper.selectList(queryWrapper);
 
-        for (Article article : data) {
+        for (Article article : list) {
             // 查询该文章下所有绑定的分类和标签以及评论数量
             List<Cate> cateList = articleMapper.getCateList(article.getId());
             article.setCateList(cateList);
@@ -74,14 +74,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         switch (sortVo.getSort()) {
             case "asc":
-                data.sort((a1, a2) -> a1.getCreateTime().compareTo(a2.getCreateTime()));
+                list.sort((a1, a2) -> a1.getCreateTime().compareTo(a2.getCreateTime()));
                 break;
             case "desc":
-                data.sort((a1, a2) -> a2.getCreateTime().compareTo(a1.getCreateTime()));
+                list.sort((a1, a2) -> a2.getCreateTime().compareTo(a1.getCreateTime()));
                 break;
         }
 
-        return data;
+        return list;
     }
 
     @Override
@@ -98,11 +98,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         // 分页查询
-        Page<Article> result = new Page<>(pageVo.getPage(), pageVo.getSize());
+        Page<Article> list = new Page<>(pageVo.getPage(), pageVo.getSize());
 
-        articleMapper.selectPage(result, queryWrapper);
+        articleMapper.selectPage(list, queryWrapper);
 
-        for (Article article : result.getRecords()) {
+        for (Article article : list.getRecords()) {
             // 查询该文章下所有绑定的分类和标签
             List<Cate> cateList = articleMapper.getCateList(article.getId());
             article.setCateList(cateList);
@@ -113,6 +113,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             article.setComment(commentMapper.getCommentList(article.getId()).size());
         }
 
-        return result;
+        return list;
     }
 }

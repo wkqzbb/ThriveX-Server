@@ -94,8 +94,8 @@ public class ArticleController {
     @ApiOperation("分页查询文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
-        Page<Article> data = articleService.paging(filterVo, sortVo, pageVo);
-        Map<String, Object> result = Paging.filter(data);
+        Page<Article> list = articleService.paging(filterVo, sortVo, pageVo);
+        Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
 }

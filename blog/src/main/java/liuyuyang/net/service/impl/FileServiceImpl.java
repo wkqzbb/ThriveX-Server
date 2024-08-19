@@ -1,5 +1,6 @@
 package liuyuyang.net.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qiniu.common.QiniuException;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
@@ -9,6 +10,8 @@ import com.qiniu.util.Auth;
 import liuyuyang.net.model.File;
 import liuyuyang.net.properties.OssProperties;
 import liuyuyang.net.service.FileService;
+import liuyuyang.net.vo.PageVo;
+import liuyuyang.net.vo.SortVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +60,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<File> list() throws QiniuException {
+    public List<File> list(SortVO sortVo) throws QiniuException {
         // 文件名前缀
         String prefix = "";
 
@@ -82,6 +85,36 @@ public class FileServiceImpl implements FileService {
             }
         }
 
+        switch (sortVo.getSort()) {
+            case "asc":
+                list.sort((a1, a2) -> a1.getCreateTime().compareTo(a2.getCreateTime()));
+                break;
+            case "desc":
+                list.sort((a1, a2) -> a2.getCreateTime().compareTo(a1.getCreateTime()));
+                break;
+        }
+
         return list;
     }
+
+    @Override
+    public Page<File> paging(SortVO sortVo, PageVo pageVo) throws QiniuException {
+        List<File> list = list(sortVo);
+
+        // 分页处理
+        int currentPage = pageVo.getPage();
+        int pageSize = pageVo.getSize();
+        int total = list.size();
+        int fromIndex = Math.min((currentPage - 1) * pageSize, total);
+        int toIndex = Math.min(currentPage * pageSize, total);
+
+        List<File> pagedFiles = list.subList(fromIndex, toIndex);
+
+        // 封装分页结果
+        Page<File> page = new Page<>(currentPage, pageSize, total);
+        page.setRecords(pagedFiles);
+
+        return page;
+    }
+
 }
