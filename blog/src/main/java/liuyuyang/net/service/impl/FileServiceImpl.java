@@ -1,10 +1,14 @@
 package liuyuyang.net.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
+import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
+import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import liuyuyang.net.model.File;
@@ -14,9 +18,12 @@ import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +36,10 @@ public class FileServiceImpl implements FileService {
     private Auth auth;
     private Configuration cfg;
     private BucketManager bucketManager;
+    private UploadManager uploadManager;
     private String bucket;
     private String url;
+    private String token;
 
     // 等注入完成后再执行
     @PostConstruct
@@ -38,9 +47,39 @@ public class FileServiceImpl implements FileService {
         this.auth = Auth.create(ossProperties.getAccessKey(), ossProperties.getSecretKey());
         this.cfg = new Configuration(Region.region0());
         this.bucketManager = new BucketManager(auth, cfg);
+        this.uploadManager = new UploadManager(cfg);
 
         this.bucket = ossProperties.getBucket();
-        this.url = "http://" + bucketManager.domainList(bucket)[0];
+        this.url = "http://" + bucketManager.domainList(bucket)[0] + "/";
+        this.token = auth.uploadToken(bucket);
+    }
+
+    @Override
+    public String add(MultipartFile file, String dir) throws IOException {
+        // 获取文件字节数组
+        byte[] fileBytes = file.getBytes();
+        // 原始文件名称
+        String originName = file.getOriginalFilename();
+
+        // 将文件名称处理成hash值
+        String hashFilename = DigestUtils.md5DigestAsHex(originName.getBytes());
+
+        // 生成文件的存储路径和名称
+        String filePath = dir + "/" + hashFilename;
+
+        uploadManager.put(fileBytes, filePath, token);
+
+        return url + filePath;
+    }
+
+    @Override
+    public void del(String name) throws QiniuException {
+
+    }
+
+    @Override
+    public void batchDel(String[] names) throws QiniuException {
+
     }
 
     @Override
@@ -54,7 +93,7 @@ public class FileServiceImpl implements FileService {
         data.setSize(file.fsize);
         data.setType(file.mimeType);
         data.setCreateTime(file.putTime);
-        data.setUrl(url + "/" + name);
+        data.setUrl(url + name);
 
         return data;
     }
@@ -79,7 +118,7 @@ public class FileServiceImpl implements FileService {
                 file.setSize(item.fsize);
                 file.setType(item.mimeType);
                 file.setCreateTime(item.putTime);
-                file.setUrl(url + "/" + item.key);
+                file.setUrl(url  + item.key);
 
                 list.add(file);
             }

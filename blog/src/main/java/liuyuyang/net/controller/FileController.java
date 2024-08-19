@@ -13,12 +13,11 @@ import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +29,12 @@ import java.util.Map;
 public class FileController {
     @Resource
     private FileService fileService;
+
+    @PostMapping
+    public Result<String> add(@RequestParam("file") MultipartFile file, @RequestParam(defaultValue = "default") String dir) throws IOException {
+        String url = fileService.add(file, dir);
+        return Result.success("文件上传成功：" + url);
+    }
 
     @GetMapping("/{name}")
     @ApiOperation("获取文件信息")
