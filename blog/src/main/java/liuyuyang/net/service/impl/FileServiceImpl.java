@@ -1,14 +1,11 @@
 package liuyuyang.net.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
-import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
-import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import liuyuyang.net.model.File;
@@ -39,7 +36,6 @@ public class FileServiceImpl implements FileService {
     private UploadManager uploadManager;
     private String bucket;
     private String url;
-    private String token;
 
     // 等注入完成后再执行
     @PostConstruct
@@ -49,13 +45,16 @@ public class FileServiceImpl implements FileService {
         this.bucketManager = new BucketManager(auth, cfg);
         this.uploadManager = new UploadManager(cfg);
 
+        // 存储桶名称
         this.bucket = ossProperties.getBucket();
+        // 存储桶域名
         this.url = "http://" + bucketManager.domainList(bucket)[0] + "/";
-        this.token = auth.uploadToken(bucket);
     }
 
     @Override
     public String add(MultipartFile file, String dir) throws IOException {
+        String token = auth.uploadToken(bucket);
+
         // 获取文件字节数组
         byte[] fileBytes = file.getBytes();
         // 原始文件名称
@@ -74,12 +73,15 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void del(String name) throws QiniuException {
-
+        System.out.println(8888);
+        System.out.println(bucketManager.delete(bucket, name));;
     }
 
     @Override
     public void batchDel(String[] names) throws QiniuException {
-
+        for (String name : names) {
+            bucketManager.delete(bucket, name);
+        }
     }
 
     @Override
@@ -118,7 +120,7 @@ public class FileServiceImpl implements FileService {
                 file.setSize(item.fsize);
                 file.setType(item.mimeType);
                 file.setCreateTime(item.putTime);
-                file.setUrl(url  + item.key);
+                file.setUrl(url + item.key);
 
                 list.add(file);
             }

@@ -5,7 +5,6 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.qiniu.common.QiniuException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.File;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.FileService;
@@ -31,9 +30,27 @@ public class FileController {
     private FileService fileService;
 
     @PostMapping
+    @ApiOperation("文件上传")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestParam("file") MultipartFile file, @RequestParam(defaultValue = "default") String dir) throws IOException {
         String url = fileService.add(file, dir);
         return Result.success("文件上传成功：" + url);
+    }
+
+    @DeleteMapping("/{name}")
+    @ApiOperation("删除文件")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
+    public Result<String> del(@PathVariable String name) throws QiniuException {
+        fileService.del(name);
+        return Result.success("文件删除成功");
+    }
+
+    @DeleteMapping("/batch")
+    @ApiOperation("批量删除文件")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
+    public Result batchDel(@RequestBody String[] names) throws QiniuException {
+        fileService.batchDel(names);
+        return Result.success();
     }
 
     @GetMapping("/{name}")

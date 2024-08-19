@@ -1,5 +1,6 @@
 package liuyuyang.net.handler;
 
+import com.qiniu.common.QiniuException;
 import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.result.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,6 +15,14 @@ public class GlobalExceptionHandler {
     public Result<Object> yuyangException(YuYangException e) {
         e.printStackTrace();
         return Result.error(e.getCode(), e.getMessage());
+    }
+
+    // 处理七牛云Oss异常
+    @ResponseBody
+    @ExceptionHandler(QiniuException.class)
+    public Result<Object> qiniuException(QiniuException e) {
+        e.printStackTrace();
+        return Result.error(e.code(), e.error());
     }
 
     // 处理所有异常
