@@ -17,7 +17,7 @@ public interface FileService {
 
     public void batchDel(String[] pathList) throws QiniuException;
 
-    public File get(String name) throws QiniuException;
+    public File get(String filePath) throws QiniuException;
 
     public List<File> list(String dir, SortVO sortVo) throws QiniuException;
 

@@ -32,14 +32,14 @@ public class FileController {
     @PostMapping
     @ApiOperation("文件上传")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestParam("file") MultipartFile file, @RequestParam(defaultValue = "default") String dir) throws IOException {
+    public Result<String> add(@RequestParam MultipartFile file, @RequestParam(defaultValue = "default") String dir) throws IOException {
         String url = fileService.add(file, dir);
         return Result.success("文件上传成功：" + url);
     }
 
     @DeleteMapping
     @ApiOperation("删除文件")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@RequestParam String filePath) throws QiniuException {
         fileService.del(filePath);
         return Result.success("文件删除成功");
@@ -53,17 +53,17 @@ public class FileController {
         return Result.success();
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/info")
     @ApiOperation("获取文件信息")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<File> get(@PathVariable String name) throws QiniuException {
-        File data = fileService.get(name);
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
+    public Result<File> get(@RequestParam String filePath) throws QiniuException {
+        File data = fileService.get(filePath);
         return Result.success(data);
     }
 
     @GetMapping("/all")
     @ApiOperation("获取文件列表")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<List<File>> list(@RequestParam(defaultValue = "all") String dir, SortVO sortVo) throws QiniuException {
         List<File> list = fileService.list(dir, sortVo);
         return Result.success(list);
@@ -71,7 +71,7 @@ public class FileController {
 
     @GetMapping
     @ApiOperation("分页查询文件列表")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result paging(@RequestParam(defaultValue = "all") String dir, SortVO sortVo, PageVo pageVo) throws QiniuException {
         Page<File> list = fileService.paging(dir, sortVo, pageVo);
         Map<String, Object> result = Paging.filter((list));

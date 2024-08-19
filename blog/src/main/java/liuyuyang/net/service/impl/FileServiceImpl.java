@@ -86,17 +86,20 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File get(String name) throws QiniuException {
+    public File get(String filePath) throws QiniuException {
         BucketManager bucketManager = new BucketManager(auth, cfg);
 
-        FileInfo file = bucketManager.stat(bucket, name);
+        FileInfo file = bucketManager.stat(bucket, filePath);
+
+        String suffix = "." + file.mimeType.split("/")[1]; // 文件后缀
+        String name = filePath.split("/")[1]; // 去掉目录的文件名
 
         File data = new File();
-        data.setName(name);
+        data.setName(name + suffix);
         data.setSize(file.fsize);
         data.setType(file.mimeType);
         data.setCreateTime(file.putTime);
-        data.setUrl(url + name);
+        data.setUrl(url + filePath);
 
         return data;
     }
@@ -104,40 +107,36 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<File> list(String dir, SortVO sortVo) throws QiniuException {
         // 文件名前缀
-        String prefix = "";
+        String prefix = "all".equals(dir) ? "" : dir + "/";
 
         List<File> list = new ArrayList<>();
 
         // 列举空间文件列表
         BucketManager.FileListIterator fileListIterator = bucketManager.createFileListIterator(bucket, prefix);
 
-        if (Objects.equals(dir, "all")) {
-            while (fileListIterator.hasNext()) {
-                // 处理获取的file list结果
-                FileInfo[] items = fileListIterator.next();
+        while (fileListIterator.hasNext()) {
+            // 处理获取的file list结果
+            FileInfo[] items = fileListIterator.next();
 
-                for (FileInfo item : items) {
-                    File file = new File();
-                    file.setName(item.key);
-                    file.setSize(item.fsize);
-                    file.setType(item.mimeType);
-                    file.setCreateTime(item.putTime);
-                    file.setUrl(url + item.key);
+            for (FileInfo item : items) {
+                if ("all".equals(dir) || item.key.startsWith(prefix)) {
+                    // 当 dir 不为 "all" 时，进一步过滤掉不在指定目录中的文件
+                    String relativePath = item.key.substring(prefix.length());
+                    if ("all".equals(dir) || !relativePath.contains("/")) {
+                        String suffix = "." + item.mimeType.split("/")[1]; // 文件后缀
 
-                    list.add(file);
+                        File file = new File();
+                        // 如果 dir 为 "all"，保留完整的 item.key，否则去掉 prefix
+                        String name = "all".equals(dir) ? item.key : item.key.replaceFirst("^" + prefix, "");
+                        file.setName(name + suffix);
+                        file.setSize(item.fsize);
+                        file.setType(item.mimeType);
+                        file.setCreateTime(item.putTime);
+                        file.setUrl(url + item.key);
+
+                        list.add(file);
+                    }
                 }
-            }
-        } else {
-            FileInfo[] fileListing = bucketManager.listFiles(bucket, dir, null, 1000, null).items;
-            for (FileInfo item : fileListing) {
-                File file = new File();
-                file.setName(item.key);
-                file.setSize(item.fsize);
-                file.setType(item.mimeType);
-                file.setCreateTime(item.putTime);
-                file.setUrl(url + item.key);
-
-                list.add(file);
             }
         }
 
