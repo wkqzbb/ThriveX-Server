@@ -1,7 +1,9 @@
 package liuyuyang.net.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.qiniu.common.QiniuException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.execption.YuYangException;
 import liuyuyang.net.model.File;
 import liuyuyang.net.result.Result;
@@ -24,6 +26,8 @@ public class FileController {
     private FileService fileService;
 
     @GetMapping
+    @ApiOperation("获取文件列表")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<List<File>> list() {
         try {
             List<File> list = fileService.list();

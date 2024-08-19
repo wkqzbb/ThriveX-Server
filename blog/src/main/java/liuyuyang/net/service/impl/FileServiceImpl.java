@@ -7,22 +7,35 @@ import com.qiniu.storage.Region;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import liuyuyang.net.model.File;
+import liuyuyang.net.properties.OssProperties;
 import liuyuyang.net.service.FileService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
 public class FileServiceImpl implements FileService {
-    String accessKey = "xpquCtc-v1t-M3wY3b8WVCVACS1viMpUNY6aZPzg";
-    String secretKey = "1h-V_vCrOt2UIoHf4x_Rj4GxfjsW_IINRz0VyzFQ";
-    String bucket = "thrive";
-    Auth auth = Auth.create(accessKey, secretKey);
-    Configuration cfg = new Configuration(Region.region0());
-    BucketManager bucketManager = new BucketManager(auth, cfg);
+    @Resource
+    private OssProperties ossProperties;
+
+    String bucket;
+    Auth auth;
+    Configuration cfg;
+    BucketManager bucketManager;
+
+    // 等注入完成后再执行
+    @PostConstruct
+    public void init() {
+        this.bucket = ossProperties.getBucket();
+        this.auth = Auth.create(ossProperties.getAccessKey(), ossProperties.getSecretKey());
+        this.cfg = new Configuration(Region.region0());
+        this.bucketManager = new BucketManager(auth, cfg);
+    }
 
     @Override
     public List<File> list() throws QiniuException {
@@ -31,10 +44,9 @@ public class FileServiceImpl implements FileService {
 
         // 列举空间文件列表
         BucketManager.FileListIterator fileListIterator = bucketManager.createFileListIterator(bucket, prefix);
-        System.out.println(fileListIterator);
 
         // 获取存储桶的域名
-        String url = bucketManager.domainList(bucket)[0];
+        String url = "http://" + bucketManager.domainList(bucket)[0];
 
         List<File> list = new ArrayList<>();
 

@@ -12,6 +12,11 @@ jwt:
   # 设置前端传递过来的令牌名称
   token-name: Authorization
 
+oss:
+  accessKey: xpquCtc-v1t-M3wY3b8WVCVACS1viMpUNY6aZPzg
+  secretKey: 1h-V_vCrOt2UIoHf4x_Rj4GxfjsW_IINRz0VyzFQ
+  bucket: thrive
+
 # API文档配置
 knife4j:
   enable: true
