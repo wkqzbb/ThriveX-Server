@@ -3,7 +3,7 @@ package liuyuyang.net.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.Route;
 import liuyuyang.net.result.Result;

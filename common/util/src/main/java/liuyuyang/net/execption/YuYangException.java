@@ -3,7 +3,7 @@ package liuyuyang.net.execption;
 import lombok.Data;
 
 @Data
-public class YuYangException extends RuntimeException {
+public class CustomException extends RuntimeException {
     private Integer code;
 
     private String message;
@@ -14,7 +14,7 @@ public class YuYangException extends RuntimeException {
      * @param code
      * @param message
      */
-    public YuYangException(Integer code, String message) {
+    public CustomException(Integer code, String message) {
         super(message);
         this.code = code;
         this.message = message;
@@ -22,7 +22,7 @@ public class YuYangException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "YuYangException{" +
+        return "CustomException{" +
                 "code=" + code +
                 ", message=" + this.getMessage() +
                 '}';

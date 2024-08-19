@@ -2,7 +2,7 @@ package liuyuyang.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.RoleMapper;
 import liuyuyang.net.mapper.RouteRoleMapper;
 import liuyuyang.net.model.Role;
@@ -31,7 +31,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public void bindingRoute(Integer roleId, List<Integer> ids) {
         if (ids == null || ids.isEmpty()) {
-            throw new YuYangException(400, "请确保参数完整");
+            throw new CustomException(400, "请确保参数完整");
         }
 
         // 先删除当前角色绑定的所有路由

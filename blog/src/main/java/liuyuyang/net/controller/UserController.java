@@ -6,7 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.dto.user.EditPassDTO;
 import liuyuyang.net.dto.user.UserInfoDTO;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.User;
 import liuyuyang.net.properties.JwtProperties;
@@ -45,7 +45,7 @@ public class UserController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new YuYangException(400, e.getMessage());
+            throw new CustomException(400, e.getMessage());
         }
     }
 

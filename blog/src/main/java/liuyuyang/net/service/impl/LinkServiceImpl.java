@@ -3,7 +3,7 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.LinkMapper;
 import liuyuyang.net.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
@@ -27,7 +27,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
         Link data = linkMapper.selectById(id);
 
         if (data == null) {
-            throw new YuYangException(400, "该网站不存在");
+            throw new CustomException(400, "该网站不存在");
         }
 
         // 获取网站类型

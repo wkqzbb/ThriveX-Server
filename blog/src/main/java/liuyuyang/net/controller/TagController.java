@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Tag;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.TagService;
@@ -33,7 +33,7 @@ public class TagController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new YuYangException(400, e.getMessage());
+            throw new CustomException(400, e.getMessage());
         }
     }
 
@@ -67,7 +67,7 @@ public class TagController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new YuYangException(400, e.getMessage());
+            throw new CustomException(400, e.getMessage());
         }
     }
 

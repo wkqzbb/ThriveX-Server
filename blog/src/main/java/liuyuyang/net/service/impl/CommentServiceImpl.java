@@ -3,7 +3,7 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.mapper.CommentMapper;
 import liuyuyang.net.model.Article;
@@ -32,7 +32,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         Comment data = commentMapper.selectById(id);
 
         if (data == null) {
-            throw new YuYangException(400, "该评论不存在");
+            throw new CustomException(400, "该评论不存在");
         }
 
         // 文章标题

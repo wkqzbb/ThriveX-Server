@@ -1,7 +1,7 @@
 package liuyuyang.net.handler;
 
 import com.qiniu.common.QiniuException;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.result.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class GlobalExceptionHandler {
     // 处理自定义的异常
     @ResponseBody
-    @ExceptionHandler(YuYangException.class)
-    public Result<Object> yuyangException(YuYangException e) {
+    @ExceptionHandler(CustomException.class)
+    public Result<Object> customException(CustomException e) {
         e.printStackTrace();
         return Result.error(e.getCode(), e.getMessage());
     }

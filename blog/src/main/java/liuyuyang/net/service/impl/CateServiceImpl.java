@@ -3,7 +3,7 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.CateMapper;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.service.CateService;
@@ -29,7 +29,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
         List<Cate> data = cateMapper.selectList(queryWrapper);
 
         if (!data.isEmpty()) {
-            throw new YuYangException(400, "ID为：" + id + "的分类中绑定了 " + data.size() + " 个二级分类，请解绑后重试");
+            throw new CustomException(400, "ID为：" + id + "的分类中绑定了 " + data.size() + " 个二级分类，请解绑后重试");
         }
 
         return true;
@@ -40,7 +40,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
         Cate data = cateMapper.selectById(id);
 
         if (data == null) {
-            throw new YuYangException(400, "该分类不存在");
+            throw new CustomException(400, "该分类不存在");
         }
 
         // 获取当前分类下的所有子分类

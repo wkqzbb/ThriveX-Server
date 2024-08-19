@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
 import liuyuyang.net.model.LinkType;
@@ -37,7 +37,7 @@ public class LinkController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new YuYangException(400, e.getMessage());
+            throw new CustomException(400, e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class LinkController {
 
             return res ? Result.success() : Result.error();
         } catch (Exception e) {
-            throw new YuYangException(400, e.getMessage());
+            throw new CustomException(400, e.getMessage());
         }
     }
 

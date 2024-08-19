@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.dto.user.EditPassDTO;
-import liuyuyang.net.execption.YuYangException;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.RoleMapper;
 import liuyuyang.net.mapper.UserMapper;
 import liuyuyang.net.model.Role;
@@ -60,7 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userMapper.selectOne(queryWrapper);
 
         if (user == null) {
-            throw new YuYangException(400, "用户名或旧密码错误");
+            throw new CustomException(400, "用户名或旧密码错误");
         }
 
         user.setPassword(DigestUtils.md5DigestAsHex(data.getNewPassword().getBytes()));
@@ -76,7 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 判断用户名是否存在
         if (data != null) {
-            throw new YuYangException(400, "该用户已存在：" + user.getUsername());
+            throw new CustomException(400, "该用户已存在：" + user.getUsername());
         }
 
         // 密码加密
@@ -94,7 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User data = userMapper.selectOne(queryWrapper);
 
         if (data == null) {
-            throw new YuYangException(400, "用户名或密码错误");
+            throw new CustomException(400, "用户名或密码错误");
         }
 
         return data;
