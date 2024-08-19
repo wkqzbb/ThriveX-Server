@@ -23,18 +23,37 @@ public class FileServiceImpl implements FileService {
     @Resource
     private OssProperties ossProperties;
 
-    String bucket;
-    Auth auth;
-    Configuration cfg;
-    BucketManager bucketManager;
+    private Auth auth;
+    private Configuration cfg;
+    private BucketManager bucketManager;
+    private String bucket;
+    private String url;
 
     // 等注入完成后再执行
     @PostConstruct
-    public void init() {
-        this.bucket = ossProperties.getBucket();
+    public void init() throws QiniuException {
         this.auth = Auth.create(ossProperties.getAccessKey(), ossProperties.getSecretKey());
         this.cfg = new Configuration(Region.region0());
         this.bucketManager = new BucketManager(auth, cfg);
+
+        this.bucket = ossProperties.getBucket();
+        this.url = "http://" + bucketManager.domainList(bucket)[0];
+    }
+
+    @Override
+    public File get(String name) throws QiniuException {
+        BucketManager bucketManager = new BucketManager(auth, cfg);
+
+        FileInfo file = bucketManager.stat(bucket, name);
+
+        File data = new File();
+        data.setName(name);
+        data.setSize(file.fsize);
+        data.setType(file.mimeType);
+        data.setCreateTime(file.putTime);
+        data.setUrl(url + "/" + name);
+
+        return data;
     }
 
     @Override
@@ -44,9 +63,6 @@ public class FileServiceImpl implements FileService {
 
         // 列举空间文件列表
         BucketManager.FileListIterator fileListIterator = bucketManager.createFileListIterator(bucket, prefix);
-
-        // 获取存储桶的域名
-        String url = "http://" + bucketManager.domainList(bucket)[0];
 
         List<File> list = new ArrayList<>();
 

@@ -10,6 +10,7 @@ import liuyuyang.net.result.Result;
 import liuyuyang.net.service.FileService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,15 +26,19 @@ public class FileController {
     @Resource
     private FileService fileService;
 
+    @GetMapping("/{name}")
+    @ApiOperation("获取文件信息")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
+    public Result<File> get(@PathVariable String name) throws QiniuException {
+        File data = fileService.get(name);
+        return Result.success(data);
+    }
+
     @GetMapping
     @ApiOperation("获取文件列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<List<File>> list() {
-        try {
-            List<File> list = fileService.list();
-            return Result.success("获取文件列表成功", list);
-        } catch (QiniuException e) {
-            throw new YuYangException(e.code(), "获取文件列表失败：" + e.getMessage());
-        }
+    public Result<List<File>> list() throws QiniuException {
+        List<File> list = fileService.list();
+        return Result.success(list);
     }
 }
