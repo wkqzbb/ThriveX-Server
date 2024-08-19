@@ -37,6 +37,7 @@
         <spring-beans.version>5.3.21</spring-beans.version>
         <rome.version>1.18.0</rome.version>
         <oshi.version>6.2.2</oshi.version>
+        <qiniu.version>7.13.0</qiniu.version>
     </properties>
 
     <!--配置dependencyManagement锁定依赖的版本-->
@@ -107,6 +108,13 @@
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi.version}</version>
+            </dependency>
+
+            <!-- 七牛云OSS相关配置 -->
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>${qiniu.version}</version>
             </dependency>
 
             <!-- 自定义模块 -->
