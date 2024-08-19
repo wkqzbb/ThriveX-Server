@@ -37,19 +37,19 @@ public class FileController {
         return Result.success("文件上传成功：" + url);
     }
 
-    @DeleteMapping("/{name}")
+    @DeleteMapping
     @ApiOperation("删除文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-    public Result<String> del(@PathVariable String name) throws QiniuException {
-        fileService.del(name);
+    public Result<String> del(@RequestParam String filePath) throws QiniuException {
+        fileService.del(filePath);
         return Result.success("文件删除成功");
     }
 
     @DeleteMapping("/batch")
     @ApiOperation("批量删除文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-    public Result batchDel(@RequestBody String[] names) throws QiniuException {
-        fileService.batchDel(names);
+    public Result batchDel(@RequestBody String[] pathList) throws QiniuException {
+        fileService.batchDel(pathList);
         return Result.success();
     }
 
@@ -64,16 +64,16 @@ public class FileController {
     @GetMapping("/all")
     @ApiOperation("获取文件列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<List<File>> list(SortVO sortVo) throws QiniuException {
-        List<File> list = fileService.list(sortVo);
+    public Result<List<File>> list(@RequestParam(defaultValue = "all") String dir, SortVO sortVo) throws QiniuException {
+        List<File> list = fileService.list(dir, sortVo);
         return Result.success(list);
     }
 
     @GetMapping
     @ApiOperation("分页查询文件列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result paging(SortVO sortVo, PageVo pageVo) throws QiniuException {
-        Page<File> list = fileService.paging(sortVo, pageVo);
+    public Result paging(@RequestParam(defaultValue = "all") String dir, SortVO sortVo, PageVo pageVo) throws QiniuException {
+        Page<File> list = fileService.paging(dir, sortVo, pageVo);
         Map<String, Object> result = Paging.filter((list));
         return Result.success(result);
     }

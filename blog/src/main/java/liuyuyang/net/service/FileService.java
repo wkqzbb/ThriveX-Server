@@ -13,13 +13,13 @@ import java.util.List;
 public interface FileService {
     public String add(MultipartFile file, String dir) throws IOException;
 
-    public void del(String name) throws QiniuException;
+    public void del(String filePath) throws QiniuException;
 
-    public void batchDel(String[] names) throws QiniuException;
+    public void batchDel(String[] pathList) throws QiniuException;
 
     public File get(String name) throws QiniuException;
 
-    public List<File> list(SortVO sortVo) throws QiniuException;
+    public List<File> list(String dir, SortVO sortVo) throws QiniuException;
 
-    public Page<File> paging(SortVO sortVo, PageVo pageVo) throws QiniuException;
+    public Page<File> paging(String dir, SortVO sortVo, PageVo pageVo) throws QiniuException;
 }

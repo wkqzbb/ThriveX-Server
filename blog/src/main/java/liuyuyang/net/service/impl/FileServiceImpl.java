@@ -7,6 +7,7 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.FileInfo;
+import com.qiniu.storage.model.FileListing;
 import com.qiniu.util.Auth;
 import liuyuyang.net.model.File;
 import liuyuyang.net.properties.OssProperties;
@@ -23,6 +24,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -72,14 +74,13 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void del(String name) throws QiniuException {
-        System.out.println(8888);
-        System.out.println(bucketManager.delete(bucket, name));;
+    public void del(String filePath) throws QiniuException {
+        bucketManager.delete(bucket, filePath);
     }
 
     @Override
-    public void batchDel(String[] names) throws QiniuException {
-        for (String name : names) {
+    public void batchDel(String[] pathList) throws QiniuException {
+        for (String name : pathList) {
             bucketManager.delete(bucket, name);
         }
     }
@@ -101,20 +102,34 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<File> list(SortVO sortVo) throws QiniuException {
+    public List<File> list(String dir, SortVO sortVo) throws QiniuException {
         // 文件名前缀
         String prefix = "";
+
+        List<File> list = new ArrayList<>();
 
         // 列举空间文件列表
         BucketManager.FileListIterator fileListIterator = bucketManager.createFileListIterator(bucket, prefix);
 
-        List<File> list = new ArrayList<>();
+        if (Objects.equals(dir, "all")) {
+            while (fileListIterator.hasNext()) {
+                // 处理获取的file list结果
+                FileInfo[] items = fileListIterator.next();
 
-        while (fileListIterator.hasNext()) {
-            // 处理获取的file list结果
-            FileInfo[] items = fileListIterator.next();
+                for (FileInfo item : items) {
+                    File file = new File();
+                    file.setName(item.key);
+                    file.setSize(item.fsize);
+                    file.setType(item.mimeType);
+                    file.setCreateTime(item.putTime);
+                    file.setUrl(url + item.key);
 
-            for (FileInfo item : items) {
+                    list.add(file);
+                }
+            }
+        } else {
+            FileInfo[] fileListing = bucketManager.listFiles(bucket, dir, null, 1000, null).items;
+            for (FileInfo item : fileListing) {
                 File file = new File();
                 file.setName(item.key);
                 file.setSize(item.fsize);
@@ -139,8 +154,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Page<File> paging(SortVO sortVo, PageVo pageVo) throws QiniuException {
-        List<File> list = list(sortVo);
+    public Page<File> paging(String dir, SortVO sortVo, PageVo pageVo) throws QiniuException {
+        List<File> list = list(dir, sortVo);
 
         // 分页处理
         int currentPage = pageVo.getPage();
