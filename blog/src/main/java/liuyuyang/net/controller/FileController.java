@@ -33,6 +33,7 @@ public class FileController {
     @ApiOperation("文件上传")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestParam MultipartFile file, @RequestParam(defaultValue = "default") String dir) throws IOException {
+        dir = "root".equals(dir) ? "" : dir + "/";
         String url = fileService.add(file, dir);
         return Result.success("文件上传成功：" + url);
     }

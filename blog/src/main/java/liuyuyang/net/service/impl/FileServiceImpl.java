@@ -7,7 +7,6 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.FileInfo;
-import com.qiniu.storage.model.FileListing;
 import com.qiniu.util.Auth;
 import liuyuyang.net.model.File;
 import liuyuyang.net.properties.OssProperties;
@@ -22,9 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -56,21 +57,24 @@ public class FileServiceImpl implements FileService {
     @Override
     public String add(MultipartFile file, String dir) throws IOException {
         String token = auth.uploadToken(bucket);
+        // 将文件内容转换为hash值
+        String hashValue = DigestUtils.md5DigestAsHex(file.getBytes());
 
-        // 获取文件字节数组
-        byte[] fileBytes = file.getBytes();
-        // 原始文件名称
-        String originName = file.getOriginalFilename();
+        // 获取文件的原始文件名
+        String originalFilename = file.getOriginalFilename();
+        String suffix = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
 
-        // 将文件名称处理成hash值
-        String hashFilename = DigestUtils.md5DigestAsHex(originName.getBytes());
+        // 构建新的文件名（hash值 + 后缀）
+        String fileName = hashValue + suffix;
 
-        // 生成文件的存储路径和名称
-        String filePath = dir + "/" + hashFilename;
+        // 上传文件
+        uploadManager.put(file.getBytes(), dir + fileName, token);
 
-        uploadManager.put(fileBytes, filePath, token);
-
-        return url + filePath;
+        // 返回文件的URL
+        return url + dir + fileName;
     }
 
     @Override
