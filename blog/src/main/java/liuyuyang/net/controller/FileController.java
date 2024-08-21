@@ -6,6 +6,7 @@ import com.qiniu.common.QiniuException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.model.File;
+import liuyuyang.net.properties.OssProperties;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.FileService;
 import liuyuyang.net.utils.Paging;
@@ -28,6 +29,8 @@ import java.util.Map;
 public class FileController {
     @Resource
     private FileService fileService;
+    @Resource
+    private OssProperties ossProperties;
 
     @PostMapping
     @ApiOperation("文件上传")
@@ -76,5 +79,13 @@ public class FileController {
         Page<File> list = fileService.paging(dir, sortVo, pageVo);
         Map<String, Object> result = Paging.filter((list));
         return Result.success(result);
+    }
+
+    @GetMapping("/dir")
+    @ApiOperation("获取目录列表")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
+    public Result<List<String>> dirList() {
+        List<String> list = ossProperties.getDirList();
+        return Result.success(list);
     }
 }
