@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -63,6 +64,12 @@ public class FileServiceImpl implements FileService {
         if (!isDir) throw new RuntimeException("上传失败：该目录不在白名单内");
 
         dir = "root".equals(dir) ? "" : dir + "/";
+
+        // 检查文件的 MIME 类型
+        String contentType = file.getContentType();
+        if (!isImage(contentType)) {
+            throw new RuntimeException("上传失败：不支持的图片类型");
+        }
 
         String token = auth.uploadToken(bucket);
         // 将文件内容转换为hash值
@@ -182,4 +189,13 @@ public class FileServiceImpl implements FileService {
         return page;
     }
 
+    // 判断上传的是不是图片格式
+    private boolean isImage(String contentType) {
+        if (contentType == null) {
+            return false;
+        }
+        // 定义支持的图片 MIME 类型
+        List<String> imageMimeTypes = Arrays.asList("image/jpeg", "image/png", "image/gif", "image/bmp", "image/webp");
+        return imageMimeTypes.contains(contentType);
+    }
 }
