@@ -13,6 +13,7 @@ import liuyuyang.net.properties.OssProperties;
 import liuyuyang.net.service.FileService;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -25,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -56,6 +56,14 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String add(MultipartFile file, String dir) throws IOException {
+        // 限制文件只能上传指定的目录当中
+        List<String> dirList = ossProperties.getDirList();
+        // 判断该目录是否在白名单内
+        boolean isDir = dirList.contains(dir);
+        if (!isDir) throw new RuntimeException("上传失败：该目录不在白名单内");
+
+        dir = "root".equals(dir) ? "" : dir + "/";
+
         String token = auth.uploadToken(bucket);
         // 将文件内容转换为hash值
         String hashValue = DigestUtils.md5DigestAsHex(file.getBytes());
@@ -127,12 +135,10 @@ public class FileServiceImpl implements FileService {
                     // 当 dir 不为 "all" 时，进一步过滤掉不在指定目录中的文件
                     String relativePath = item.key.substring(prefix.length());
                     if ("all".equals(dir) || !relativePath.contains("/")) {
-                        String suffix = "." + item.mimeType.split("/")[1]; // 文件后缀
-
                         File file = new File();
                         // 如果 dir 为 "all"，保留完整的 item.key，否则去掉 prefix
                         String name = "all".equals(dir) ? item.key : item.key.replaceFirst("^" + prefix, "");
-                        file.setName(name + suffix);
+                        file.setName(name);
                         file.setSize(item.fsize);
                         file.setType(item.mimeType);
                         file.setCreateTime(item.putTime);

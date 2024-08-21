@@ -16,6 +16,8 @@ oss:
   accessKey: xpquCtc-v1t-M3wY3b8WVCVACS1viMpUNY6aZPzg
   secretKey: 1h-V_vCrOt2UIoHf4x_Rj4GxfjsW_IINRz0VyzFQ
   bucket: thrive
+  # 目录白名单
+  dirList: [ "default","article","swiper" ]
 
 # API文档配置
 knife4j:
