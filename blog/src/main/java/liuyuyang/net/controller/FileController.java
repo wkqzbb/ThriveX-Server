@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +33,29 @@ public class FileController {
     @Resource
     private OssProperties ossProperties;
 
+    // @PostMapping
+    // @ApiOperation("文件上传")
+    // @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
+    // public Result<String> add(@RequestParam MultipartFile file, @RequestParam(defaultValue = "default") String dir) throws IOException {
+    //     String url = fileService.add(file, dir);
+    //     return Result.success("文件上传成功：" + url);
+    // }
+
     @PostMapping
     @ApiOperation("文件上传")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestParam MultipartFile file, @RequestParam(defaultValue = "default") String dir) throws IOException {
-        String url = fileService.add(file, dir);
-        return Result.success("文件上传成功：" + url);
+    public Result<Object> add(@RequestParam MultipartFile[] files, @RequestParam(defaultValue = "default") String dir) throws IOException {
+        List<String> urls = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String url = fileService.add(file, dir);
+            urls.add(url);
+        }
+
+        if (urls.size() == 1) {
+            return Result.success("文件上传成功：", urls.get(0));
+        } else {
+            return Result.success("文件上传成功：", urls);
+        }
     }
 
     @DeleteMapping
@@ -83,7 +101,7 @@ public class FileController {
 
     @GetMapping("/dir")
     @ApiOperation("获取目录列表")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result<List<String>> dirList() {
         List<String> list = ossProperties.getDirList();
         return Result.success(list);
