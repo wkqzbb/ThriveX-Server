@@ -6,6 +6,7 @@ import liuyuyang.net.result.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,8 +22,18 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(QiniuException.class)
     public Result<Object> qiniuException(QiniuException e) {
+        System.out.println(1111);
+        System.out.println(e.getMessage());
         e.printStackTrace();
         return Result.error(e.code(), e.error());
+    }
+
+    // 处理上传文件大小超过限制的异常
+    @ResponseBody
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public Result<Object> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+        e.printStackTrace();
+        return Result.error(400, "上传失败：文件大小超出最大限制");
     }
 
     // 处理所有异常

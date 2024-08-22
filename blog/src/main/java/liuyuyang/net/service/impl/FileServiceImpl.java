@@ -13,7 +13,6 @@ import liuyuyang.net.properties.OssProperties;
 import liuyuyang.net.service.FileService;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -22,10 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -72,6 +69,7 @@ public class FileServiceImpl implements FileService {
         }
 
         String token = auth.uploadToken(bucket);
+
         // 将文件内容转换为hash值
         String hashValue = DigestUtils.md5DigestAsHex(file.getBytes());
 
