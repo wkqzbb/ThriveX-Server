@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.result.Result;
@@ -97,5 +98,13 @@ public class ArticleController {
         Page<Article> list = articleService.paging(filterVo, sortVo, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
+    }
+
+    @GetMapping("/random")
+    @ApiOperation("随机获取文章数据")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
+    public Result<List<Article>> getRandomArticles(@ApiParam(value = "默认随机获取5篇文章，可以通过count指定数量") @RequestParam(defaultValue = "5") Integer count) {
+        List<Article> data = articleService.getRandomArticles(count);
+        return Result.success(data);
     }
 }

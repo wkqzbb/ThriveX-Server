@@ -16,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -114,5 +117,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         return list;
+    }
+
+    @Override
+    public List<Article> getRandomArticles(int count) {
+        List<Integer> ids = articleMapper.selectList(null).stream().map(Article::getId).collect(Collectors.toList());
+
+        if (ids.size() <= count) {
+            // 如果文章数量少于或等于需要的数量，直接返回所有文章
+            return ids.stream()
+                    .map(this::get)
+                    .collect(Collectors.toList());
+        }
+
+        // 随机打乱文章ID列表
+        Collections.shuffle(ids, new Random());
+
+        // 选择前 count 个文章ID
+        List<Integer> randomArticleIds = ids.subList(0, count);
+
+        // 根据随机选择的文章ID获取文章
+        return randomArticleIds.stream()
+                .map(this::get)
+                .collect(Collectors.toList());
     }
 }
