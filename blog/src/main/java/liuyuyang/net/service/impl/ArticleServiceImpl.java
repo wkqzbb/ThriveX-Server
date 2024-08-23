@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -61,19 +62,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             queryWrapper.like("tag_ids", "%" + filterVo.getTagId() + "%");
         }
 
-        System.out.println(queryWrapper.getSqlSelect());
         List<Article> list = articleMapper.selectList(queryWrapper);
 
-        for (Article article : list) {
-            // 查询该文章下所有绑定的分类和标签以及评论数量
-            List<Cate> cateList = articleMapper.getCateList(article.getId());
-            article.setCateList(cateList);
+        Stream<Integer> ids = list.stream().map(Article::getId);
+        list = ids.map(id -> get(id)).collect(Collectors.toList());
 
-            List<Tag> tagList = articleMapper.getTagList(article.getId());
-            article.setTagList(tagList);
-
-            article.setComment(commentMapper.getCommentList(article.getId()).size());
-        }
+        // for (Article article : list) {
+        //     // 查询该文章下所有绑定的分类和标签以及评论数量
+        //     List<Cate> cateList = articleMapper.getCateList(article.getId());
+        //     article.setCateList(cateList);
+        //
+        //     List<Tag> tagList = articleMapper.getTagList(article.getId());
+        //     article.setTagList(tagList);
+        //
+        //     article.setComment(commentMapper.getCommentList(article.getId()).size());
+        // }
 
         switch (sortVo.getSort()) {
             case "asc":
@@ -105,16 +108,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         articleMapper.selectPage(list, queryWrapper);
 
-        for (Article article : list.getRecords()) {
-            // 查询该文章下所有绑定的分类和标签
-            List<Cate> cateList = articleMapper.getCateList(article.getId());
-            article.setCateList(cateList);
-
-            List<Tag> tagList = articleMapper.getTagList(article.getId());
-            article.setTagList(tagList);
-
-            article.setComment(commentMapper.getCommentList(article.getId()).size());
-        }
+        Stream<Integer> ids = list.getRecords().stream().map(Article::getId);
+        list.setRecords(ids.map(id -> get(id)).collect(Collectors.toList()));
 
         return list;
     }
