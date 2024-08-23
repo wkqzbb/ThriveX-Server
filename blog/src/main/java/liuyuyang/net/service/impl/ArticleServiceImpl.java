@@ -115,7 +115,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<Article> getRandomArticles(int count) {
+    public List<Article> getRandomArticles(Integer count) {
         List<Integer> ids = articleMapper.selectList(null).stream().map(Article::getId).collect(Collectors.toList());
 
         if (ids.size() <= count) {
@@ -135,5 +135,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return randomArticleIds.stream()
                 .map(this::get)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Article> getRecommendedArticles(Integer count) {
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("view").last("LIMIT " + count);
+        return this.list(queryWrapper);
     }
 }
