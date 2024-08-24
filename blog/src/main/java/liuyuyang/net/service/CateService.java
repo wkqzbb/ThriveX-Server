@@ -2,6 +2,7 @@ package liuyuyang.net.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import liuyuyang.net.model.Article;
 import liuyuyang.net.model.Cate;
 
 import java.util.List;

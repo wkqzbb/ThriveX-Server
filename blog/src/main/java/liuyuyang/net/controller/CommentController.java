@@ -25,17 +25,13 @@ public class CommentController {
     @Resource
     private CommentService commentService;
 
-    @PostMapping
+    @PostMapping("/{aid}")
     @ApiOperation("新增评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody Comment comment) {
-        try {
-            boolean res = commentService.save(comment);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new CustomException(400, e.getMessage());
-        }
+    public Result<String> add(@PathVariable Integer aid, @RequestBody Comment comment) {
+        comment.setArticleId(aid);
+        boolean res = commentService.save(comment);
+        return res ? Result.success() : Result.error();
     }
 
     @DeleteMapping("/{id}")

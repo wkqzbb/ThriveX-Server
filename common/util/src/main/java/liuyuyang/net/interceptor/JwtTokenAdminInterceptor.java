@@ -32,15 +32,23 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
      * @throws Exception
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 检查请求方法和路径
+        String method = request.getMethod();
+        String api = request.getRequestURI();
+
+        // 从请求头中获取令牌
+        String token = request.getHeader(jwtProperties.getTokenName());
+
         // 如果是预检请求，直接放行
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }
 
-        // 从请求头中获取令牌
-        String token = request.getHeader(jwtProperties.getTokenName());
-        System.out.println(token);
+        // 排除新增评论接口，开放给所有人
+        if ("POST".equalsIgnoreCase(method) && api.matches("/api/comment/\\d+")) {
+            return true;
+        }
 
         // 校验令牌
         try {

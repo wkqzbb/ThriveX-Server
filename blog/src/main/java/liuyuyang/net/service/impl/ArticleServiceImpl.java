@@ -104,13 +104,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         // 分页查询
-        Page<Article> list = new Page<>(pageVo.getPage(), pageVo.getSize());
+        Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
 
-        articleMapper.selectPage(list, queryWrapper);
+        articleMapper.selectPage(page, queryWrapper);
 
-        Stream<Integer> ids = list.getRecords().stream().map(Article::getId);
-        list.setRecords(ids.map(id -> get(id)).collect(Collectors.toList()));
+        Stream<Integer> ids = page.getRecords().stream().map(Article::getId);
+        page.setRecords(ids.map(id -> get(id)).collect(Collectors.toList()));
 
+        return page;
+    }
+
+    @Override
+    public List<Article> getArticleList(Integer id, SortVO sortVo, PageVo pageVo) {
+        List<Article> list = articleMapper.getArticleList(id);
+        Stream<Integer> ids = list.stream().map(Article::getId);
+        list = ids.map(this::get).collect(Collectors.toList());
         return list;
     }
 
