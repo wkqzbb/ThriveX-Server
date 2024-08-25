@@ -42,9 +42,7 @@ public class ArticleController {
     public Result<String> del(@PathVariable Integer id) {
         Article data = articleService.getById(id);
         if (data == null) return Result.error("删除失败：该文章不存在");
-
-        Boolean res = articleService.removeById(id);
-
+        boolean res = articleService.removeById(id);
         return res ? Result.success() : Result.error();
     }
 
@@ -52,7 +50,7 @@ public class ArticleController {
     @ApiOperation("批量删除文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
-        Boolean res = articleService.removeByIds(ids);
+        boolean res = articleService.removeByIds(ids);
 
         return res ? Result.success() : Result.error();
     }
@@ -61,13 +59,8 @@ public class ArticleController {
     @ApiOperation("编辑文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result<String> edit(@RequestBody Article article) {
-        try {
-            boolean res = articleService.updateById(article);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new CustomException(400, e.getMessage());
-        }
+        articleService.edit(article);
+        return Result.success();
     }
 
     @GetMapping("/{id}")

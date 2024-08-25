@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.mapper.ArticleCateMapper;
 import liuyuyang.net.mapper.ArticleMapper;
+import liuyuyang.net.mapper.CateMapper;
 import liuyuyang.net.mapper.CommentMapper;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.ArticleCate;
+import liuyuyang.net.model.Cate;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
@@ -30,6 +32,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private ArticleCateMapper articleCateMapper;
     @Resource
+    private CateMapper cateMapper;
+    @Resource
     private CommentMapper commentMapper;
 
     @Override
@@ -45,9 +49,37 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    public void edit(Article article) {
+        articleMapper.updateById(article);
+
+        // 先删除之前绑定的分类
+        articleCateMapper.deleteBatchIds(article.getCateIds());
+        // 再重新绑定分类
+        for (Integer id : article.getCateIds()) {
+            ArticleCate articleCate = new ArticleCate();
+            articleCate.setArticleId(article.getId());
+            articleCate.setCateId(id);
+            articleCateMapper.insert(articleCate);
+        }
+    }
+
+    @Override
     public Article get(Integer id) {
         Article data = articleMapper.selectById(id);
-        data.setCateList(articleMapper.getCateList(id));
+
+        // 查询当前文章的分类ID
+        QueryWrapper<ArticleCate> queryWrapperCateIds = new QueryWrapper<>();
+        queryWrapperCateIds.eq("article_id", id);
+        List<Integer> cids = articleCateMapper.selectList(queryWrapperCateIds).stream().map(ArticleCate::getCateId).collect(Collectors.toList());
+
+        // 如果有分类，则绑定分类信息
+        if (!cids.isEmpty()) {
+            QueryWrapper<Cate> queryWrapperCateList = new QueryWrapper<>();
+            queryWrapperCateList.in("id", cids);
+            data.setCateList(cateMapper.selectList(queryWrapperCateList));
+        }
+
+        data.setCateIds(cids);
         data.setTagList(articleMapper.getTagList(id));
         data.setComment(commentMapper.getCommentList(id).size());
         return data;
@@ -55,76 +87,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public List<Article> list(FilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {
-            queryWrapper.like("title", "%" + filterVo.getKey() + "%");
-        }
-
-        if (filterVo.getStartDate() != null && filterVo.getEndDate() != null) {
-            queryWrapper.between("create_time", filterVo.getStartDate(), filterVo.getEndDate());
-        } else if (filterVo.getStartDate() != null) {
-            queryWrapper.ge("create_time", filterVo.getStartDate());
-        } else if (filterVo.getEndDate() != null) {
-            queryWrapper.le("create_time", filterVo.getEndDate());
-        }
-
-        if (filterVo.getCateIds() != null && !filterVo.getCateIds().isEmpty()) {
-            queryWrapper.in("cate_ids", filterVo.getCateIds());
-        }
-
-        if (filterVo.getTagId() != null && !filterVo.getTagId().isEmpty()) {
-            queryWrapper.like("tag_ids", "%" + filterVo.getTagId() + "%");
-        }
-
+        QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
         List<Article> list = articleMapper.selectList(queryWrapper);
-
-        Stream<Integer> ids = list.stream().map(Article::getId);
-        list = ids.map(id -> get(id)).collect(Collectors.toList());
-
-        // for (Article article : list) {
-        //     // 查询该文章下所有绑定的分类和标签以及评论数量
-        //     List<Cate> cateList = articleMapper.getCateList(article.getId());
-        //     article.setCateList(cateList);
-        //
-        //     List<Tag> tagList = articleMapper.getTagList(article.getId());
-        //     article.setTagList(tagList);
-        //
-        //     article.setComment(commentMapper.getCommentList(article.getId()).size());
-        // }
-
-        switch (sortVo.getSort()) {
-            case "asc":
-                list.sort((a1, a2) -> a1.getCreateTime().compareTo(a2.getCreateTime()));
-                break;
-            case "desc":
-                list.sort((a1, a2) -> a2.getCreateTime().compareTo(a1.getCreateTime()));
-                break;
-        }
-
-        return list;
+        return list.stream().map(article -> get(article.getId())).collect(Collectors.toList());
     }
 
     @Override
     public Page<Article> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-
-        switch (sortVo.getSort()) {
-            case "asc":
-                queryWrapper.orderByAsc("create_time");
-                break;
-            case "desc":
-                queryWrapper.orderByDesc("create_time");
-                break;
-        }
-
-        // 分页查询
+        QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
         Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
-
         articleMapper.selectPage(page, queryWrapper);
-
-        Stream<Integer> ids = page.getRecords().stream().map(Article::getId);
-        page.setRecords(ids.map(id -> get(id)).collect(Collectors.toList()));
-
+        page.setRecords(page.getRecords().stream().map(article -> get(article.getId())).collect(Collectors.toList()));
         return page;
     }
 
@@ -164,5 +137,49 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("view").last("LIMIT " + count);
         return this.list(queryWrapper);
+    }
+
+    // 过滤文章数据
+    private QueryWrapper<Article> queryWrapperArticle(FilterVo filterVo, SortVO sortVo) {
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+
+        // 根据发布时间从早到晚排序
+        switch (sortVo.getSort()) {
+            case "asc":
+                queryWrapper.orderByAsc("create_time");
+                break;
+            case "desc":
+                queryWrapper.orderByDesc("create_time");
+                break;
+        }
+
+        // 根据关键字通过标题过滤出对应文章数据
+        if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {
+            queryWrapper.like("title", "%" + filterVo.getKey() + "%");
+        }
+
+        // 根据开始与结束时间过滤
+        if (filterVo.getStartDate() != null && filterVo.getEndDate() != null) {
+            queryWrapper.between("create_time", filterVo.getStartDate(), filterVo.getEndDate());
+        } else if (filterVo.getStartDate() != null) {
+            queryWrapper.ge("create_time", filterVo.getStartDate());
+        } else if (filterVo.getEndDate() != null) {
+            queryWrapper.le("create_time", filterVo.getEndDate());
+        }
+
+        // 根据分类id过滤
+        if (filterVo.getCateIds() != null && !filterVo.getCateIds().isEmpty()) {
+            QueryWrapper<ArticleCate> queryWrapperArticleIds = new QueryWrapper<>();
+            queryWrapperArticleIds.in("cate_id", filterVo.getCateIds());
+            List<Integer> articleIds = articleCateMapper.selectList(queryWrapperArticleIds).stream().map(ArticleCate::getArticleId).collect(Collectors.toList());
+            queryWrapper.in("id", !articleIds.isEmpty() ? articleIds : 0);
+        }
+
+        // 根据标签id过滤
+        if (filterVo.getTagId() != null && !filterVo.getTagId().isEmpty()) {
+            queryWrapper.like("tag_ids", "%" + filterVo.getTagId() + "%");
+        }
+
+        return queryWrapper;
     }
 }

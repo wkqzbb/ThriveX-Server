@@ -11,10 +11,9 @@ import java.util.List;
 
 public interface ArticleService extends IService<Article> {
     public void add(Article article);
+    public void edit(Article article);
     public Article get(Integer id);
-
     public List<Article> list(FilterVo filterVo, SortVO sortVo);
-
     public Page<Article> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo);
     public List<Article> getArticleList(Integer id, SortVO sortVo, PageVo pageVo);
     public List<Article> getRandomArticles(Integer count);
