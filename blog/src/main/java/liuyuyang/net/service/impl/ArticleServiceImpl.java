@@ -14,6 +14,7 @@ import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import liuyuyang.net.vo.article.ArticleFillterVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,14 +87,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<Article> list(FilterVo filterVo, SortVO sortVo) {
+    public List<Article> list(ArticleFillterVo filterVo, SortVO sortVo) {
+        System.out.println(filterVo);
+        System.out.println(filterVo.getCateIds());
+        System.out.println(6666);
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
         List<Article> list = articleMapper.selectList(queryWrapper);
         return list.stream().map(article -> get(article.getId())).collect(Collectors.toList());
     }
 
     @Override
-    public Page<Article> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+    public Page<Article> paging(ArticleFillterVo filterVo, SortVO sortVo, PageVo pageVo) {
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
         Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
         articleMapper.selectPage(page, queryWrapper);
@@ -140,7 +144,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     // 过滤文章数据
-    private QueryWrapper<Article> queryWrapperArticle(FilterVo filterVo, SortVO sortVo) {
+    private QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo, SortVO sortVo) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
 
         // 根据发布时间从早到晚排序
