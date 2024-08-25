@@ -10,6 +10,7 @@ import liuyuyang.net.vo.PageVo;
 import java.util.List;
 
 public interface ArticleService extends IService<Article> {
+    public void add(Article article);
     public Article get(Integer id);
 
     public List<Article> list(FilterVo filterVo, SortVO sortVo);

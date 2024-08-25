@@ -37,8 +37,9 @@ public class Article {
     @ApiModelProperty(value = "文章评论数量", example = "20")
     private Integer comment;
 
+    @TableField(exist = false)
     @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3", required = true)
-    private String cateIds;
+    private List<Integer> cateIds;
     @TableField(exist = false)
     private List<Cate> cateList = new ArrayList<>();
 

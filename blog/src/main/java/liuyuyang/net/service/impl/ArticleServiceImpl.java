@@ -3,11 +3,11 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import liuyuyang.net.mapper.ArticleCateMapper;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.mapper.CommentMapper;
 import liuyuyang.net.model.Article;
-import liuyuyang.net.model.Cate;
-import liuyuyang.net.model.Tag;
+import liuyuyang.net.model.ArticleCate;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
@@ -28,7 +28,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private ArticleMapper articleMapper;
     @Resource
+    private ArticleCateMapper articleCateMapper;
+    @Resource
     private CommentMapper commentMapper;
+
+    @Override
+    public void add(Article article) {
+        articleMapper.insert(article);
+
+        for (Integer id : article.getCateIds()) {
+            ArticleCate articleCate = new ArticleCate();
+            articleCate.setArticleId(article.getId());
+            articleCate.setCateId(id);
+            articleCateMapper.insert(articleCate);
+        }
+    }
 
     @Override
     public Article get(Integer id) {

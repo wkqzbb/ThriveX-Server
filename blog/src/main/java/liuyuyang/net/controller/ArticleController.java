@@ -32,13 +32,8 @@ public class ArticleController {
     @ApiOperation("新增文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestBody Article article) {
-        try {
-            boolean res = articleService.save(article);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new CustomException(400, e.getMessage());
-        }
+        articleService.add(article);
+        return Result.success();
     }
 
     @DeleteMapping("/{id}")
@@ -46,7 +41,7 @@ public class ArticleController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@PathVariable Integer id) {
         Article data = articleService.getById(id);
-        if (data == null) return Result.error("该数据不存在");
+        if (data == null) return Result.error("删除失败：该文章不存在");
 
         Boolean res = articleService.removeById(id);
 
