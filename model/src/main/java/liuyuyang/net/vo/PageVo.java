@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class PageVo {
-    @ApiParam(value = "默认为第1页")
-    Integer page = 1;
-    @ApiParam(value = "默认为每页显示5个数据")
-    Integer size = 5;
+    @ApiParam(defaultValue = "1", value = "默认为第1页")
+    private Integer page = 1;
+    @ApiParam(defaultValue = "5", value = "默认为每页显示5个数据")
+    private Integer size = 5;
 }

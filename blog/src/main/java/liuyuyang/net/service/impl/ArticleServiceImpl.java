@@ -11,7 +11,7 @@ import liuyuyang.net.model.Article;
 import liuyuyang.net.model.ArticleCate;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.service.ArticleService;
-import liuyuyang.net.vo.FilterVo;
+import liuyuyang.net.service.CateService;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.article.ArticleFillterVo;
@@ -34,6 +34,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ArticleCateMapper articleCateMapper;
     @Resource
     private CateMapper cateMapper;
+    @Resource
+    private CateService cateService;
     @Resource
     private CommentMapper commentMapper;
 
@@ -77,7 +79,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (!cids.isEmpty()) {
             QueryWrapper<Cate> queryWrapperCateList = new QueryWrapper<>();
             queryWrapperCateList.in("id", cids);
-            data.setCateList(cateMapper.selectList(queryWrapperCateList));
+            List<Cate> cates = cateService.buildCateTree(cateMapper.selectList(queryWrapperCateList), 0);
+            data.setCateList(cates);
         }
 
         data.setCateIds(cids);
@@ -88,9 +91,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public List<Article> list(ArticleFillterVo filterVo, SortVO sortVo) {
-        System.out.println(filterVo);
-        System.out.println(filterVo.getCateIds());
-        System.out.println(6666);
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
         List<Article> list = articleMapper.selectList(queryWrapper);
         return list.stream().map(article -> get(article.getId())).collect(Collectors.toList());
@@ -176,7 +176,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             QueryWrapper<ArticleCate> queryWrapperArticleIds = new QueryWrapper<>();
             queryWrapperArticleIds.in("cate_id", filterVo.getCateIds());
             List<Integer> articleIds = articleCateMapper.selectList(queryWrapperArticleIds).stream().map(ArticleCate::getArticleId).collect(Collectors.toList());
-            queryWrapper.in("id", !articleIds.isEmpty() ? articleIds : 0);
+
+            if (!articleIds.isEmpty()) {
+                queryWrapper.in("id", articleIds);
+            } else {
+                // 添加一个始终为假的条件
+                queryWrapper.in("id", -1); // -1 假设为不存在的ID
+            }
         }
 
         // 根据标签id过滤

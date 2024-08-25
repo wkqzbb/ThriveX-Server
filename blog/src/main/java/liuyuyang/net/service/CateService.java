@@ -12,4 +12,5 @@ public interface CateService extends IService<Cate> {
     public Cate get(Integer cid);
     public List<Cate> list(String pattern);
     public Page<Cate> paging(Integer page, Integer size);
+    public List<Cate> buildCateTree(List<Cate> list, Integer lever);
 }

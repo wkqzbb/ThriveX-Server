@@ -86,8 +86,9 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
         return result;
     }
 
+    @Override
     // 无限级递归
-    private List<Cate> buildCateTree(List<Cate> list, Integer lever) {
+    public List<Cate> buildCateTree(List<Cate> list, Integer lever) {
         List<Cate> children = new ArrayList<>();
         for (Cate cate : list) {
             if (cate.getLevel().equals(lever)) {
