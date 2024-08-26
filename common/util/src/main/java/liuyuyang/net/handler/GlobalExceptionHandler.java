@@ -22,8 +22,6 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(QiniuException.class)
     public Result<Object> qiniuException(QiniuException e) {
-        System.out.println(1111);
-        System.out.println(e.getMessage());
         e.printStackTrace();
         return Result.error(e.code(), e.error());
     }

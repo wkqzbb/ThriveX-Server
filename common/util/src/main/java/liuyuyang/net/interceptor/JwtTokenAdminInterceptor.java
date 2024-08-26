@@ -50,6 +50,11 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        // 如果是post请求并且路径为list或者paging则不需要token校验
+        if ("POST".equalsIgnoreCase(method) && api.matches("/api/[^/]+/(list|paging)")) {
+            return true;
+        }
+
         // 校验令牌
         try {
             log.info("jwt校验：{}", token);
