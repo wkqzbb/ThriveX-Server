@@ -92,8 +92,9 @@ public class ArticleController {
     @ApiOperation("获取指定分类中的所有文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result getArticleList(@PathVariable Integer id, SortVO sortVo, PageVo pageVo) {
-        List<Article> list = articleService.getArticleList(id, sortVo, pageVo);
-        return Result.success(list);
+        Page<Article> list = articleService.getArticleList(id, sortVo, pageVo);
+        Map<String, Object> result = Paging.filter(list);
+        return Result.success(result);
     }
 
     @GetMapping("/random")

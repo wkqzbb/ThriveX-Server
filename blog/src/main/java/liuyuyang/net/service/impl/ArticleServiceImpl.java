@@ -110,11 +110,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<Article> getArticleList(Integer id, SortVO sortVo, PageVo pageVo) {
-        List<Article> list = articleMapper.getArticleList(id);
-        Stream<Integer> ids = list.stream().map(Article::getId);
-        list = ids.map(this::get).collect(Collectors.toList());
-        return list;
+    public Page<Article> getArticleList(Integer id, SortVO sortVo, PageVo pageVo) {
+        // 先通过分类id查询出所有文章id
+        QueryWrapper<ArticleCate> queryWrapperArticleCate = new QueryWrapper<>();
+        queryWrapperArticleCate.in("cate_id", id);
+        List<Integer> articleIds = articleCateMapper.selectList(queryWrapperArticleCate).stream().map(ArticleCate::getArticleId).collect(Collectors.toList());
+
+        // 然后通过文章的id查询出对应的文章数据
+        QueryWrapper<Article> queryWrapperArticle = new QueryWrapper<>();
+        queryWrapperArticle.orderByAsc("create_time");
+
+        // 有数据就查询，没有就返回空数组
+        if (!articleIds.isEmpty()) {
+            queryWrapperArticle.in("id", articleIds);
+        } else {
+            queryWrapperArticle.in("id", -1);
+        }
+
+        Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
+        articleMapper.selectPage(page, queryWrapperArticle);
+        page.setRecords(page.getRecords().stream().map(article -> get(article.getId())).collect(Collectors.toList()));
+
+        return page;
     }
 
     @Override

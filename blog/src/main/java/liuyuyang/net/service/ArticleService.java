@@ -17,7 +17,7 @@ public interface ArticleService extends IService<Article> {
     public Article get(Integer id);
     public List<Article> list(ArticleFillterVo filterVo, SortVO sortVo);
     public Page<Article> paging(ArticleFillterVo filterVo, SortVO sortVo, PageVo pageVo);
-    public List<Article> getArticleList(Integer id, SortVO sortVo, PageVo pageVo);
+    public Page<Article> getArticleList(Integer id, SortVO sortVo, PageVo pageVo);
     public List<Article> getRandomArticles(Integer count);
     public List<Article> getRecommendedArticles(Integer count);
 }
