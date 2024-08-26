@@ -13,11 +13,7 @@ import java.util.Map;
 
 @Data
 @TableName("article")
-public class Article {
-    @TableId(type = IdType.AUTO)
-    @ApiModelProperty(value = "文章ID")
-    private Integer id;
-
+public class Article extends BaseModel {
     @ApiModelProperty(value = "文章标题", example = "示例文章标题", required = true)
     private String title;
 
@@ -47,7 +43,4 @@ public class Article {
     private Map prev;
     @TableField(exist = false)
     private Map next;
-
-    @ApiModelProperty(value = "文章创建时间", example = "1723533206613", required = true)
-    private String createTime;
 }

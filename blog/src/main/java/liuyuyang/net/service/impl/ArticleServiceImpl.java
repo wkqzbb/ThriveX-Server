@@ -82,6 +82,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void edit(ArticleDTO article) {
         int res = articleMapper.updateById(article);
         if (res == 0) throw new CustomException(400, "编辑文章失败");
+        if (article.getCateIds() == null) throw new CustomException(400, "编辑文章失败：请绑定分类");
 
         // 先删除之前绑定的分类
         QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
