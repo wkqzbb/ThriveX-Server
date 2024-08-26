@@ -85,7 +85,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 先删除之前绑定的分类
         QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("cate_id", article.getCateIds());
+        queryWrapper.in("article_id", article.getId());
         articleCateMapper.delete(queryWrapper);
 
         // 再重新绑定分类

@@ -87,7 +87,7 @@ public class ArticleController {
     }
 
     @GetMapping("/cate/{id}")
-    @ApiOperation("获取指定分类中的所有文章")
+    @ApiOperation("获取指定分类的文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result getArticleList(@PathVariable Integer id, SortVO sortVo, PageVo pageVo) {
         Page<Article> list = articleService.getArticleList(id, sortVo, pageVo);
