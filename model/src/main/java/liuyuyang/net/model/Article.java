@@ -9,6 +9,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @TableName("article")
@@ -36,9 +37,16 @@ public class Article {
     private Integer comment;
 
     @TableField(exist = false)
+    @ApiModelProperty(value = "分类列表")
     private List<Cate> cateList = new ArrayList<>();
     @TableField(exist = false)
+    @ApiModelProperty(value = "标签列表")
     private List<Tag> tagList = new ArrayList<>();
+
+    @TableField(exist = false)
+    private Map prev;
+    @TableField(exist = false)
+    private Map next;
 
     @ApiModelProperty(value = "文章创建时间", example = "1723533206613", required = true)
     private String createTime;

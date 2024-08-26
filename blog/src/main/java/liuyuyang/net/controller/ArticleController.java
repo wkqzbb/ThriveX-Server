@@ -40,19 +40,16 @@ public class ArticleController {
     @ApiOperation("删除文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@PathVariable Integer id) {
-        Article data = articleService.getById(id);
-        if (data == null) return Result.error("删除失败：该文章不存在");
-        boolean res = articleService.removeById(id);
-        return res ? Result.success() : Result.error();
+        articleService.get(id);
+        return Result.success();
     }
 
     @DeleteMapping("/batch")
     @ApiOperation("批量删除文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
-        boolean res = articleService.removeByIds(ids);
-
-        return res ? Result.success() : Result.error();
+        articleService.delBatch(ids);
+        return Result.success();
     }
 
     @PatchMapping
@@ -68,6 +65,7 @@ public class ArticleController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<Article> get(@PathVariable Integer id) {
         Article data = articleService.get(id);
+
         return Result.success(data);
     }
 

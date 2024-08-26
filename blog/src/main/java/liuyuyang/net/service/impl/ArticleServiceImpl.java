@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.dto.article.ArticleDTO;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.ArticleCateMapper;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.mapper.CateMapper;
@@ -20,11 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -53,9 +51,37 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    public void del(Integer id) {
+        // 先删除之前绑定的分类
+        QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("article_id", id);
+        articleCateMapper.delete(queryWrapper);
+
+        // 再删除当前文章
+        int res = articleMapper.deleteById(id);
+        if (res == 0) throw new CustomException(400, "删除文章失败");
+    }
+
+    @Override
+    public void delBatch(List<Integer> ids) {
+        // 先删除之前绑定的分类
+        for (Integer id : ids) {
+            QueryWrapper<ArticleCate> queryWrapperArticleCate = new QueryWrapper<>();
+            queryWrapperArticleCate.in("article_id", id);
+            articleCateMapper.delete(queryWrapperArticleCate);
+        }
+
+        // 再批量删除文章
+        QueryWrapper<Article> queryWrapperArticle = new QueryWrapper<>();
+        queryWrapperArticle.in("id", ids);
+        int res = articleMapper.delete(queryWrapperArticle);
+        if (res == 0) throw new CustomException(400, "批量删除文章失败");
+    }
+
+    @Override
     public void edit(ArticleDTO article) {
-        articleMapper.updateById(article);
-        System.out.println(article.getCateIds());
+        int res = articleMapper.updateById(article);
+        if (res == 0) throw new CustomException(400, "编辑文章失败");
 
         // 先删除之前绑定的分类
         QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
@@ -73,23 +99,33 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public Article get(Integer id) {
-        Article data = articleMapper.selectById(id);
+        Article data = bindingData(id);
 
-        // 查询当前文章的分类ID
-        QueryWrapper<ArticleCate> queryWrapperCateIds = new QueryWrapper<>();
-        queryWrapperCateIds.eq("article_id", id);
-        List<Integer> cids = articleCateMapper.selectList(queryWrapperCateIds).stream().map(ArticleCate::getCateId).collect(Collectors.toList());
+        // 获取当前文章的创建时间
+        String createTime = data.getCreateTime();
 
-        // 如果有分类，则绑定分类信息
-        if (!cids.isEmpty()) {
-            QueryWrapper<Cate> queryWrapperCateList = new QueryWrapper<>();
-            queryWrapperCateList.in("id", cids);
-            List<Cate> cates = cateService.buildCateTree(cateMapper.selectList(queryWrapperCateList), 0);
-            data.setCateList(cates);
+        // 查询上一篇文章
+        QueryWrapper<Article> prevQueryWrapper = new QueryWrapper<>();
+        prevQueryWrapper.lt("create_time", createTime).orderByDesc("create_time").last("LIMIT 1");
+        Article prevArticle = articleMapper.selectOne(prevQueryWrapper);
+        if (prevArticle != null) {
+            Map<String, Object> resultPrev = new HashMap<>();
+            resultPrev.put("id", prevArticle.getId());
+            resultPrev.put("title", prevArticle.getTitle());
+            data.setPrev(resultPrev);
         }
 
-        data.setTagList(articleMapper.getTagList(id));
-        data.setComment(commentMapper.getCommentList(id).size());
+        // 查询下一篇文章
+        QueryWrapper<Article> nextQueryWrapper = new QueryWrapper<>();
+        nextQueryWrapper.gt("create_time", createTime).orderByAsc("create_time").last("LIMIT 1");
+        Article nextArticle = articleMapper.selectOne(nextQueryWrapper);
+        if (nextArticle != null) {
+            Map<String, Object> resultNext = new HashMap<>();
+            resultNext.put("id", nextArticle.getId());
+            resultNext.put("title", nextArticle.getTitle());
+            data.setNext(resultNext);
+        }
+
         return data;
     }
 
@@ -97,7 +133,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public List<Article> list(ArticleFillterVo filterVo, SortVO sortVo) {
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
         List<Article> list = articleMapper.selectList(queryWrapper);
-        return list.stream().map(article -> get(article.getId())).collect(Collectors.toList());
+        return list.stream().map(article -> bindingData(article.getId())).collect(Collectors.toList());
     }
 
     @Override
@@ -105,7 +141,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
         Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
         articleMapper.selectPage(page, queryWrapper);
-        page.setRecords(page.getRecords().stream().map(article -> get(article.getId())).collect(Collectors.toList()));
+        page.setRecords(page.getRecords().stream().map(article -> bindingData(article.getId())).collect(Collectors.toList()));
         return page;
     }
 
@@ -129,7 +165,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
         articleMapper.selectPage(page, queryWrapperArticle);
-        page.setRecords(page.getRecords().stream().map(article -> get(article.getId())).collect(Collectors.toList()));
+        page.setRecords(page.getRecords().stream().map(article -> bindingData(article.getId())).collect(Collectors.toList()));
 
         return page;
     }
@@ -153,7 +189,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 根据随机选择的文章ID获取文章
         return randomArticleIds.stream()
-                .map(this::get)
+                .map(this::bindingData)
                 .collect(Collectors.toList());
     }
 
@@ -161,11 +197,36 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public List<Article> getRecommendedArticles(Integer count) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("view").last("LIMIT " + count);
-        return this.list(queryWrapper);
+        return list(queryWrapper);
+    }
+
+    // 关联文章数据
+    @Override
+    public Article bindingData(Integer id) {
+        Article data = articleMapper.selectById(id);
+        if (data == null) throw new CustomException(400, "获取文章失败：该文章不存在");
+
+        // 查询当前文章的分类ID
+        QueryWrapper<ArticleCate> queryWrapperCateIds = new QueryWrapper<>();
+        queryWrapperCateIds.eq("article_id", id);
+        List<Integer> cids = articleCateMapper.selectList(queryWrapperCateIds).stream().map(ArticleCate::getCateId).collect(Collectors.toList());
+
+        // 如果有分类，则绑定分类信息
+        if (!cids.isEmpty()) {
+            QueryWrapper<Cate> queryWrapperCateList = new QueryWrapper<>();
+            queryWrapperCateList.in("id", cids);
+            List<Cate> cates = cateService.buildCateTree(cateMapper.selectList(queryWrapperCateList), 0);
+            data.setCateList(cates);
+        }
+
+        data.setTagList(articleMapper.getTagList(id));
+        data.setComment(commentMapper.getCommentList(id).size());
+        return data;
     }
 
     // 过滤文章数据
-    private QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo, SortVO sortVo) {
+    @Override
+    public QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo, SortVO sortVo) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
 
         // 根据发布时间从早到晚排序
