@@ -76,7 +76,6 @@ public class ArticleController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<Article>> list(@RequestBody ArticleFillterVo filterVo, SortVO sortVo) {
         List<Article> data = articleService.list(filterVo, sortVo);
-        System.out.println(data);
         return Result.success(data);
     }
 

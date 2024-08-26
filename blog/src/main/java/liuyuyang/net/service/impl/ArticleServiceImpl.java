@@ -55,15 +55,19 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public void edit(ArticleDTO article) {
         articleMapper.updateById(article);
+        System.out.println(article.getCateIds());
 
         // 先删除之前绑定的分类
-        articleCateMapper.deleteBatchIds(article.getCateIds());
+        QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("cate_id", article.getCateIds());
+        articleCateMapper.delete(queryWrapper);
+
         // 再重新绑定分类
         for (Integer id : article.getCateIds()) {
             ArticleCate articleCate = new ArticleCate();
             articleCate.setArticleId(article.getId());
             articleCate.setCateId(id);
-            articleCateMapper.insert(articleCate);
+            System.out.println(articleCateMapper.insert(articleCate));
         }
     }
 
