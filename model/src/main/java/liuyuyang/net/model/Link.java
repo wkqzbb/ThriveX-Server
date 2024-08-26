@@ -1,18 +1,13 @@
 package liuyuyang.net.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 @TableName("link")
-public class Link {
-    @TableId(type = IdType.AUTO)
-    @ApiModelProperty(value = "网站ID")
-    private Integer id;
+public class Link extends BaseModel {
     @ApiModelProperty(value = "网站标题", example = "这是一个网站", required = true)
     private String title;
     @ApiModelProperty(value = "网站描述", example = "这是一个网站的描述", required = true)
@@ -29,6 +24,4 @@ public class Link {
     private String url;
     @ApiModelProperty(value = "订阅地址", example = "/")
     private String rss;
-    @ApiModelProperty(value = "网站创建时间", example = "1723533206613", required = true)
-    private String createTime;
 }

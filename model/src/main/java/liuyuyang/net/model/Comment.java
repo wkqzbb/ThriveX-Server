@@ -13,11 +13,7 @@ import java.util.List;
 
 @Data
 @TableName("comment")
-public class Comment {
-    @TableId(type = IdType.AUTO)
-    @ApiModelProperty(value = "评论ID")
-    private Integer id;
-
+public class Comment extends BaseModel {
     @ApiModelProperty(value = "评论者名称", example = "宇阳", required = true)
     private String name;
 
@@ -49,7 +45,4 @@ public class Comment {
 
     @ApiModelProperty(value = "评论是否审核通过", example = "1")
     private Integer auditStatus;
-
-    @ApiModelProperty(value = "评论创建时间", example = "1723533206613", required = true)
-    private String createTime;
 }

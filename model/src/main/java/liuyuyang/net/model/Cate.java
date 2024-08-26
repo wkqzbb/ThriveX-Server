@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 @Data
 @TableName("cate")
-public class Cate {
+public class Cate{
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "分类ID")
     private Integer id;

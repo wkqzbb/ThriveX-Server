@@ -1,19 +1,13 @@
 package liuyuyang.net.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 @TableName("user")
-public class User {
-    @TableId(type = IdType.AUTO)
-    @ApiModelProperty(value = "用户ID")
-    private Integer id;
-
+public class User extends BaseModel {
     @ApiModelProperty(value = "用户账号", example = "liuyuyang", required = true)
     private String username;
 
@@ -37,7 +31,4 @@ public class User {
     @TableField(exist = false)
     @ApiModelProperty(value = "用户角色信息", example = "...", required = true)
     private Role role;
-
-    @ApiModelProperty(value = "用户创建时间", example = "1723533206613", required = true)
-    private String createTime;
 }

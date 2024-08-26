@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @TableName("article_cate")
-public class ArticleCate {
+public class ArticleCate{
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "ID")
     private Integer id;

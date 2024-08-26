@@ -1,6 +1,5 @@
 package liuyuyang.net.model;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
