@@ -1,16 +1,19 @@
 package liuyuyang.net.interceptor;
 
 import io.jsonwebtoken.Claims;
+import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 
 /**
  * jwt令牌校验的拦截器
@@ -31,11 +34,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
      * @return
      * @throws Exception
      */
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 检查请求方法和路径
-        String method = request.getMethod();
-        String api = request.getRequestURI();
-
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getTokenName());
 
@@ -45,13 +44,11 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // 排除新增评论接口，开放给所有人
-        if ("POST".equalsIgnoreCase(method) && api.matches("/api/comment/\\d+")) {
-            return true;
-        }
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Method method = handlerMethod.getMethod();
 
-        // 如果是post请求并且路径为list或者paging则不需要token校验
-        if ("POST".equalsIgnoreCase(method) && api.matches("/api/[^/]+/(list|paging)")) {
+        // 检查方法上是否有@NoTokenRequired注解，如果有就直接放行
+        if (method.isAnnotationPresent(NoTokenRequired.class)) {
             return true;
         }
 

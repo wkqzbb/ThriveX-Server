@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.result.Result;
@@ -25,6 +26,7 @@ public class CommentController {
     @Resource
     private CommentService commentService;
 
+    @NoTokenRequired
     @PostMapping("/{aid}")
     @ApiOperation("新增评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)

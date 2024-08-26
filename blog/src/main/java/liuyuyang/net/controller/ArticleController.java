@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.dto.article.ArticleDTO;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.result.Result;
@@ -77,6 +78,7 @@ public class ArticleController {
         return Result.success(data);
     }
 
+    @NoTokenRequired
     @PostMapping("/paging")
     @ApiOperation("分页查询文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
