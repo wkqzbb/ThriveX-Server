@@ -3,6 +3,7 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import liuyuyang.net.dto.article.ArticleDTO;
 import liuyuyang.net.mapper.ArticleCateMapper;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.mapper.CateMapper;
@@ -40,7 +41,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private CommentMapper commentMapper;
 
     @Override
-    public void add(Article article) {
+    public void add(ArticleDTO article) {
         articleMapper.insert(article);
 
         for (Integer id : article.getCateIds()) {
@@ -52,7 +53,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public void edit(Article article) {
+    public void edit(ArticleDTO article) {
         articleMapper.updateById(article);
 
         // 先删除之前绑定的分类
@@ -83,7 +84,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             data.setCateList(cates);
         }
 
-        data.setCateIds(cids);
         data.setTagList(articleMapper.getTagList(id));
         data.setComment(commentMapper.getCommentList(id).size());
         return data;

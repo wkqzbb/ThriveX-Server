@@ -5,12 +5,11 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import liuyuyang.net.execption.CustomException;
+import liuyuyang.net.dto.article.ArticleDTO;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.utils.Paging;
-import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.article.ArticleFillterVo;
@@ -32,7 +31,7 @@ public class ArticleController {
     @PostMapping
     @ApiOperation("新增文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody Article article) {
+    public Result<String> add(@RequestBody ArticleDTO article) {
         articleService.add(article);
         return Result.success();
     }
@@ -59,7 +58,7 @@ public class ArticleController {
     @PatchMapping
     @ApiOperation("编辑文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-    public Result<String> edit(@RequestBody Article article) {
+    public Result<String> edit(@RequestBody ArticleDTO article) {
         articleService.edit(article);
         return Result.success();
     }
@@ -77,6 +76,7 @@ public class ArticleController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<Article>> list(@RequestBody ArticleFillterVo filterVo, SortVO sortVo) {
         List<Article> data = articleService.list(filterVo, sortVo);
+        System.out.println(data);
         return Result.success(data);
     }
 

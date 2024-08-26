@@ -29,22 +29,14 @@ public class Article {
     @ApiModelProperty(value = "文章封面链接", example = "/images/example.jpg")
     private String cover;
 
-    // @TableField(exist = false)
     @ApiModelProperty(value = "文章浏览量", example = "100")
     private Integer view;
 
-    // @TableField(exist = false)
     @ApiModelProperty(value = "文章评论数量", example = "20")
     private Integer comment;
 
     @TableField(exist = false)
-    @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3", required = true)
-    private List<Integer> cateIds;
-    @TableField(exist = false)
     private List<Cate> cateList = new ArrayList<>();
-
-    @ApiModelProperty(value = "该文章所绑定的标签ID", example = "1,2,3")
-    private String tagIds;
     @TableField(exist = false)
     private List<Tag> tagList = new ArrayList<>();
 
