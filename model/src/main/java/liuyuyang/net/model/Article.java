@@ -23,7 +23,7 @@ public class Article extends BaseModel {
     @ApiModelProperty(value = "文章主要内容", example = "示例文章内容", required = true)
     private String content;
 
-    @ApiModelProperty(value = "文章封面链接", example = "/images/example.jpg")
+    @ApiModelProperty(value = "文章封面链接", example = "http://123.com/images/example.jpg")
     private String cover;
 
     @ApiModelProperty(value = "文章浏览量", example = "100")

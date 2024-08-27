@@ -3,12 +3,16 @@ package liuyuyang.net.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import liuyuyang.net.model.Comment;
+import liuyuyang.net.vo.PageVo;
 
 import java.util.List;
 
 public interface CommentService extends IService<Comment> {
     public Comment get(Integer id);
-    public List<Comment> getCommentList(Integer aid);
+
+    public Page<Comment> getCommentList(Integer aid, PageVo pageVo);
+
     public List<Comment> list(String pattern);
+
     public Page<Comment> paging(Integer page, Integer size);
 }

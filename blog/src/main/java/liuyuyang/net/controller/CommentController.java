@@ -11,6 +11,7 @@ import liuyuyang.net.model.Comment;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.CommentService;
 import liuyuyang.net.utils.Paging;
+import liuyuyang.net.vo.PageVo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,10 +42,8 @@ public class CommentController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@PathVariable Integer id) {
         Comment data = commentService.getById(id);
-        if (data == null) return Result.error("该数据不存在");
-
+        if (data == null) return Result.error("删除评论失败：该评论不存在");
         Boolean res = commentService.removeById(id);
-
         return res ? Result.success() : Result.error();
     }
 
@@ -53,7 +52,6 @@ public class CommentController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
         Boolean res = commentService.removeByIds(ids);
-
         return res ? Result.success() : Result.error();
     }
 
@@ -78,30 +76,32 @@ public class CommentController {
         return Result.success(data);
     }
 
-    @GetMapping("/all")
+    @NoTokenRequired
+    @PostMapping("/list")
     @ApiOperation("获取评论列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<Comment>> list(@ApiParam(value = "默认为recursion模式，表示将子分类都递归到children中。如果设置了list模式，则直接返回所有评论") @RequestParam(defaultValue = "recursion") String pattern) {
-        List<Comment> data = commentService.list(pattern);
-        return Result.success(data);
+        List<Comment> list = commentService.list(pattern);
+        return Result.success(list);
     }
 
-    @GetMapping
+    @NoTokenRequired
+    @PostMapping("/paging")
     @ApiOperation("分页查询评论列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        Page<Comment> data = commentService.paging(page, size);
-
-        Map<String, Object> result = Paging.filter(data);
-
+        Page<Comment> list = commentService.paging(page, size);
+        Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
 
-    @GetMapping("/article/{aid}")
+    @NoTokenRequired
+    @PostMapping("/article/{aid}")
     @ApiOperation("获取指定文章中所有评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result<List<Comment>> getCommentList(@PathVariable Integer aid) {
-        List<Comment> data = commentService.getCommentList(aid);
-        return Result.success(data);
+    public Result getCommentList(@PathVariable Integer aid, PageVo pageVo) {
+        Page<Comment> list = commentService.getCommentList(aid, pageVo);
+        Map<String, Object> result = Paging.filter(list);
+        return Result.success(result);
     }
 }

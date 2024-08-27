@@ -11,6 +11,7 @@ import liuyuyang.net.model.Cate;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.service.CommentService;
+import liuyuyang.net.vo.PageVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,9 +48,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public List<Comment> getCommentList(Integer aid) {
-        // 查询所有评论
-        List<Comment> list = commentMapper.getCommentList(aid);
+    public Page<Comment> getCommentList(Integer aid, PageVo pageVo) {
+        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("article_id", aid);
+        queryWrapper.orderByDesc("create_time");
+
+        Page<Comment> page = new Page<>(pageVo.getPage(), pageVo.getSize());
+        commentMapper.selectPage(page, queryWrapper);
+
+        List<Comment> list = page.getRecords();
 
         for (Comment comment : list) {
             Article article = articleMapper.selectById(comment.getArticleId());
@@ -57,8 +64,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
 
         // 构建评论树
-        List<Comment> result = buildCommentTree(list, 0);
-        return result;
+        list = buildCommentTree(list, 0);
+        page.setRecords(list);
+
+        return page;
     }
 
     @Override
@@ -83,7 +92,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Page<Comment> paging(Integer page, Integer size) {
         // 查询所有评论
-        List<Comment> list = commentMapper.selectList(new QueryWrapper<>());
+        List<Comment> list = commentMapper.selectList(null);
 
         for (Comment comment : list) {
             Article article = articleMapper.selectById(comment.getArticleId());
