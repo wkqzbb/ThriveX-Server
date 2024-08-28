@@ -38,6 +38,8 @@ public class FootprintServiceImpl extends ServiceImpl<FootprintMapper, Footprint
         }
 
         List<Footprint> list = footprintMapper.selectList(queryWrapper);
+        System.out.println(list);
+        System.out.println(5555);
         return list;
     }
 }
