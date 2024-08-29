@@ -3,6 +3,7 @@ package liuyuyang.net.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Footprint;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.FootprintService;
@@ -61,6 +62,7 @@ public class FootprintController {
         return Result.success(data);
     }
 
+    @NoTokenRequired
     @PostMapping("/list")
     @ApiOperation("获取足迹列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
