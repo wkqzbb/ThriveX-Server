@@ -7,8 +7,6 @@ import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.mapper.CommentMapper;
 import liuyuyang.net.model.Article;
-import liuyuyang.net.model.Cate;
-import liuyuyang.net.model.Comment;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.service.CommentService;
 import liuyuyang.net.vo.PageVo;
@@ -36,13 +34,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             throw new CustomException(400, "该评论不存在");
         }
 
-        // 文章标题
-        Article article = articleMapper.selectById(data.getArticleId());
-        data.setArticleTitle(article.getTitle());
+        enrichComment(data); // 使用公共方法
 
         // 获取当前评论下的所有子评论
-        List<Comment> comments = commentMapper.selectList(null);
-        data.setChildren(buildCommentTree(comments, id));
+        List<Comment> list = commentMapper.selectList(null);
+        data.setChildren(buildCommentTree(list, id));
 
         return data;
     }
@@ -51,71 +47,67 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public Page<Comment> getCommentList(Integer aid, PageVo pageVo) {
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("article_id", aid);
+        queryWrapper.eq("audit_status", 1);
         queryWrapper.orderByDesc("create_time");
 
         Page<Comment> page = new Page<>(pageVo.getPage(), pageVo.getSize());
         commentMapper.selectPage(page, queryWrapper);
 
         List<Comment> list = page.getRecords();
-
-        for (Comment comment : list) {
-            Article article = articleMapper.selectById(comment.getArticleId());
-            comment.setArticleTitle(article.getTitle());
-        }
+        list.forEach(this::enrichComment); // 使用公共方法
 
         // 构建评论树
         list = buildCommentTree(list, 0);
-        page.setRecords(list);
 
-        return page;
+        // 分页处理
+        return getPagedComments(pageVo, list); // 使用公共方法
     }
 
     @Override
     public List<Comment> list(String pattern) {
-        // 查询所有分类
         List<Comment> list = commentMapper.selectList(null);
 
-        // 如果参数是list则直接不进行递归处理
         if (Objects.equals(pattern, "list")) return list;
 
-        for (Comment comment : list) {
-            Article article = articleMapper.selectById(comment.getArticleId());
-            comment.setArticleTitle(article.getTitle());
-        }
+        list.forEach(this::enrichComment); // 使用公共方法
 
-        // 构建评论树
-        List<Comment> result = buildCommentTree(list, 0);
-
-        return result;
+        return buildCommentTree(list, 0);
     }
 
     @Override
     public Page<Comment> paging(Integer page, Integer size) {
-        // 查询所有评论
         List<Comment> list = commentMapper.selectList(null);
+        list.forEach(this::enrichComment); // 使用公共方法
 
-        for (Comment comment : list) {
-            Article article = articleMapper.selectById(comment.getArticleId());
-            comment.setArticleTitle(article.getTitle());
-        }
-
-        // 构建评论树
         List<Comment> comments = buildCommentTree(list, 0);
 
         // 分页处理
-        int start = (page - 1) * size;
-        int end = Math.min(start + size, comments.size());
+        PageVo pageVo = new PageVo();
+        pageVo.setPage(page);
+        pageVo.setSize(size);
+
+        return getPagedComments(pageVo, comments); // 使用公共方法
+    }
+
+    private void enrichComment(Comment comment) {
+        Article article = articleMapper.selectById(comment.getArticleId());
+        if (article != null) {
+            comment.setArticleTitle(article.getTitle());
+        }
+    }
+
+    private Page<Comment> getPagedComments(PageVo pageVo, List<Comment> comments) {
+        int start = (pageVo.getPage() - 1) * pageVo.getSize();
+        int end = Math.min(start + pageVo.getSize(), comments.size());
         List<Comment> pagedComments = comments.subList(start, end);
 
-        // 返回分页结果
-        Page<Comment> result = new Page<>(page, size);
+        Page<Comment> result = new Page<>(pageVo.getPage(), pageVo.getSize());
         result.setRecords(pagedComments);
         result.setTotal(comments.size());
 
         return result;
     }
 
-    // 无限级递归
     private List<Comment> buildCommentTree(List<Comment> list, Integer cid) {
         List<Comment> children = new ArrayList<>();
         for (Comment comment : list) {

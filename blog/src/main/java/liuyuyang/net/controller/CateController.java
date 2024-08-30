@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.result.Result;
@@ -91,7 +92,8 @@ public class CateController {
         return Result.success(data);
     }
 
-    @GetMapping("/all")
+    @NoTokenRequired
+    @PostMapping("/list")
     @ApiOperation("获取分类列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<Cate>> list(@ApiParam(value = "默认为recursion模式，表示将子分类都递归到children中。如果设置了list模式，则直接返回所有评论") @RequestParam(defaultValue = "recursion") String pattern )  {
@@ -99,7 +101,8 @@ public class CateController {
         return Result.success(data);
     }
 
-    @GetMapping("/{page}/{size}")
+    @NoTokenRequired
+    @PostMapping("/paging")
     @ApiOperation("分页查询分类列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {

@@ -20,7 +20,7 @@ oss:
   secretKey: 1h-V_vCrOt2UIoHf4x_Rj4GxfjsW_IINRz0VyzFQ
   bucket: thrive
   # 目录白名单
-  dirList: [ "default","article","swiper" ]
+  dirList: [ "default","article","swiper","footprint" ]
 
 # API文档配置
 knife4j:
