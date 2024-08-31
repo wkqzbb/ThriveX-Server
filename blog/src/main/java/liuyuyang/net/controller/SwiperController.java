@@ -79,7 +79,7 @@ public class SwiperController {
         return Result.success(data);
     }
 
-    @GetMapping("/all")
+    @PostMapping("/list")
     @ApiOperation("获取轮播图列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<Swiper>> list() {
@@ -87,14 +87,12 @@ public class SwiperController {
         return Result.success(data);
     }
 
-    @GetMapping
+    @PostMapping("/paging")
     @ApiOperation("分页查询轮播图列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
         Page<Swiper> data = swiperService.list(page, size);
-
         Map<String, Object> result = Paging.filter(data);
-
         return Result.success(result);
     }
 }

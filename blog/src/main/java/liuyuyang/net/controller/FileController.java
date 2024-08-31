@@ -74,7 +74,7 @@ public class FileController {
         return Result.success(data);
     }
 
-    @GetMapping("/all")
+    @PostMapping("/list")
     @ApiOperation("获取文件列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<List<File>> list(@RequestParam(defaultValue = "all") String dir, SortVO sortVo) throws QiniuException {
@@ -82,7 +82,7 @@ public class FileController {
         return Result.success(list);
     }
 
-    @GetMapping
+    @PostMapping("/paging")
     @ApiOperation("分页查询文件列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result paging(@RequestParam(defaultValue = "all") String dir, SortVO sortVo, PageVo pageVo) throws QiniuException {

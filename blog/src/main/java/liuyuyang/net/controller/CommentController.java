@@ -104,4 +104,18 @@ public class CommentController {
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
+
+    @PatchMapping("/audit/{id}")
+    @ApiOperation("审核指定评论")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
+    public Result auditComment(@PathVariable Integer id) {
+        Comment data = commentService.getById(id);
+        if (data == null) {
+            throw new CustomException(400, "该评论不存在");
+        }
+
+        data.setAuditStatus(1);
+        commentService.updateById(data);
+        return Result.success();
+    }
 }

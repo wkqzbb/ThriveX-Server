@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Tag;
 import liuyuyang.net.result.Result;
@@ -79,7 +80,8 @@ public class TagController {
         return Result.success(data);
     }
 
-    @GetMapping("/all")
+    @NoTokenRequired
+    @PostMapping("/list")
     @ApiOperation("获取标签列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     public Result<List<Tag>> list() {
@@ -87,14 +89,13 @@ public class TagController {
         return Result.success(data);
     }
 
-    @GetMapping
+    @NoTokenRequired
+    @PostMapping("/paging")
     @ApiOperation("分页查询标签列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
         Page<Tag> data = tagService.list(page, size);
-
         Map<String, Object> result = Paging.filter(data);
-
         return Result.success(result);
     }
 }
