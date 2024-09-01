@@ -9,7 +9,9 @@ import liuyuyang.net.mapper.CommentMapper;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.service.CommentService;
+import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
+import liuyuyang.net.vo.SortVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +36,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             throw new CustomException(400, "该评论不存在");
         }
 
-        enrichComment(data); // 使用公共方法
+        // 文章标题
+        Article article = articleMapper.selectById(data.getArticleId());
+        if (article != null) {
+            data.setArticleTitle(article.getTitle());
+        }
 
         // 获取当前评论下的所有子评论
-        List<Comment> list = commentMapper.selectList(null);
+        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("comment_id", id);
+        List<Comment> list = commentMapper.selectList(queryWrapper);
+        System.out.println(list);
         data.setChildren(buildCommentTree(list, id));
 
         return data;
@@ -75,16 +84,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public Page<Comment> paging(Integer page, Integer size) {
-        List<Comment> list = commentMapper.selectList(null);
-        list.forEach(this::enrichComment); // 使用公共方法
+    public Page<Comment> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+        QueryWrapper<Comment> queryWrapper = queryWrapperComment(filterVo, sortVo);
+        Page<Comment> page = new Page<>(pageVo.getPage(), pageVo.getSize());
+        commentMapper.selectPage(page, queryWrapper);
+        page.getRecords().forEach(this::enrichComment); // 使用公共方法
 
-        List<Comment> comments = buildCommentTree(list, 0);
-
-        // 分页处理
-        PageVo pageVo = new PageVo();
-        pageVo.setPage(page);
-        pageVo.setSize(size);
+        List<Comment> comments = buildCommentTree(page.getRecords(), 0);
 
         return getPagedComments(pageVo, comments); // 使用公共方法
     }
@@ -121,5 +127,37 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             comment.setArticleTitle(article.getTitle());
         }
         return children;
+    }
+
+    // 过滤评论数据
+    // @Override
+    public QueryWrapper<Comment> queryWrapperComment(FilterVo filterVo, SortVO sortVo) {
+        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+
+        // 根据发布时间从早到晚排序
+        switch (sortVo.getSort()) {
+            case "asc":
+                queryWrapper.orderByAsc("create_time");
+                break;
+            case "desc":
+                queryWrapper.orderByDesc("create_time");
+                break;
+        }
+
+        // 根据关键字通过标题过滤出对应数据
+        if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {
+            queryWrapper.like("content", "%" + filterVo.getKey() + "%");
+        }
+
+        // 根据开始与结束时间过滤
+        if (filterVo.getStartDate() != null && filterVo.getEndDate() != null) {
+            queryWrapper.between("create_time", filterVo.getStartDate(), filterVo.getEndDate());
+        } else if (filterVo.getStartDate() != null) {
+            queryWrapper.ge("create_time", filterVo.getStartDate());
+        } else if (filterVo.getEndDate() != null) {
+            queryWrapper.le("create_time", filterVo.getEndDate());
+        }
+
+        return queryWrapper;
     }
 }

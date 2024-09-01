@@ -11,7 +11,9 @@ import liuyuyang.net.model.Comment;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.CommentService;
 import liuyuyang.net.utils.Paging;
+import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
+import liuyuyang.net.vo.SortVO;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,8 +91,8 @@ public class CommentController {
     @PostMapping("/paging")
     @ApiOperation("分页查询评论列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        Page<Comment> list = commentService.paging(page, size);
+    public Result paging(@RequestBody FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+        Page<Comment> list = commentService.paging(filterVo, sortVo, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }

@@ -43,11 +43,7 @@ public class FileController {
             urls.add(url);
         }
 
-        if (urls.size() == 1) {
-            return Result.success("文件上传成功：", urls.get(0));
-        } else {
-            return Result.success("文件上传成功：", urls);
-        }
+        return Result.success("文件上传成功：", urls);
     }
 
     @DeleteMapping
