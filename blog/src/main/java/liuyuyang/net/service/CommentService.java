@@ -6,6 +6,7 @@ import liuyuyang.net.model.Comment;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import liuyuyang.net.vo.comment.CommentFilterVo;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface CommentService extends IService<Comment> {
 
     public Page<Comment> getCommentList(Integer aid, PageVo pageVo);
 
-    public List<Comment> list(String pattern);
+    public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo);
 
-    public Page<Comment> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo);
+    public Page<Comment> paging(CommentFilterVo filterVo, SortVO sortVo, PageVo pageVo);
 }

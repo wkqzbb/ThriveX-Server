@@ -12,6 +12,7 @@ import liuyuyang.net.service.CommentService;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import liuyuyang.net.vo.comment.CommentFilterVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,8 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static liuyuyang.net.utils.YuYangUtils.getPageObject;
 
 @Service
 @Transactional
@@ -36,24 +39,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             throw new CustomException(400, "该评论不存在");
         }
 
-        // 文章标题
-        Article article = articleMapper.selectById(data.getArticleId());
-        if (article != null) {
-            data.setArticleTitle(article.getTitle());
-        }
+        // 绑定数据
+        bindingData(data);
 
         // 获取当前评论下的所有子评论
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("comment_id", id);
         List<Comment> list = commentMapper.selectList(queryWrapper);
-        System.out.println(list);
         data.setChildren(buildCommentTree(list, id));
 
         return data;
     }
 
     @Override
-    public Page<Comment> getCommentList(Integer aid, PageVo pageVo) {
+    public Page getCommentList(Integer aid, PageVo pageVo) {
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("article_id", aid);
         queryWrapper.eq("audit_status", 1);
@@ -63,68 +62,70 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         commentMapper.selectPage(page, queryWrapper);
 
         List<Comment> list = page.getRecords();
-        list.forEach(this::enrichComment); // 使用公共方法
+        list.forEach(this::bindingData); // 使用公共方法
 
         // 构建评论树
         list = buildCommentTree(list, 0);
 
         // 分页处理
-        return getPagedComments(pageVo, list); // 使用公共方法
+        return getPageObject(pageVo, list); // 使用公共方法
     }
 
     @Override
-    public List<Comment> list(String pattern) {
-        List<Comment> list = commentMapper.selectList(null);
+    public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo) {
+        QueryWrapper<Comment> queryWrapper = queryWrapperComment(filterVo, sortVo);
+        List<Comment> list = commentMapper.selectList(queryWrapper);
 
-        if (Objects.equals(pattern, "list")) return list;
+        // 查询的结构格式
+        if (Objects.equals(filterVo.getPattern(), "list")) return list;
 
-        list.forEach(this::enrichComment); // 使用公共方法
+        // 绑定相关数据
+        list.forEach(this::bindingData); // 使用公共方法
 
+        // 构建多级评论
         return buildCommentTree(list, 0);
     }
 
     @Override
-    public Page<Comment> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
-        QueryWrapper<Comment> queryWrapper = queryWrapperComment(filterVo, sortVo);
-        Page<Comment> page = new Page<>(pageVo.getPage(), pageVo.getSize());
-        commentMapper.selectPage(page, queryWrapper);
-        page.getRecords().forEach(this::enrichComment); // 使用公共方法
+    public Page<Comment> paging(CommentFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+        List<Comment> list = list(filterVo, sortVo);
 
-        List<Comment> comments = buildCommentTree(page.getRecords(), 0);
-
-        return getPagedComments(pageVo, comments); // 使用公共方法
+        // return getPageComments(pageVo, list);
+        return getPageObject(pageVo, list);
     }
 
-    private void enrichComment(Comment comment) {
+    // 绑定对应的数据
+    private void bindingData(Comment comment) {
         Article article = articleMapper.selectById(comment.getArticleId());
         if (article != null) {
             comment.setArticleTitle(article.getTitle());
         }
     }
 
-    private Page<Comment> getPagedComments(PageVo pageVo, List<Comment> comments) {
-        int start = (pageVo.getPage() - 1) * pageVo.getSize();
-        int end = Math.min(start + pageVo.getSize(), comments.size());
-        List<Comment> pagedComments = comments.subList(start, end);
+    // 分页查询逻辑
+    // private Page<Comment> getPageComments(PageVo pageVo, List<Comment> comments) {
+    //     int start = (pageVo.getPage() - 1) * pageVo.getSize();
+    //     int end = Math.min(start + pageVo.getSize(), comments.size());
+    //     List<Comment> pagedComments = comments.subList(start, end);
+    //
+    //     Page<Comment> result = new Page<>(pageVo.getPage(), pageVo.getSize());
+    //     result.setRecords(pagedComments);
+    //     result.setTotal(comments.size());
+    //
+    //     return result;
+    // }
 
-        Page<Comment> result = new Page<>(pageVo.getPage(), pageVo.getSize());
-        result.setRecords(pagedComments);
-        result.setTotal(comments.size());
-
-        return result;
-    }
-
+    // 递归构建评论列表
     private List<Comment> buildCommentTree(List<Comment> list, Integer cid) {
         List<Comment> children = new ArrayList<>();
+
         for (Comment comment : list) {
             if (comment.getCommentId().equals(cid)) {
                 comment.setChildren(buildCommentTree(list, comment.getId()));
                 children.add(comment);
             }
 
-            // 文章标题
-            Article article = articleMapper.selectById(comment.getArticleId());
-            comment.setArticleTitle(article.getTitle());
+            bindingData(comment);
         }
         return children;
     }
