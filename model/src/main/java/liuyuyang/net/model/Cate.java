@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @TableName("cate")
-public class Cate{
+public class Cate {
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "分类ID")
     private Integer id;
@@ -26,6 +26,9 @@ public class Cate{
     private String icon;
     @ApiModelProperty(value = "分类级别", example = "0", required = true)
     private Integer level;
+    @TableField("`order`")
+    @ApiModelProperty(value = "分类顺序", example = "0")
+    private Integer order;
     @TableField(exist = false)
     private List<Cate> children = new ArrayList<>();
 }

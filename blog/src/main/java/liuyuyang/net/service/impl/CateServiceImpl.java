@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,6 +59,9 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
         // 查询所有分类
         List<Cate> list = cateMapper.selectList(null);
 
+        // 分类排序
+        list.sort(Comparator.comparingInt(Cate::getOrder));
+
         // 如果参数是list则直接不进行递归处理
         if (Objects.equals(pattern, "list")) return list;
 
@@ -69,9 +73,12 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
     @Override
     public Page<Cate> paging(Integer page, Integer size) {
         // 查询所有分类
-        List<Cate> data = cateMapper.selectList(null);
+        List<Cate> list = cateMapper.selectList(null);
+        // 分类排序
+        list.sort(Comparator.comparingInt(Cate::getOrder));
+
         // 构建分类树
-        List<Cate> cates = buildCateTree(data, 0);
+        List<Cate> cates = buildCateTree(list, 0);
 
         // 分页处理
         int start = (page - 1) * size;
