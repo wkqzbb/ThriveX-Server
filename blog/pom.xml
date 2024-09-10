@@ -84,4 +84,14 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <!--自动检测主类-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
