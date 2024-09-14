@@ -14,8 +14,13 @@ import liuyuyang.net.vo.article.ArticleFillterVo;
 import java.util.List;
 
 public interface LinkService extends IService<Link> {
+    public void add(Link link, String token);
+
     public Link get(Integer cid);
+
     public List<Link> list(FilterVo filterVo, SortVO sortVo);
+
     public Page<Link> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo);
+
     public QueryWrapper<Link> queryWrapperArticle(FilterVo filterVo, SortVO sortVo);
 }

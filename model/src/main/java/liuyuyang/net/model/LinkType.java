@@ -15,9 +15,9 @@ public class LinkType {
     private Integer id;
     @ApiModelProperty(value = "网站类型名称", example = "技术类", required = true)
     private String name;
-    @TableField("`order`")
     @ApiModelProperty(value = "用户是否可选，0表示不可选 1表示可选", example = "0")
     private Integer isAdmin;
+    @TableField("`order`")
     @ApiModelProperty(value = "网站类型顺序", example = "1")
     private Integer order;
 }

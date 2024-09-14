@@ -127,6 +127,7 @@ public class UserController {
         User data = userService.login(user);
 
         Map<String, Object> claims = new HashMap<>();
+        claims.put("user", data);
         String token = JwtUtil.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
 
         Role role = roleService.getById(data.getRoleId());

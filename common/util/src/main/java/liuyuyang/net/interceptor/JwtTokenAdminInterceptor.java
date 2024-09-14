@@ -69,7 +69,6 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
             // 处理Authorization的Bearer
             if (token.startsWith("Bearer ")) token = token.substring(7);
-
             Claims claims = JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
 
             // 放行

@@ -2,19 +2,23 @@ package liuyuyang.net.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
 import liuyuyang.net.model.LinkType;
+import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.LinkService;
+import liuyuyang.net.utils.JwtUtil;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.article.ArticleFillterVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +37,11 @@ public class LinkController {
     private LinkTypeMapper linkTypeMapper;
 
     @PostMapping
+    @NoTokenRequired
     @ApiOperation("新增网站")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody Link link) {
-        linkService.save(link);
+    public Result<String> add(@RequestBody Link link, @RequestHeader(value = "Authorization", required = false) String token) {
+        linkService.add(link, token);
         return Result.success();
     }
 
