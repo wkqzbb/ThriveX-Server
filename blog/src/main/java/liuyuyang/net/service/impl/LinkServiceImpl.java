@@ -7,17 +7,13 @@ import io.jsonwebtoken.Claims;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.LinkMapper;
 import liuyuyang.net.mapper.LinkTypeMapper;
-import liuyuyang.net.model.Article;
-import liuyuyang.net.model.ArticleCate;
 import liuyuyang.net.model.Link;
 import liuyuyang.net.properties.JwtProperties;
-import liuyuyang.net.result.Result;
 import liuyuyang.net.service.LinkService;
 import liuyuyang.net.utils.JwtUtil;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
-import liuyuyang.net.vo.article.ArticleFillterVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +48,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
             // 是管理员，允许添加
             if ("1".equals(user.get("roleId"))) {
                 linkMapper.insert(link);
-            }else{
+            } else {
                 throw new CustomException(400, "该类型需要管理员权限才能添加");
             }
         }
@@ -67,7 +63,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
         }
 
         // 获取网站类型
-        data.setTypeName(linkTypeMapper.selectById(id).getName());
+        data.setType(linkTypeMapper.selectById(id));
 
         return data;
     }
@@ -81,9 +77,11 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
 
         if (!list.isEmpty()) {
             for (Link link : list) {
-                link.setTypeName(linkTypeMapper.selectById(link.getTypeId()).getName());
+                link.setType(linkTypeMapper.selectById(link.getTypeId()));
             }
         }
+
+        list = list.stream().sorted((o1, o2) -> o2.getCreateTime().compareTo(o1.getCreateTime())).collect(Collectors.toList());
 
         return list;
     }
