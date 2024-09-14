@@ -29,6 +29,8 @@ public class Cate {
     @TableField("`order`")
     @ApiModelProperty(value = "分类顺序", example = "0")
     private Integer order;
+    @ApiModelProperty(value = "类型", example = "cate | nav")
+    private String type;
     @TableField(exist = false)
     private List<Cate> children = new ArrayList<>();
 }

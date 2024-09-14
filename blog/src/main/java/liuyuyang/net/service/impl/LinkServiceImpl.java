@@ -38,11 +38,10 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
         }
 
         // 获取网站类型
-        data.setType(linkTypeMapper.getTypeData(id));
+        data.setTypeName(linkTypeMapper.selectById(id).getName());
 
         return data;
     }
-
 
     @Override
     public List<Link> list(FilterVo filterVo, SortVO sortVo) {
@@ -53,7 +52,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
 
         if (!list.isEmpty()) {
             for (Link link : list) {
-                link.setType(linkTypeMapper.getTypeData(link.getId()));
+                link.setTypeName(linkTypeMapper.selectById(link.getTypeId()).getName());
             }
         }
 

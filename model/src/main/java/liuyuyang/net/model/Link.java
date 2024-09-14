@@ -17,7 +17,8 @@ public class Link extends BaseModel {
     @ApiModelProperty(value = "网站类型", example = "1", required = true)
     private Integer typeId;
     @TableField(exist = false)
-    private LinkType type;
+    @ApiModelProperty(value = "网站类型名称", example = "技术类")
+    private String typeName;
     @ApiModelProperty(value = "网站图片", example = "http://127.0.0.1:5000/1.jpg", required = true)
     private String image;
     @ApiModelProperty(value = "网站链接", example = "/", required = true)
