@@ -34,8 +34,8 @@ public class CommentController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@PathVariable Integer article_id, @RequestBody Comment comment) {
         comment.setArticleId(article_id);
-        boolean res = commentService.save(comment);
-        return res ? Result.success() : Result.error();
+        commentService.save(comment);
+        return Result.success();
     }
 
     @DeleteMapping("/{id}")
@@ -44,16 +44,16 @@ public class CommentController {
     public Result<String> del(@PathVariable Integer id) {
         Comment data = commentService.getById(id);
         if (data == null) return Result.error("删除评论失败：该评论不存在");
-        Boolean res = commentService.removeById(id);
-        return res ? Result.success() : Result.error();
+        commentService.removeById(id);
+        return Result.success();
     }
 
     @DeleteMapping("/batch")
     @ApiOperation("批量删除评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
-        Boolean res = commentService.removeByIds(ids);
-        return res ? Result.success() : Result.error();
+        commentService.removeByIds(ids);
+        return Result.success();
     }
 
     @PatchMapping

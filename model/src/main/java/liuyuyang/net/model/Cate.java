@@ -27,7 +27,7 @@ public class Cate {
     @ApiModelProperty(value = "分类级别", example = "0", required = true)
     private Integer level;
     @TableField("`order`")
-    @ApiModelProperty(value = "分类顺序", example = "0")
+    @ApiModelProperty(value = "分类顺序", example = "1")
     private Integer order;
     @ApiModelProperty(value = "类型", example = "cate | nav")
     private String type;

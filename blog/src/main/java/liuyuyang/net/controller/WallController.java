@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
+import liuyuyang.net.mapper.WallCateMapper;
 import liuyuyang.net.model.Wall;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.WallService;
@@ -13,6 +14,7 @@ import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,12 +31,12 @@ public class WallController {
     private WallService wallService;
 
     @NoTokenRequired
-    @PostMapping("/{cate_id}")
+    @PostMapping
     @ApiOperation("新增留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@PathVariable Integer cate_id, @RequestBody Wall wall) {
-        boolean res = wallService.save(wall);
-        return res ? Result.success() : Result.error();
+    public Result<String> add(@RequestBody Wall wall) {
+        wallService.save(wall);
+        return Result.success();
     }
 
     @DeleteMapping("/{id}")
@@ -43,16 +45,16 @@ public class WallController {
     public Result<String> del(@PathVariable Integer id) {
         Wall data = wallService.getById(id);
         if (data == null) return Result.error("删除留言失败：该留言不存在");
-        Boolean res = wallService.removeById(id);
-        return res ? Result.success() : Result.error();
+        wallService.removeById(id);
+        return Result.success();
     }
 
     @DeleteMapping("/batch")
     @ApiOperation("批量删除留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
-        Boolean res = wallService.removeByIds(ids);
-        return res ? Result.success() : Result.error();
+        wallService.removeByIds(ids);
+        return Result.success();
     }
 
     @PatchMapping
