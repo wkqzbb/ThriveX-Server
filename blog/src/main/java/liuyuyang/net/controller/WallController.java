@@ -6,13 +6,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
-import liuyuyang.net.model.Comment;
+import liuyuyang.net.model.Wall;
 import liuyuyang.net.result.Result;
-import liuyuyang.net.service.CommentService;
+import liuyuyang.net.service.WallService;
 import liuyuyang.net.utils.Paging;
+import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
-import liuyuyang.net.vo.comment.CommentFilterVo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,98 +20,97 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "评论管理")
+@Api(tags = "留言管理")
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/wall")
 @Transactional
-public class CommentController {
+public class WallController {
     @Resource
-    private CommentService commentService;
+    private WallService wallService;
 
     @NoTokenRequired
-    @PostMapping("/{article_id}")
-    @ApiOperation("新增评论")
+    @PostMapping("/{cate_id}")
+    @ApiOperation("新增留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@PathVariable Integer article_id, @RequestBody Comment comment) {
-        comment.setArticleId(article_id);
-        boolean res = commentService.save(comment);
+    public Result<String> add(@PathVariable Integer cate_id, @RequestBody Wall wall) {
+        boolean res = wallService.save(wall);
         return res ? Result.success() : Result.error();
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("删除评论")
+    @ApiOperation("删除留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@PathVariable Integer id) {
-        Comment data = commentService.getById(id);
-        if (data == null) return Result.error("删除评论失败：该评论不存在");
-        Boolean res = commentService.removeById(id);
+        Wall data = wallService.getById(id);
+        if (data == null) return Result.error("删除留言失败：该留言不存在");
+        Boolean res = wallService.removeById(id);
         return res ? Result.success() : Result.error();
     }
 
     @DeleteMapping("/batch")
-    @ApiOperation("批量删除评论")
+    @ApiOperation("批量删除留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
-        Boolean res = commentService.removeByIds(ids);
+        Boolean res = wallService.removeByIds(ids);
         return res ? Result.success() : Result.error();
     }
 
     @PatchMapping
-    @ApiOperation("编辑评论")
+    @ApiOperation("编辑留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-    public Result<String> edit(@RequestBody Comment comment) {
-        commentService.updateById(comment);
+    public Result<String> edit(@RequestBody Wall wall) {
+        wallService.updateById(wall);
         return Result.success();
     }
 
     @GetMapping("/{id}")
-    @ApiOperation("获取评论")
+    @ApiOperation("获取留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<Comment> get(@PathVariable Integer id) {
-        Comment data = commentService.get(id);
+    public Result<Wall> get(@PathVariable Integer id) {
+        Wall data = wallService.get(id);
         return Result.success(data);
     }
 
     @NoTokenRequired
     @PostMapping("/list")
-    @ApiOperation("获取评论列表")
+    @ApiOperation("获取留言列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Comment>> list(@RequestBody CommentFilterVo filterVo, SortVO sortVo) {
-        List<Comment> list = commentService.list(filterVo, sortVo);
+    public Result<List<Wall>> list(@RequestBody FilterVo filterVo, SortVO sortVo) {
+        List<Wall> list = wallService.list(filterVo, sortVo);
         return Result.success(list);
     }
 
     @NoTokenRequired
     @PostMapping("/paging")
-    @ApiOperation("分页查询评论列表")
+    @ApiOperation("分页查询留言列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(@RequestBody CommentFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
-        Page<Comment> list = commentService.paging(filterVo, sortVo, pageVo);
+    public Result paging(@RequestBody FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+        Page<Wall> list = wallService.paging(filterVo, sortVo, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
 
     @NoTokenRequired
-    @PostMapping("/article/{article_id}")
-    @ApiOperation("获取指定文章中所有评论")
+    @PostMapping("/cate/{cate_id}")
+    @ApiOperation("获取指定分类中所有留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result getCommentList(@PathVariable Integer article_id, PageVo pageVo) {
-        Page<Comment> list = commentService.getCommentList(article_id, pageVo);
+    public Result getWallList(@PathVariable Integer cate_id, PageVo pageVo) {
+        Page<Wall> list = wallService.getWallList(cate_id, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
 
     @PatchMapping("/audit/{id}")
-    @ApiOperation("审核指定评论")
+    @ApiOperation("审核指定留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
-    public Result auditComment(@PathVariable Integer id) {
-        Comment data = commentService.getById(id);
+    public Result auditWall(@PathVariable Integer id) {
+        Wall data = wallService.getById(id);
         if (data == null) {
-            throw new CustomException(400, "该评论不存在");
+            throw new CustomException(400, "该留言不存在");
         }
 
-        data.setAuditStatus(1);
-        commentService.updateById(data);
+        // data.setAuditStatus(1);
+        wallService.updateById(data);
         return Result.success();
     }
 }
