@@ -24,4 +24,6 @@ public class Link extends BaseModel {
     private String url;
     @ApiModelProperty(value = "订阅地址", example = "/")
     private String rss;
+    @ApiModelProperty(value = "评论是否审核通过", example = "1")
+    private Integer auditStatus;
 }

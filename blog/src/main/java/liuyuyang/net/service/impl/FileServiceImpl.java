@@ -41,15 +41,21 @@ public class FileServiceImpl implements FileService {
     // 等注入完成后再执行
     @PostConstruct
     public void init() throws QiniuException {
-        this.auth = Auth.create(ossProperties.getAccessKey(), ossProperties.getSecretKey());
-        this.cfg = new Configuration(Region.region0());
-        this.bucketManager = new BucketManager(auth, cfg);
-        this.uploadManager = new UploadManager(cfg);
+        try {
+            this.auth = Auth.create(ossProperties.getAccessKey(), ossProperties.getSecretKey());
+            this.cfg = new Configuration(Region.region0());
+            this.bucketManager = new BucketManager(auth, cfg);
+            this.uploadManager = new UploadManager(cfg);
 
-        // 存储桶名称
-        this.bucket = ossProperties.getBucket();
-        // 存储桶域名
-        this.url = "http://" + bucketManager.domainList(bucket)[0] + "/";
+            // 存储桶名称
+            this.bucket = ossProperties.getBucket();
+            System.out.println(888888);
+            System.out.println(bucketManager.domainList(bucket)[0]);
+            // 存储桶域名
+            this.url = "http://" + bucketManager.domainList(bucket)[0] + "/";
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     @Override

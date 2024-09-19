@@ -21,6 +21,4 @@ public interface LinkService extends IService<Link> {
     public List<Link> list(FilterVo filterVo, SortVO sortVo);
 
     public Page<Link> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo);
-
-    public QueryWrapper<Link> queryWrapperArticle(FilterVo filterVo, SortVO sortVo);
 }

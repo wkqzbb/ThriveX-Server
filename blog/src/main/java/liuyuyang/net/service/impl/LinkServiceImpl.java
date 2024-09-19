@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static liuyuyang.net.utils.YuYangUtils.queryWrapperFilter;
+
 @Service
 @Transactional
 public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements LinkService {
@@ -70,7 +72,8 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
 
     @Override
     public List<Link> list(FilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Link> queryWrapper = queryWrapperArticle(filterVo, sortVo);
+        QueryWrapper<Link> queryWrapper = queryWrapperFilter(filterVo, sortVo);
+        queryWrapper.eq("audit_status", 1); // 只显示审核成功的网站
 
         // 查询所有网站
         List<Link> list = linkMapper.selectList(queryWrapper);
@@ -101,37 +104,5 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
         result.setTotal(list.size());
 
         return result;
-    }
-
-    // 过滤数据
-    @Override
-    public QueryWrapper<Link> queryWrapperArticle(FilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Link> queryWrapper = new QueryWrapper<>();
-
-        // 根据发布时间从早到晚排序
-        switch (sortVo.getSort()) {
-            case "asc":
-                queryWrapper.orderByAsc("create_time");
-                break;
-            case "desc":
-                queryWrapper.orderByDesc("create_time");
-                break;
-        }
-
-        // 根据关键字通过标题过滤出对应文章数据
-        if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {
-            queryWrapper.like("title", "%" + filterVo.getKey() + "%");
-        }
-
-        // 根据开始与结束时间过滤
-        if (filterVo.getStartDate() != null && filterVo.getEndDate() != null) {
-            queryWrapper.between("create_time", filterVo.getStartDate(), filterVo.getEndDate());
-        } else if (filterVo.getStartDate() != null) {
-            queryWrapper.ge("create_time", filterVo.getStartDate());
-        } else if (filterVo.getEndDate() != null) {
-            queryWrapper.le("create_time", filterVo.getEndDate());
-        }
-
-        return queryWrapper;
     }
 }
