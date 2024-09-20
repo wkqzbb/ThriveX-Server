@@ -6,15 +6,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
-import liuyuyang.net.mapper.WallCateMapper;
 import liuyuyang.net.model.Wall;
+import liuyuyang.net.model.WallCate;
 import liuyuyang.net.result.Result;
+import liuyuyang.net.service.WallCateService;
 import liuyuyang.net.service.WallService;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -96,22 +96,29 @@ public class WallController {
     @PostMapping("/cate/{cate_id}")
     @ApiOperation("获取指定分类中所有留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result getWallList(@PathVariable Integer cate_id, PageVo pageVo) {
-        Page<Wall> list = wallService.getWallList(cate_id, pageVo);
+    public Result getCateWallList(@PathVariable Integer cate_id, PageVo pageVo) {
+        Page<Wall> list = wallService.getCateWallList(cate_id, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
 
+    @GetMapping("/cate")
+    @ApiOperation("获取留言分类列表")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
+    public Result getCateList() {
+        List<WallCate> list = wallService.getCateList();
+        return Result.success(list);
+    }
+
     @PatchMapping("/audit/{id}")
     @ApiOperation("审核指定留言")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
     public Result auditWall(@PathVariable Integer id) {
         Wall data = wallService.getById(id);
-        if (data == null) {
-            throw new CustomException(400, "该留言不存在");
-        }
 
-        // data.setAuditStatus(1);
+        if (data == null) throw new CustomException(400, "该留言不存在");
+
+        data.setAuditStatus(1);
         wallService.updateById(data);
         return Result.success();
     }

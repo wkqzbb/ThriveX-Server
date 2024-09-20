@@ -66,9 +66,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public Page<Comment> getCommentList(Integer aid, PageVo pageVo) {
+    public Page<Comment> getArticleCommentList(Integer article_id, PageVo pageVo) {
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("article_id", aid);
+        queryWrapper.eq("article_id", article_id);
         queryWrapper.eq("audit_status", 1);
         queryWrapper.orderByDesc("create_time");
 

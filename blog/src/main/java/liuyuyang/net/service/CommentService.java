@@ -13,7 +13,7 @@ import java.util.List;
 public interface CommentService extends IService<Comment> {
     public Comment get(Integer id);
 
-    public Page<Comment> getCommentList(Integer aid, PageVo pageVo);
+    public Page<Comment> getArticleCommentList(Integer article_id, PageVo pageVo);
 
     public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo);
 

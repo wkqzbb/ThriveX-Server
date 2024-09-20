@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.execption.CustomException;
+import liuyuyang.net.mapper.WallCateMapper;
 import liuyuyang.net.mapper.WallMapper;
 import liuyuyang.net.model.Wall;
+import liuyuyang.net.model.WallCate;
 import liuyuyang.net.service.WallService;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
@@ -24,22 +26,26 @@ import static liuyuyang.net.utils.YuYangUtils.queryWrapperFilter;
 public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements WallService {
     @Resource
     private WallMapper wallMapper;
+    @Resource
+    private WallCateMapper wallCateMapper;
 
     @Override
     public Wall get(Integer id) {
         Wall data = wallMapper.selectById(id);
-
-        if (data == null) {
-            throw new CustomException(400, "该留言不存在");
-        }
-
+        if (data == null) throw new CustomException(400, "该留言不存在");
+        data.setCate(wallCateMapper.selectById(data.getCateId()));
         return data;
     }
 
     @Override
     public List<Wall> list(FilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Wall> queryWrapper = queryWrapperFilter(filterVo, sortVo);
+        QueryWrapper<Wall> queryWrapper = queryWrapperFilter(filterVo, sortVo, "name");
         List<Wall> list = wallMapper.selectList(queryWrapper);
+
+        // 绑定数据
+        for (Wall wall : list) {
+            wall.setCate(wallCateMapper.selectById(wall.getCateId()));
+        }
 
         return list;
     }
@@ -51,8 +57,10 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     }
 
     @Override
-    public Page<Wall> getWallList(Integer aid, PageVo pageVo) {
+    public Page<Wall> getCateWallList(Integer cate_id, PageVo pageVo) {
         QueryWrapper<Wall> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("cate_id", cate_id);
+        queryWrapper.eq("audit_status", 1);
         queryWrapper.orderByDesc("create_time");
 
         Page<Wall> page = new Page<>(pageVo.getPage(), pageVo.getSize());
@@ -60,7 +68,19 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
 
         List<Wall> list = page.getRecords();
 
+        // 绑定数据
+        for (Wall wall : list) {
+            wall.setCate(wallCateMapper.selectById(wall.getCateId()));
+        }
+
         // 分页处理
         return getPageData(pageVo, list);
+    }
+
+    @Override
+    public List<WallCate> getCateList() {
+        QueryWrapper<WallCate> queryWrapper = new QueryWrapper<>();
+        List<WallCate> list = wallCateMapper.selectList(queryWrapper);
+        return list;
     }
 }

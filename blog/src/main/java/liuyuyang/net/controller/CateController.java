@@ -6,7 +6,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import liuyuyang.net.annotation.NoTokenRequired;
-import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.CateService;
@@ -30,13 +29,8 @@ public class CateController {
     @ApiOperation("新增分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestBody Cate cate) {
-        try {
-            boolean res = cateService.save(cate);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new CustomException(400, e.getMessage());
-        }
+        cateService.save(cate);
+        return Result.success();
     }
 
     @DeleteMapping("/{id}")
@@ -45,15 +39,13 @@ public class CateController {
     public Result<String> del(@PathVariable Integer id) {
         // 判断该分类中是否绑定了二级分类
         boolean e = cateService.exist(id);
-
         if (!e) return Result.error();
 
         Cate data = cateService.getById(id);
         if (data == null) return Result.error("该数据不存在");
 
-        Boolean res = cateService.removeById(id);
-
-        return res ? Result.success() : Result.error();
+        cateService.removeById(id);
+        return Result.success();
     }
 
     @DeleteMapping("/batch")
@@ -62,9 +54,7 @@ public class CateController {
     public Result batchDel(@RequestBody List<Integer> ids) {
         for (Integer id : ids) {
             boolean e = cateService.exist(id);
-
             if (!e) return Result.error();
-
             cateService.removeById(id);
         }
 
@@ -75,13 +65,8 @@ public class CateController {
     @ApiOperation("编辑分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result<String> edit(@RequestBody Cate cate) {
-        try {
-            boolean res = cateService.updateById(cate);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new CustomException(400, e.getMessage());
-        }
+        cateService.updateById(cate);
+        return Result.success();
     }
 
     @GetMapping("/{id}")
@@ -96,7 +81,7 @@ public class CateController {
     @PostMapping("/list")
     @ApiOperation("获取分类列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Cate>> list(@ApiParam(value = "默认为recursion模式，表示将子分类都递归到children中。如果设置了list模式，则直接返回所有评论") @RequestParam(defaultValue = "recursion") String pattern )  {
+    public Result<List<Cate>> list(@ApiParam(value = "默认为recursion模式，表示将子分类都递归到children中。如果设置了list模式，则直接返回所有评论") @RequestParam(defaultValue = "recursion") String pattern) {
         List<Cate> data = cateService.list(pattern);
         return Result.success(data);
     }
@@ -107,9 +92,7 @@ public class CateController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
         Page<Cate> data = cateService.paging(page, size);
-
         Map<String, Object> result = Paging.filter(data);
-
         return Result.success(result);
     }
 }

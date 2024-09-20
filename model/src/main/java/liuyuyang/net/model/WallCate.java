@@ -1,13 +1,19 @@
 package liuyuyang.net.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 @TableName("wall_cate")
-public class WallCate extends BaseModel {
+public class WallCate {
+    @TableId(type = IdType.AUTO)
+    @ApiModelProperty(value = "标签ID")
+    private Integer id;
+
     @ApiModelProperty(value = "分类名称", example = "全部", required = true)
     private String name;
 

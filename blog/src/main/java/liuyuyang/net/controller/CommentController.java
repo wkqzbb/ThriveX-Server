@@ -29,11 +29,10 @@ public class CommentController {
     private CommentService commentService;
 
     @NoTokenRequired
-    @PostMapping("/{article_id}")
+    @PostMapping
     @ApiOperation("新增评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@PathVariable Integer article_id, @RequestBody Comment comment) {
-        comment.setArticleId(article_id);
+    public Result<String> add(@RequestBody Comment comment) {
         commentService.save(comment);
         return Result.success();
     }
@@ -95,8 +94,8 @@ public class CommentController {
     @PostMapping("/article/{article_id}")
     @ApiOperation("获取指定文章中所有评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result getCommentList(@PathVariable Integer article_id, PageVo pageVo) {
-        Page<Comment> list = commentService.getCommentList(article_id, pageVo);
+    public Result getArticleCommentList(@PathVariable Integer article_id, PageVo pageVo) {
+        Page<Comment> list = commentService.getArticleCommentList(article_id, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }

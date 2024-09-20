@@ -16,7 +16,7 @@ public class Wall extends BaseModel {
 
     @TableField(exist = false)
     @ApiModelProperty(value = "留言分类", example = "全部")
-    private String cate;
+    private WallCate cate;
 
     @ApiModelProperty(value = "留言墙颜色", example = "#92e6f54d", required = true)
     private String color;
@@ -24,4 +24,6 @@ public class Wall extends BaseModel {
     @ApiModelProperty(value = "留言内容", example = "这是一段内容", required = true)
     private String content;
 
+    @ApiModelProperty(value = "评论是否审核通过", example = "1")
+    private Integer auditStatus;
 }
