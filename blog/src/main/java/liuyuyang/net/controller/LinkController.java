@@ -2,23 +2,20 @@ package liuyuyang.net.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.NoTokenRequired;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
 import liuyuyang.net.model.LinkType;
-import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.LinkService;
-import liuyuyang.net.utils.JwtUtil;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.article.ArticleFillterVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -106,4 +103,16 @@ public class LinkController {
         return Result.success(data);
     }
 
+    @PatchMapping("/audit/{id}")
+    @ApiOperation("审核指定网站")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
+    public Result auditWeb(@PathVariable Integer id) {
+        Link data = linkService.getById(id);
+
+        if (data == null) throw new CustomException(400, "该网站不存在");
+
+        data.setAuditStatus(1);
+        linkService.updateById(data);
+        return Result.success();
+    }
 }

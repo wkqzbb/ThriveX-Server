@@ -57,9 +57,9 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     }
 
     @Override
-    public Page<Wall> getCateWallList(Integer cate_id, PageVo pageVo) {
+    public Page<Wall> getCateWallList(Integer cateId, PageVo pageVo) {
         QueryWrapper<Wall> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("cate_id", cate_id);
+        if (cateId != 1) queryWrapper.eq("cate_id", cateId);
         queryWrapper.eq("audit_status", 1);
         queryWrapper.orderByDesc("create_time");
 
@@ -74,7 +74,7 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
         }
 
         // 分页处理
-        return getPageData(pageVo, list);
+        return page;
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.List;
 public interface WallService extends IService<Wall> {
     public Wall get(Integer id);
 
-    public Page<Wall> getCateWallList(Integer cate_id, PageVo pageVo);
+    public Page<Wall> getCateWallList(Integer cateId, PageVo pageVo);
     public List<WallCate> getCateList();
 
     public List<Wall> list(FilterVo filterVo, SortVO sortVo);

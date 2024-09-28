@@ -49,7 +49,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Comment> queryWrapper = queryWrapperFilter(filterVo, sortVo);
+        QueryWrapper<Comment> queryWrapper = queryWrapperFilter(filterVo, sortVo, "name");
+        if (filterVo.getContent() != null && !filterVo.getContent().isEmpty()) {
+            queryWrapper.like("content", filterVo.getContent());
+        }
+
         List<Comment> list = commentMapper.selectList(queryWrapper);
 
         // 查询的结构格式
@@ -66,9 +70,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public Page<Comment> getArticleCommentList(Integer article_id, PageVo pageVo) {
+    public Page<Comment> getArticleCommentList(Integer articleId, PageVo pageVo) {
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("article_id", article_id);
+        queryWrapper.eq("article_id", articleId);
         queryWrapper.eq("audit_status", 1);
         queryWrapper.orderByDesc("create_time");
 

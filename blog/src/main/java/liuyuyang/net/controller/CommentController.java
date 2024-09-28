@@ -91,11 +91,11 @@ public class CommentController {
     }
 
     @NoTokenRequired
-    @PostMapping("/article/{article_id}")
+    @PostMapping("/article/{articleId}")
     @ApiOperation("获取指定文章中所有评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result getArticleCommentList(@PathVariable Integer article_id, PageVo pageVo) {
-        Page<Comment> list = commentService.getArticleCommentList(article_id, pageVo);
+    public Result getArticleCommentList(@PathVariable Integer articleId, PageVo pageVo) {
+        Page<Comment> list = commentService.getArticleCommentList(articleId, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
@@ -105,9 +105,8 @@ public class CommentController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
     public Result auditComment(@PathVariable Integer id) {
         Comment data = commentService.getById(id);
-        if (data == null) {
-            throw new CustomException(400, "该评论不存在");
-        }
+
+        if (data == null) throw new CustomException(400, "该评论不存在");
 
         data.setAuditStatus(1);
         commentService.updateById(data);

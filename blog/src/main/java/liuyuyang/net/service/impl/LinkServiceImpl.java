@@ -73,7 +73,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
     @Override
     public List<Link> list(FilterVo filterVo, SortVO sortVo) {
         QueryWrapper<Link> queryWrapper = queryWrapperFilter(filterVo, sortVo);
-        queryWrapper.eq("audit_status", 1); // 只显示审核成功的网站
+        // queryWrapper.eq("audit_status", 1); // 只显示审核成功的网站
 
         // 查询所有网站
         List<Link> list = linkMapper.selectList(queryWrapper);

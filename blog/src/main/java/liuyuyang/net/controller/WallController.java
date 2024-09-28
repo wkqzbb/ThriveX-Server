@@ -93,11 +93,11 @@ public class WallController {
     }
 
     @NoTokenRequired
-    @PostMapping("/cate/{cate_id}")
+    @PostMapping("/cate/{cateId}")
     @ApiOperation("获取指定分类中所有留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result getCateWallList(@PathVariable Integer cate_id, PageVo pageVo) {
-        Page<Wall> list = wallService.getCateWallList(cate_id, pageVo);
+    public Result getCateWallList(@PathVariable Integer cateId, PageVo pageVo) {
+        Page<Wall> list = wallService.getCateWallList(cateId, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
