@@ -50,6 +50,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo) {
         QueryWrapper<Comment> queryWrapper = queryWrapperFilter(filterVo, sortVo, "name");
+        queryWrapper.eq("audit_status", filterVo.getStatus());
         if (filterVo.getContent() != null && !filterVo.getContent().isEmpty()) {
             queryWrapper.like("content", filterVo.getContent());
         }

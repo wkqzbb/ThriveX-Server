@@ -15,6 +15,7 @@ import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import liuyuyang.net.vo.wall.WallFilterVo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,7 +78,7 @@ public class WallController {
     @PostMapping("/list")
     @ApiOperation("获取留言列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Wall>> list(@RequestBody FilterVo filterVo, SortVO sortVo) {
+    public Result<List<Wall>> list(@RequestBody WallFilterVo filterVo, SortVO sortVo) {
         List<Wall> list = wallService.list(filterVo, sortVo);
         return Result.success(list);
     }
@@ -86,7 +87,7 @@ public class WallController {
     @PostMapping("/paging")
     @ApiOperation("分页查询留言列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(@RequestBody FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+    public Result paging(@RequestBody WallFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
         Page<Wall> list = wallService.paging(filterVo, sortVo, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);

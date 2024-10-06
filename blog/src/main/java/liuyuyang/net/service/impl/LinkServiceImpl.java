@@ -14,6 +14,7 @@ import liuyuyang.net.utils.JwtUtil;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import liuyuyang.net.vo.link.LinkFilterVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,9 +72,9 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
     }
 
     @Override
-    public List<Link> list(FilterVo filterVo, SortVO sortVo) {
+    public List<Link> list(LinkFilterVo filterVo, SortVO sortVo) {
         QueryWrapper<Link> queryWrapper = queryWrapperFilter(filterVo, sortVo);
-        // queryWrapper.eq("audit_status", 1); // 只显示审核成功的网站
+        queryWrapper.eq("audit_status", filterVo.getStatus()); // 只显示审核成功的网站
 
         // 查询所有网站
         List<Link> list = linkMapper.selectList(queryWrapper);
@@ -90,7 +91,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
     }
 
     @Override
-    public Page<Link> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+    public Page<Link> paging(LinkFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
         List<Link> list = list(filterVo, sortVo);
 
         // 分页处理

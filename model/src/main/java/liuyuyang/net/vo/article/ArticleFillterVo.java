@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 public class ArticleFillterVo extends FilterVo {
-    @ApiModelProperty(value = "根据分类进行查询")
+    @ApiModelProperty(value = "根据分类进行筛选")
     private List<Integer> cateIds;
-    @ApiModelProperty(value = "根据标签进行模糊查询")
-    private String tagId;
+    @ApiModelProperty(value = "根据标签进行筛选")
+    private Integer tagId;
 }

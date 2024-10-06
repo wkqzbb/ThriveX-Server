@@ -12,6 +12,7 @@ import liuyuyang.net.service.WallService;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import liuyuyang.net.vo.wall.WallFilterVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +39,14 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     }
 
     @Override
-    public List<Wall> list(FilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Wall> queryWrapper = queryWrapperFilter(filterVo, sortVo, "name");
+    public List<Wall> list(WallFilterVo filterVo, SortVO sortVo) {
+        QueryWrapper<Wall> queryWrapper = queryWrapperFilter(filterVo, sortVo, "content");
+        queryWrapper.eq("audit_status", filterVo.getStatus());
+
+        if (filterVo.getCateId() != null) {
+            queryWrapper.eq("cate_id", filterVo.getCateId());
+        }
+
         List<Wall> list = wallMapper.selectList(queryWrapper);
 
         // 绑定数据
@@ -51,7 +58,7 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     }
 
     @Override
-    public Page<Wall> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo) {
+    public Page<Wall> paging(WallFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
         List<Wall> list = list(filterVo, sortVo);
         return getPageData(pageVo, list);
     }

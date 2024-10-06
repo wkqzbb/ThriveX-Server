@@ -269,7 +269,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         // 根据标签id过滤
-        if (filterVo.getTagId() != null && !filterVo.getTagId().isEmpty()) {
+        if (filterVo.getTagId() != null) {
             queryWrapper.like("tag_ids", "%" + filterVo.getTagId() + "%");
         }
 

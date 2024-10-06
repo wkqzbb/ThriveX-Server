@@ -7,6 +7,7 @@ import liuyuyang.net.model.WallCate;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import liuyuyang.net.vo.wall.WallFilterVo;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface WallService extends IService<Wall> {
     public Page<Wall> getCateWallList(Integer cateId, PageVo pageVo);
     public List<WallCate> getCateList();
 
-    public List<Wall> list(FilterVo filterVo, SortVO sortVo);
+    public List<Wall> list(WallFilterVo filterVo, SortVO sortVo);
 
-    public Page<Wall> paging(FilterVo filterVo, SortVO sortVo, PageVo pageVo);
+    public Page<Wall> paging(WallFilterVo filterVo, SortVO sortVo, PageVo pageVo);
 }
