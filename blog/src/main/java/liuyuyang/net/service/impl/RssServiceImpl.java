@@ -41,6 +41,8 @@ public class RssServiceImpl implements RssService {
         List<String> feedUrls = linkList.stream().map(Link::getRss).collect(Collectors.toList());
 
         for (String feedUrl : feedUrls) {
+            if(feedUrl == null) continue;
+
             QueryWrapper<Link> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("rss", feedUrl);
             Link link = linkMapper.selectOne(queryWrapper);
