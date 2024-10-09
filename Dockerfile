@@ -8,7 +8,7 @@ WORKDIR /thrive
 COPY thrive.jar /thrive/app.jar
 
 # 暴露容器端口号，不写表示所有
-EXPOSE 9999
+EXPOSE 9003
 
 # 创建容器成功做的事情,等价于：java -jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

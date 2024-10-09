@@ -2,7 +2,7 @@ spring:
   application:
     name: service-system
   profiles:
-    active: dev
+    active: pro
   # 约束文件上传大小
   servlet.multipart.max-file-size: 10MB
   servlet.multipart.max-request-size: 100MB
@@ -32,7 +32,7 @@ knife4j:
     description: 有些梦虽然遥不可及，但并不是不可能实现!
     email: liuyuyang1024@yeah.net
     concat: 刘宇阳
-    url: https://blog.liuyuyang.net
+    url: https://liuyuyang.net
     version: v4.0
     license: Apache 2.0
     terms-of-service-url: https://stackoverflow.com/
