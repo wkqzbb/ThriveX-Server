@@ -40,7 +40,7 @@ public class ArticleController {
     @ApiOperation("删除文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@PathVariable Integer id) {
-        articleService.get(id);
+        articleService.del(id);
         return Result.success();
     }
 
