@@ -3,7 +3,6 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liuyuyang.net.dto.article.ArticleDTO;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.ArticleCateMapper;
 import liuyuyang.net.mapper.ArticleMapper;
@@ -39,7 +38,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private CommentMapper commentMapper;
 
     @Override
-    public void add(ArticleDTO article) {
+    public void add(Article article) {
         articleMapper.insert(article);
 
         for (Integer id : article.getCateIds()) {
@@ -79,10 +78,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public void edit(ArticleDTO article) {
-        int res = articleMapper.updateById(article);
-        if (res == 0) throw new CustomException(400, "编辑文章失败");
-        if (article.getCateIds() == null) throw new CustomException(400, "编辑文章失败：请绑定分类");
+    public void edit(Article article) {
+        if (article.getCateIds() == null) throw new CustomException(400, "编辑失败：请绑定分类");
 
         // 先删除之前绑定的分类
         QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
@@ -94,8 +91,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             ArticleCate articleCate = new ArticleCate();
             articleCate.setArticleId(article.getId());
             articleCate.setCateId(id);
-            System.out.println(articleCateMapper.insert(articleCate));
+            articleCateMapper.insert(articleCate);
         }
+
+        articleMapper.updateById(article);
     }
 
     @Override

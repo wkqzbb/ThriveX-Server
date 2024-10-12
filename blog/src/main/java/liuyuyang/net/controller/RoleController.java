@@ -85,9 +85,6 @@ public class RoleController {
     @ApiOperation("分配角色权限")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result<String> bindingRoute(@PathVariable Integer id, @RequestBody List<Integer> ids) {
-        System.out.println(id);
-        System.out.println(ids);
-        System.out.println(77777);
         roleService.bindingRoute(id, ids);
         return Result.success();
     }

@@ -33,8 +33,14 @@ public class Article extends BaseModel {
     private Integer comment;
 
     @TableField(exist = false)
+    @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3")
+    private List<Integer> cateIds;
+    @TableField(exist = false)
     @ApiModelProperty(value = "分类列表")
     private List<Cate> cateList = new ArrayList<>();
+
+    @ApiModelProperty(value = "该文章所绑定的标签ID", example = "1,2,3")
+    private String tagIds;
     @TableField(exist = false)
     @ApiModelProperty(value = "标签列表")
     private List<Tag> tagList = new ArrayList<>();

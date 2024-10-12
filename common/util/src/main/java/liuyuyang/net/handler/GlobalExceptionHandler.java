@@ -3,12 +3,9 @@ package liuyuyang.net.handler;
 import com.qiniu.common.QiniuException;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.result.Result;
-import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.multipart.MultipartException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -32,8 +29,6 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public Result<Object> exception(Exception e) {
-        System.out.println(111);
-        System.out.println(e.getMessage());
         e.printStackTrace();
         return Result.error(e.getMessage());
     }

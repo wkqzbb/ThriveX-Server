@@ -25,7 +25,6 @@ public class RouteController {
     @ApiOperation("新增路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestBody Route route) {
-        System.out.println(route);
         try {
             boolean res = routeService.save(route);
 

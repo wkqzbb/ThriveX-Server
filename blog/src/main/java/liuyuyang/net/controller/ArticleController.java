@@ -6,7 +6,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import liuyuyang.net.annotation.NoTokenRequired;
-import liuyuyang.net.dto.article.ArticleDTO;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.ArticleService;
@@ -32,7 +31,7 @@ public class ArticleController {
     @PostMapping
     @ApiOperation("新增文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody ArticleDTO article) {
+    public Result<String> add(@RequestBody Article article) {
         articleService.add(article);
         return Result.success();
     }
@@ -56,7 +55,7 @@ public class ArticleController {
     @PatchMapping
     @ApiOperation("编辑文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-    public Result<String> edit(@RequestBody ArticleDTO article) {
+    public Result<String> edit(@RequestBody Article article) {
         articleService.edit(article);
         return Result.success();
     }
