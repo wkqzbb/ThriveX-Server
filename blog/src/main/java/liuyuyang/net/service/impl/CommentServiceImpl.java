@@ -77,10 +77,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         queryWrapper.eq("audit_status", 1);
         queryWrapper.orderByDesc("create_time");
 
-        Page<Comment> page = new Page<>(pageVo.getPage(), pageVo.getSize());
-        commentMapper.selectPage(page, queryWrapper);
-
-        List<Comment> list = page.getRecords();
+        List<Comment> list = commentMapper.selectList(queryWrapper);
 
         // 构建评论树
         list = buildCommentTree(list, 0);
