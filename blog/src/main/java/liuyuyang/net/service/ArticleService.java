@@ -31,6 +31,8 @@ public interface ArticleService extends IService<Article> {
 
     public List<Article> getRecommendedArticles(Integer count);
 
+    public void recordView(Integer id);
+
     public Article bindingData(Integer id);
 
     public QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo, SortVO sortVo);

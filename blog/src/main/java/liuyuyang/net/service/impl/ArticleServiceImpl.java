@@ -200,6 +200,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return list(queryWrapper);
     }
 
+    @Override
+    public void recordView(Integer id) {
+        Article data = articleMapper.selectById(id);
+        if (data == null) throw new CustomException(400, "获取失败：该文章不存在");
+        data.setView(data.getView() + 1);
+        articleMapper.updateById(data);
+    }
+
     // 关联文章数据
     @Override
     public Article bindingData(Integer id) {

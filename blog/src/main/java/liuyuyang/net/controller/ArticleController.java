@@ -87,11 +87,11 @@ public class ArticleController {
         return Result.success(result);
     }
 
-    @GetMapping("/cate/{id}")
+    @GetMapping("/cate/{cate_id}")
     @ApiOperation("获取指定分类的文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result getArticleList(@PathVariable Integer id, SortVO sortVo, PageVo pageVo) {
-        Page<Article> list = articleService.getArticleList(id, sortVo, pageVo);
+    public Result getArticleList(@PathVariable Integer cate_id, SortVO sortVo, PageVo pageVo) {
+        Page<Article> list = articleService.getArticleList(cate_id, sortVo, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
@@ -105,10 +105,18 @@ public class ArticleController {
     }
 
     @GetMapping("/hot")
-    @ApiOperation("获取推荐文章数据")
+    @ApiOperation("获取热门文章数据")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
     public Result<List<Article>> getRecommendedArticles(@ApiParam(value = "默认浏览量最高的5篇文章，可以通过count指定数量") @RequestParam(defaultValue = "5") Integer count) {
         List<Article> data = articleService.getRecommendedArticles(count);
         return Result.success(data);
+    }
+
+    @GetMapping("/view/{article_id}")
+    @ApiOperation("递增文章浏览量")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 11)
+    public Result<String> recordView(@PathVariable Integer article_id) {
+        articleService.recordView(article_id);
+        return Result.success();
     }
 }
