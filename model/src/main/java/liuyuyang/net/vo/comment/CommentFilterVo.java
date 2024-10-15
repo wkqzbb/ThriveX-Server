@@ -1,7 +1,6 @@
 package liuyuyang.net.vo.comment;
 
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import liuyuyang.net.vo.FilterVo;
 import lombok.Data;
 

@@ -57,6 +57,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         List<Comment> list = commentMapper.selectList(queryWrapper);
 
+        for (Comment data : list) {
+            // 绑定对应的数据
+            Article article = articleMapper.selectById(data.getArticleId());
+            if (article != null) data.setArticleTitle(article.getTitle());
+        }
+
         // 查询的结构格式
         if (Objects.equals(filterVo.getPattern(), "list")) return list;
 
@@ -94,12 +100,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             if (data.getCommentId().equals(cid)) {
                 data.setChildren(buildCommentTree(list, data.getId()));
                 children.add(data);
-            }
-
-            // 绑定对应的数据
-            Article article = articleMapper.selectById(data.getArticleId());
-            if (article != null) {
-                data.setArticleTitle(article.getTitle());
             }
         }
         return children;
