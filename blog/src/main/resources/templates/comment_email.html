@@ -45,27 +45,22 @@
 </style>
 
 <body>
-    <!-- 您好，您的验证码为 <span th:text="${code}"></span> 请在两分钟内使用完成操作。 -->
-
     <div class="container">
         <div style="text-align: center;">
-            <h1 style="font-size: 20px; text-align: center;">《好久不见，我回来了！》</h1>
+            <h1 style="font-size: 20px; text-align: center;">《<span th:text="${title}" />》</h1>
 
             <div style="display: flex; justify-content: center; font-size: 12px;">
-                <h3 class="title" style="font-size: 12px;">评论者：<span>宇阳</span></h3>
-                <h3 class="title" style="margin-left: 20px; font-size: 12px;">时间：<span class="time">2024年10月15日
-                        14:44</span></h3>
+                <h3 class="title" style="font-size: 12px;">发送方：<span th:text="${reviewers}" /></h3>
+                <h3 class="title" style="margin-left: 20px; font-size: 12px;">时间：<span th:text="${time}" class="time" />
+                </h3>
             </div>
         </div>
 
         <div class="box">
-            <!-- <h3 class="title">文章：<a href="#" target="_blank" class="article content">《好久不见，我回来了！》</a></h3> -->
-
-            <h3 class="title" style="line-height: 25px;">希望明年能够实现月薪过万的目标，这也是我的目标 哈哈哈
-            </h3>
+            <h3 class="title" style="line-height: 25px;"><span th:text="${content}"></span></h3>
         </div>
 
-        <a href="#" target="_blank" class="jump">查看完整回复内容</a>
+        <a th:href="${url}" target="_blank" class="jump">查看完整回复内容</a>
     </div>
 </body>
 
