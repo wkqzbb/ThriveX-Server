@@ -9,6 +9,7 @@ import liuyuyang.net.mapper.WallMapper;
 import liuyuyang.net.model.Wall;
 import liuyuyang.net.model.WallCate;
 import liuyuyang.net.service.WallService;
+import liuyuyang.net.utils.EmailUtils;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
@@ -29,6 +30,14 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     private WallMapper wallMapper;
     @Resource
     private WallCateMapper wallCateMapper;
+    @Resource
+    private EmailUtils emailUtils;
+
+    @Override
+    public void add(Wall wall) throws Exception {
+        wallMapper.insert(wall);
+        emailUtils.send(null, "您有新的留言等待审核", "");
+    }
 
     @Override
     public Wall get(Integer id) {

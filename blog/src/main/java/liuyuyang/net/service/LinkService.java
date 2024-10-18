@@ -15,7 +15,7 @@ import liuyuyang.net.vo.link.LinkFilterVo;
 import java.util.List;
 
 public interface LinkService extends IService<Link> {
-    public void add(Link link, String token);
+    public void add(Link link, String token) throws Exception;
 
     public Link get(Integer cid);
 

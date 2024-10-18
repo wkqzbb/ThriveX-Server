@@ -38,7 +38,7 @@ public class LinkController {
     @NoTokenRequired
     @ApiOperation("新增网站")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody Link link, @RequestHeader(value = "Authorization", required = false) String token) {
+    public Result<String> add(@RequestBody Link link, @RequestHeader(value = "Authorization", required = false) String token) throws Exception {
         linkService.add(link, token);
         return Result.success();
     }

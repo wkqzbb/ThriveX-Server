@@ -10,6 +10,7 @@ import liuyuyang.net.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.service.LinkService;
+import liuyuyang.net.utils.EmailUtils;
 import liuyuyang.net.utils.JwtUtil;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
@@ -35,9 +36,11 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
     private LinkMapper linkMapper;
     @Resource
     private LinkTypeMapper linkTypeMapper;
+    @Resource
+    private EmailUtils emailUtils;
 
     @Override
-    public void add(Link link, String token) {
+    public void add(Link link, String token) throws Exception {
         // 这里有时间可以做个全局鉴权工具类优化如下代码：
         if (token == null) {
             // 添加之前先判断所选的网站类型是否为当前用户可选的
@@ -57,6 +60,8 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
                 throw new CustomException(400, "该类型需要管理员权限才能添加");
             }
         }
+
+        emailUtils.send(null, "您有新的友联等待审核", "");
     }
 
     @Override

@@ -35,8 +35,8 @@ public class WallController {
     @PostMapping
     @ApiOperation("新增留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody Wall wall) {
-        wallService.save(wall);
+    public Result<String> add(@RequestBody Wall wall) throws Exception {
+        wallService.add(wall);
         return Result.success();
     }
 

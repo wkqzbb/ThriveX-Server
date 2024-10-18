@@ -12,6 +12,7 @@ import liuyuyang.net.vo.wall.WallFilterVo;
 import java.util.List;
 
 public interface WallService extends IService<Wall> {
+    public void add(Wall wall) throws Exception;
     public Wall get(Integer id);
 
     public Page<Wall> getCateWallList(Integer cateId, PageVo pageVo);
