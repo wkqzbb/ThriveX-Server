@@ -38,6 +38,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
 
     @Override
     public void add(Link link, String token) {
+        // 这里有时间可以做个全局鉴权工具类优化如下代码：
         if (token == null) {
             // 添加之前先判断所选的网站类型是否为当前用户可选的
             Integer isAdmin = linkTypeMapper.selectById(link.getTypeId()).getIsAdmin();
@@ -50,6 +51,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
 
             // 是管理员，允许添加
             if ("1".equals(user.get("roleId"))) {
+                link.setAuditStatus(1);
                 linkMapper.insert(link);
             } else {
                 throw new CustomException(400, "该类型需要管理员权限才能添加");
