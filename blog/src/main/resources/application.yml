@@ -2,17 +2,17 @@ spring:
   application:
     name: service-system
   profiles:
-    active: dev
+    active: env
   # 约束文件上传大小
   servlet.multipart.max-file-size: 10MB
   servlet.multipart.max-request-size: 100MB
 
   mail:
     default-encoding: UTF-8
-    host: smtp.qq.com
-    port: 465  # 使用 SSL 的端口
-    username: 3311118881@qq.com
-    password: nsjgxjbooggrdcah
+    host: ${lyy.email.host}
+    port: ${lyy.email.port}  # 使用 SSL 的端口
+    username: ${lyy.email.username}
+    password: ${lyy.email.password}
     properties:
       mail:
         smtp: # 修正拼写错误
@@ -32,11 +32,11 @@ jwt:
   token-name: Authorization
 
 oss:
-  accessKey: xpquCtc-v1t-M3wY3b8WVCVACS1viMpUNY6aZPzg
-  secretKey: 1h-V_vCrOt2UIoHf4x_Rj4GxfjsW_IINRz0VyzFQ
-  bucket: thrive
+  accessKey: ${lyy.oss.accessKey}
+  secretKey: ${lyy.oss.secretKey}
+  bucket: ${lyy.oss.bucket}
   # 目录白名单
-  dirList: [ "default","article","swiper","footprint" ]
+  dirList: ${lyy.oss.dirList}
 
 # API文档配置
 knife4j:

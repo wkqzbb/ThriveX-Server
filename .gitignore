@@ -1,3 +1,4 @@
 .idea
 
 **/target/
+blog/src/main/resources/application-env.yml
