@@ -100,7 +100,7 @@ CREATE TABLE `cate` (
 
 LOCK TABLES `cate` WRITE;
 /*!40000 ALTER TABLE `cate` DISABLE KEYS */;
-INSERT INTO `cate` VALUES (1,'测试分类','💻','/','kfbj',0,1,'cate'),(50,'首页','💎','/','home',0,0,'nav'),(51,'足迹','⛳️','/footprint','zj',0,8,'nav'),(52,'关于我','👋','/my','my',0,11,'nav'),(53,'友人','😇','/friend','yr',0,9,'nav'),(54,'留言墙','💌','/wall/all','wall',0,10,'nav');
+INSERT INTO `cate` VALUES (1,'测试分类','💻','/','kfbj',0,1,'cate'),(50,'首页','💎','/','home',0,0,'nav'),(51,'足迹','⛳️','/footprint','zj',0,8,'nav'),(52,'关于我','👋','/my','my',0,11,'nav'),(53,'友人','😇','/friend','yr',0,9,'nav'),(54,'留言墙','💌','/wall/all','wall',0,10,'nav'),(55,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav');
 /*!40000 ALTER TABLE `cate` ENABLE KEYS */;
 UNLOCK TABLES;
 
