@@ -146,7 +146,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public Page<Article> getArticleList(Integer id, SortVO sortVo, PageVo pageVo) {
+    public Page<Article> getArticleList(Integer id, PageVo pageVo) {
         // 先通过分类id查询出所有文章id
         QueryWrapper<ArticleCate> queryWrapperArticleCate = new QueryWrapper<>();
         queryWrapperArticleCate.in("cate_id", id);
@@ -154,7 +154,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 然后通过文章的id查询出对应的文章数据
         QueryWrapper<Article> queryWrapperArticle = new QueryWrapper<>();
-        queryWrapperArticle.orderByAsc("create_time");
+        queryWrapperArticle.orderByDesc("create_time");
 
         // 有数据就查询，没有就返回空数组
         if (!articleIds.isEmpty()) {

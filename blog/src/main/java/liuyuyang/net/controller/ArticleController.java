@@ -90,8 +90,8 @@ public class ArticleController {
     @GetMapping("/cate/{cate_id}")
     @ApiOperation("获取指定分类的文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result getArticleList(@PathVariable Integer cate_id, SortVO sortVo, PageVo pageVo) {
-        Page<Article> list = articleService.getArticleList(cate_id, sortVo, pageVo);
+    public Result getArticleList(@PathVariable Integer cate_id, PageVo pageVo) {
+        Page<Article> list = articleService.getArticleList(cate_id, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
