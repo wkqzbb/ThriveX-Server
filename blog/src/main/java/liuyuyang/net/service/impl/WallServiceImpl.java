@@ -10,6 +10,7 @@ import liuyuyang.net.model.Wall;
 import liuyuyang.net.model.WallCate;
 import liuyuyang.net.service.WallService;
 import liuyuyang.net.utils.EmailUtils;
+import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
@@ -20,12 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static liuyuyang.net.utils.YuYangUtils.getPageData;
-import static liuyuyang.net.utils.YuYangUtils.queryWrapperFilter;
-
 @Service
 @Transactional
 public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements WallService {
+    @Resource
+    private YuYangUtils yuYangUtils;
     @Resource
     private WallMapper wallMapper;
     @Resource
@@ -49,7 +49,7 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
 
     @Override
     public List<Wall> list(WallFilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Wall> queryWrapper = queryWrapperFilter(filterVo, sortVo, "content");
+        QueryWrapper<Wall> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo, sortVo, "content");
         queryWrapper.eq("audit_status", filterVo.getStatus());
 
         if (filterVo.getCateId() != null) {
@@ -69,7 +69,7 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     @Override
     public Page<Wall> paging(WallFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
         List<Wall> list = list(filterVo, sortVo);
-        return getPageData(pageVo, list);
+        return yuYangUtils.getPageData(pageVo, list);
     }
 
     @Override

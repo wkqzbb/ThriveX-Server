@@ -3,35 +3,28 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.jsonwebtoken.Claims;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.LinkMapper;
 import liuyuyang.net.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
-import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.service.LinkService;
 import liuyuyang.net.utils.EmailUtils;
-import liuyuyang.net.utils.JwtUtil;
-import liuyuyang.net.vo.FilterVo;
+import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.link.LinkFilterVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-
-import static liuyuyang.net.utils.YuYangUtils.queryWrapperFilter;
 
 @Service
 @Transactional
 public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements LinkService {
-    @Autowired
-    private JwtProperties jwtProperties;
+    @Resource
+    private YuYangUtils yuYangUtils;
     @Resource
     private LinkMapper linkMapper;
     @Resource
@@ -41,27 +34,48 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
 
     @Override
     public void add(Link link, String token) throws Exception {
-        // 这里有时间可以做个全局鉴权工具类优化如下代码：
-        if (token == null) {
+        // 前端用户手动提交
+        if (token == null || token.isEmpty()) {
             // 添加之前先判断所选的网站类型是否为当前用户可选的
             Integer isAdmin = linkTypeMapper.selectById(link.getTypeId()).getIsAdmin();
             if (isAdmin == 1) throw new CustomException(400, "该类型需要管理员权限才能添加");
             linkMapper.insert(link);
-        } else {
-            if (token.startsWith("Bearer ")) token = token.substring(7);
-            Claims claims = JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
-            Map<String, Object> user = (Map<String, Object>) claims.get("user");
 
-            // 是管理员，允许添加
-            if ("1".equals(user.get("roleId"))) {
-                link.setAuditStatus(1);
-                linkMapper.insert(link);
-            } else {
-                throw new CustomException(400, "该类型需要管理员权限才能添加");
-            }
+            // 邮件提醒
+            emailUtils.send(null, "您有新的友联等待审核", link.toString());
+
+            return;
         }
 
-        emailUtils.send(null, "您有新的友联等待审核", "");
+        // 判断权限
+        Boolean isAdminPermissions = yuYangUtils.isAdmin(token);
+        // 如果是超级管理员在添加时候不需要审核，直接显示
+        if (isAdminPermissions) {
+            link.setAuditStatus(1);
+            linkMapper.insert(link);
+        }
+
+        // 这里有时间可以做个全局鉴权工具类优化如下代码：
+        // if (token == null) {
+        //     // 添加之前先判断所选的网站类型是否为当前用户可选的
+        //     Integer isAdmin = linkTypeMapper.selectById(link.getTypeId()).getIsAdmin();
+        //     if (isAdmin == 1) throw new CustomException(400, "该类型需要管理员权限才能添加");
+        //     linkMapper.insert(link);
+        // } else {
+        //     if (token.startsWith("Bearer ")) token = token.substring(7);
+        //     Claims claims = JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
+        //     Map<String, Object> user = (Map<String, Object>) claims.get("user");
+        //
+        //     // 是管理员，允许添加
+        //     if ("1".equals(user.get("roleId"))) {
+        //         link.setAuditStatus(1);
+        //         linkMapper.insert(link);
+        //     } else {
+        //         throw new CustomException(400, "该类型需要管理员权限才能添加");
+        //     }
+        // }
+
+        // emailUtils.send(null, "您有新的友联等待审核", "");
     }
 
     @Override
@@ -80,7 +94,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
 
     @Override
     public List<Link> list(LinkFilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Link> queryWrapper = queryWrapperFilter(filterVo, sortVo);
+        QueryWrapper<Link> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo, sortVo);
         queryWrapper.eq("audit_status", filterVo.getStatus()); // 只显示审核成功的网站
 
         // 查询所有网站

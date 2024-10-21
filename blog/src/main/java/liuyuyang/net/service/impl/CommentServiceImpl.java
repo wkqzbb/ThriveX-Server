@@ -9,6 +9,7 @@ import liuyuyang.net.mapper.CommentMapper;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.Comment;
 import liuyuyang.net.service.CommentService;
+import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.comment.CommentFilterVo;
@@ -20,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static liuyuyang.net.utils.YuYangUtils.*;
-
 @Service
 @Transactional
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
+    @Resource
+    private YuYangUtils yuYangUtils;
     @Resource
     private CommentMapper commentMapper;
     @Resource
@@ -49,7 +50,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Comment> queryWrapper = queryWrapperFilter(filterVo, sortVo, "name");
+        QueryWrapper<Comment> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo, sortVo, "name");
         queryWrapper.eq("audit_status", filterVo.getStatus());
         if (filterVo.getContent() != null && !filterVo.getContent().isEmpty()) {
             queryWrapper.like("content", filterVo.getContent());
@@ -73,7 +74,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Page<Comment> paging(CommentFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
         List<Comment> list = list(filterVo, sortVo);
-        return getPageData(pageVo, list);
+        return yuYangUtils.getPageData(pageVo, list);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         list = buildCommentTree(list, 0);
 
         // 分页处理
-        return getPageData(pageVo, list);
+        return yuYangUtils.getPageData(pageVo, list);
     }
 
     // 递归构建评论列表

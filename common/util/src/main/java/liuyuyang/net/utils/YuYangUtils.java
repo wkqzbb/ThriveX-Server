@@ -2,15 +2,24 @@ package liuyuyang.net.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.jsonwebtoken.Claims;
+import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
+@Component
 public class YuYangUtils {
+    @Resource
+    private JwtProperties jwtProperties;
+
     // 分页查询逻辑
-    public static <T> Page<T> getPageData(PageVo pageVo, List<T> list) {
+    public <T> Page<T> getPageData(PageVo pageVo, List<T> list) {
         int start = (pageVo.getPage() - 1) * pageVo.getSize();
         int end = Math.min(start + pageVo.getSize(), list.size());
         List<T> pagedRecords = list.subList(start, end);
@@ -23,11 +32,11 @@ public class YuYangUtils {
     }
 
     // 过滤数据
-    public static <T> QueryWrapper<T> queryWrapperFilter(FilterVo filterVo, SortVO sortVo) {
+    public <T> QueryWrapper<T> queryWrapperFilter(FilterVo filterVo, SortVO sortVo) {
         return queryWrapperFilter(filterVo, sortVo, "title");
     }
 
-    public static <T> QueryWrapper<T> queryWrapperFilter(FilterVo filterVo, SortVO sortVo, String key) {
+    public <T> QueryWrapper<T> queryWrapperFilter(FilterVo filterVo, SortVO sortVo, String key) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
 
         // 根据时间从早到晚排序
@@ -57,4 +66,17 @@ public class YuYangUtils {
         return queryWrapper;
     }
 
+    // 鉴权：判断是否为超级管理员
+    public boolean isAdmin(String token) {
+        if (token != null) {
+            if (token.startsWith("Bearer ")) token = token.substring(7);
+            Claims claims = JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
+            Map<String, Object> user = (Map<String, Object>) claims.get("user");
+
+            // 是超级管理员
+            return "1".equals(user.get("roleId"));
+        }
+
+        return false;
+    }
 }
