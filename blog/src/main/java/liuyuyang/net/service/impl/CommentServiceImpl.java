@@ -39,14 +39,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             throw new CustomException(400, "该评论不存在");
         }
 
-        // 获取当前评论下的所有子评论
+        // 获取所有相关评论
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("comment_id", id);
+        queryWrapper.eq("article_id", data.getArticleId());
         List<Comment> list = commentMapper.selectList(queryWrapper);
-        data.setChildren(buildCommentTree(list, id));
+
+        // 构建评论树
+        data.setChildren(buildCommentTree(list, data.getId()));
 
         return data;
     }
+
 
     @Override
     public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo) {
