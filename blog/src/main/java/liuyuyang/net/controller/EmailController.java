@@ -27,41 +27,22 @@ public class EmailController {
     @Resource
     private TemplateEngine templateEngine;
 
-    @PostMapping("/comment")
-    @NoTokenRequired
-    @ApiOperation("发送评论邮件")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result comment(@RequestBody CommentEmailDTO email) throws Exception {
-        // 处理邮件模板
-        Context context = new Context();
-        context.setVariable("title", email.getTitle());
-        context.setVariable("reviewers", email.getReviewers());
-        context.setVariable("time", email.getTime());
-        context.setVariable("content", email.getContent());
-        context.setVariable("url", email.getUrl());
-        String template = templateEngine.process("comment_email", context);
-
-        emailUtils.send(email.getTo() != null && !email.getTo().isEmpty() ? email.getTo() : null, email.getSubject(), template);
-
-        return Result.success();
-    }
-
-    @PostMapping("/dismiss")
-    @NoTokenRequired
-    @ApiOperation("驳回通知邮件")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result dismiss(@RequestBody DismissEmailDTO email) throws Exception {
-        // 处理邮件模板
-        Context context = new Context();
-        context.setVariable("type", email.getType());
-        context.setVariable("recipient", email.getRecipient());
-        context.setVariable("time", email.getTime());
-        context.setVariable("content", email.getContent());
-        context.setVariable("url", email.getUrl());
-        String template = templateEngine.process("dismiss_email", context);
-
-        emailUtils.send(email.getTo() != null && !email.getTo().isEmpty() ? email.getTo() : null, email.getSubject(), template);
-
-        return Result.success();
-    }
+    // @PostMapping("/dismiss")
+    // @NoTokenRequired
+    // @ApiOperation("驳回通知邮件")
+    // @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
+    // public Result dismiss(@RequestBody DismissEmailDTO email) throws Exception {
+    //     // 处理邮件模板
+    //     Context context = new Context();
+    //     context.setVariable("type", email.getType());
+    //     context.setVariable("recipient", email.getRecipient());
+    //     context.setVariable("time", email.getTime());
+    //     context.setVariable("content", email.getContent());
+    //     context.setVariable("url", email.getUrl());
+    //     String template = templateEngine.process("dismiss_email", context);
+    //
+    //     emailUtils.send(email.getTo(), email.getSubject(), template);
+    //
+    //     return Result.success();
+    // }
 }

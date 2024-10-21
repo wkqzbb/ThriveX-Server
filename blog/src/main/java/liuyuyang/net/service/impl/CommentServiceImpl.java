@@ -3,20 +3,30 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import liuyuyang.net.dto.project.WebDTO;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.ArticleMapper;
 import liuyuyang.net.mapper.CommentMapper;
+import liuyuyang.net.mapper.ProjectMapper;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.Comment;
+import liuyuyang.net.model.Project;
 import liuyuyang.net.service.CommentService;
+import liuyuyang.net.utils.EmailUtils;
 import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.comment.CommentFilterVo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,11 +35,64 @@ import java.util.Objects;
 @Transactional
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
     @Resource
+    private EmailUtils emailUtils;
+    @Resource
+    private TemplateEngine templateEngine;
+    @Resource
     private YuYangUtils yuYangUtils;
     @Resource
     private CommentMapper commentMapper;
     @Resource
     private ArticleMapper articleMapper;
+    @Resource
+    private ProjectMapper projectMapper;
+
+
+    @Value("${spring.mail.username}")
+    private String from;
+
+    @Override
+    public void add(Comment comment) throws Exception {
+        commentMapper.insert(comment);
+
+        // 文章标题
+        String title = articleMapper.selectById(comment.getArticleId()).getTitle();
+
+        // 评论记录
+        StringBuilder content = new StringBuilder();
+        // 判断是否还有上一条评论
+        Comment prev_comment = null;
+        if (comment.getCommentId() != 0) {
+            prev_comment = commentMapper.selectById(comment.getCommentId());
+            content.append(prev_comment.getName()).append("：").append(prev_comment.getContent()).append("<br>");
+        }
+        content.append(comment.getName()).append("：").append(comment.getContent());
+
+        // 处理邮件模板
+        Context context = new Context();
+        context.setVariable("title", title);
+        context.setVariable("reviewers", comment.getName());
+
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss");
+        String time = now.format(formatter);
+        context.setVariable("time", time);
+
+        context.setVariable("content", content.toString());
+
+        // 获取url
+        Project config = projectMapper.selectById(1);
+        String url = String.format("%s/article/%d", config.getUrl(), comment.getArticleId());
+        context.setVariable("url", url);
+
+        String template = templateEngine.process("comment_email", context);
+
+        // 如果是一级评论则邮件提醒管理员，否则邮件提醒被回复人和管理员
+        String email = prev_comment != null ? prev_comment.getEmail() : from;
+        emailUtils.send(email, "您有最新回复~", template);
+        if (Objects.equals(email, from) && email.isEmpty()) emailUtils.send(from, title, template);
+    }
 
     @Override
     public Comment get(Integer id) {
@@ -49,7 +112,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         return data;
     }
-
 
     @Override
     public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo) {

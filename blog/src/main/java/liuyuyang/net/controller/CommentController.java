@@ -32,8 +32,8 @@ public class CommentController {
     @PostMapping
     @ApiOperation("新增评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody Comment comment) {
-        commentService.save(comment);
+    public Result<String> add(@RequestBody Comment comment) throws Exception {
+        commentService.add(comment);
         return Result.success();
     }
 

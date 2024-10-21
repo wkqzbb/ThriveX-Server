@@ -23,7 +23,7 @@ public class EmailUtils {
 
         // 发送邮件
         helper.setFrom(new InternetAddress(from, "你有新的消息~")); // 发送者
-        helper.setTo(to != null && !to.isEmpty() ? to : from); // 接收者
+        helper.setTo(to); // 接收者
         helper.setSubject(subject); // 邮件标题
         helper.setText(template, true); // 第二个参数为 true 表示发送 HTML 格式
         mailSender.send(message);

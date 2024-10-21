@@ -45,19 +45,6 @@ public class ProjectController {
 
         WebDTO data = new WebDTO();
 
-        // data.setCovers(config.getCovers());
-        // data.setDarkLogo(config.getDarkLogo());
-        // data.setDescription(config.getDescription());
-        // data.setFavicon(config.getFavicon());
-        // data.setFont(config.getFont());
-        // data.setFooter(config.getFooter());
-        // data.setKeyword(config.getKeyword());
-        // data.setLightLogo(config.getLightLogo());
-        // data.setSocial(config.getSocial());
-        // data.setSubhead(config.getSubhead());
-        // data.setTitle(config.getTitle());
-        // data.setUrl(config.getUrl());
-
         BeanUtils.copyProperties(config, data);
 
         return Result.success(data);
