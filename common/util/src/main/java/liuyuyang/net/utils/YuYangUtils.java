@@ -70,7 +70,7 @@ public class YuYangUtils {
     public boolean isAdmin(String token) {
         if (token != null) {
             if (token.startsWith("Bearer ")) token = token.substring(7);
-            Claims claims = JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
+            Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
             Map<String, Object> user = (Map<String, Object>) claims.get("user");
 
             // 是超级管理员

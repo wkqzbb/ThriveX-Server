@@ -10,7 +10,6 @@ import liuyuyang.net.mapper.UserMapper;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.User;
 import liuyuyang.net.service.UserService;
-import liuyuyang.net.utils.JwtUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;

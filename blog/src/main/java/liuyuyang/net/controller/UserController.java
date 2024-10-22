@@ -13,7 +13,7 @@ import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.RoleService;
 import liuyuyang.net.service.UserService;
-import liuyuyang.net.utils.JwtUtil;
+import liuyuyang.net.utils.JwtUtils;
 import liuyuyang.net.utils.Paging;
 import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,7 +128,7 @@ public class UserController {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("user", data);
-        String token = JwtUtil.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
+        String token = JwtUtils.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
 
         Role role = roleService.getById(data.getRoleId());
 

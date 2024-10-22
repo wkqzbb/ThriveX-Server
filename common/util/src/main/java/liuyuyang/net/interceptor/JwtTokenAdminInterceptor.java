@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.properties.JwtProperties;
-import liuyuyang.net.utils.JwtUtil;
+import liuyuyang.net.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,7 +60,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             if ("GET".equalsIgnoreCase(request.getMethod())) {
                 if (token != null) {
                     if (token.startsWith("Bearer ")) token = token.substring(7);
-                    JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
+                    JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
                     return true;
                 } else {
                     return true;
@@ -69,7 +69,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
             // 处理Authorization的Bearer
             if (token.startsWith("Bearer ")) token = token.substring(7);
-            Claims claims = JwtUtil.parseJWT(jwtProperties.getSecretKey(), token);
+            Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
 
             // 放行
             return true;
