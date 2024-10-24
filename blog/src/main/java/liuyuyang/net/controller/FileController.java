@@ -11,7 +11,6 @@ import liuyuyang.net.result.Result;
 import liuyuyang.net.service.FileService;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.SortVO;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,16 +72,16 @@ public class FileController {
     @PostMapping("/list")
     @ApiOperation("获取文件列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<List<File>> list(@RequestParam(defaultValue = "all") String dir, SortVO sortVo) throws QiniuException {
-        List<File> list = fileService.list(dir, sortVo);
+    public Result<List<File>> list(@RequestParam(defaultValue = "all") String dir) throws QiniuException {
+        List<File> list = fileService.list(dir);
         return Result.success(list);
     }
 
     @PostMapping("/paging")
     @ApiOperation("分页查询文件列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result paging(@RequestParam(defaultValue = "all") String dir, SortVO sortVo, PageVo pageVo) throws QiniuException {
-        Page<File> list = fileService.paging(dir, sortVo, pageVo);
+    public Result paging(@RequestParam(defaultValue = "all") String dir, PageVo pageVo) throws QiniuException {
+        Page<File> list = fileService.paging(dir, pageVo);
         Map<String, Object> result = Paging.filter((list));
         return Result.success(result);
     }

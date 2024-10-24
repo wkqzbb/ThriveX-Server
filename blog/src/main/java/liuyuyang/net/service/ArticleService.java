@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import liuyuyang.net.model.Article;
-import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
 
@@ -21,9 +20,9 @@ public interface ArticleService extends IService<Article> {
 
     public Article get(Integer id);
 
-    public List<Article> list(ArticleFillterVo filterVo, SortVO sortVo);
+    public List<Article> list(ArticleFillterVo filterVo);
 
-    public Page<Article> paging(ArticleFillterVo filterVo, SortVO sortVo, PageVo pageVo);
+    public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo);
 
     public Page<Article> getArticleList(Integer id, PageVo pageVo);
 
@@ -35,5 +34,5 @@ public interface ArticleService extends IService<Article> {
 
     public Article bindingData(Integer id);
 
-    public QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo, SortVO sortVo);
+    public QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo);
 }

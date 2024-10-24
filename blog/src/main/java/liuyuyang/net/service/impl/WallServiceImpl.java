@@ -11,9 +11,7 @@ import liuyuyang.net.model.WallCate;
 import liuyuyang.net.service.WallService;
 import liuyuyang.net.utils.EmailUtils;
 import liuyuyang.net.utils.YuYangUtils;
-import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.wall.WallFilterVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,8 +46,8 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     }
 
     @Override
-    public List<Wall> list(WallFilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Wall> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo, sortVo, "content");
+    public List<Wall> list(WallFilterVo filterVo) {
+        QueryWrapper<Wall> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo, "content");
         queryWrapper.eq("audit_status", filterVo.getStatus());
 
         if (filterVo.getCateId() != null) {
@@ -67,8 +65,8 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     }
 
     @Override
-    public Page<Wall> paging(WallFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
-        List<Wall> list = list(filterVo, sortVo);
+    public Page<Wall> paging(WallFilterVo filterVo, PageVo pageVo) {
+        List<Wall> list = list(filterVo);
         return yuYangUtils.getPageData(pageVo, list);
     }
 

@@ -6,7 +6,6 @@ import io.jsonwebtoken.Claims;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.SortVO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -32,22 +31,13 @@ public class YuYangUtils {
     }
 
     // 过滤数据
-    public <T> QueryWrapper<T> queryWrapperFilter(FilterVo filterVo, SortVO sortVo) {
-        return queryWrapperFilter(filterVo, sortVo, "title");
+    public <T> QueryWrapper<T> queryWrapperFilter(FilterVo filterVo) {
+        return queryWrapperFilter(filterVo, "title");
     }
 
-    public <T> QueryWrapper<T> queryWrapperFilter(FilterVo filterVo, SortVO sortVo, String key) {
+    public <T> QueryWrapper<T> queryWrapperFilter(FilterVo filterVo, String key) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-
-        // 根据时间从早到晚排序
-        switch (sortVo.getSort()) {
-            case "asc":
-                queryWrapper.orderByAsc("create_time");
-                break;
-            case "desc":
-                queryWrapper.orderByDesc("create_time");
-                break;
-        }
+        queryWrapper.orderByDesc("create_time");
 
         // 根据关键字通过标题过滤出对应数据
         if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {

@@ -12,10 +12,7 @@ import liuyuyang.net.model.LinkType;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.LinkService;
 import liuyuyang.net.utils.Paging;
-import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.SortVO;
-import liuyuyang.net.vo.article.ArticleFillterVo;
 import liuyuyang.net.vo.link.LinkFilterVo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -81,8 +78,8 @@ public class LinkController {
     @PostMapping("/list")
     @ApiOperation("获取网站列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Link>> list(@RequestBody LinkFilterVo filterVo, SortVO sortVo) {
-        List<Link> data = linkService.list(filterVo, sortVo);
+    public Result<List<Link>> list(@RequestBody LinkFilterVo filterVo) {
+        List<Link> data = linkService.list(filterVo);
         return Result.success(data);
     }
 
@@ -90,8 +87,8 @@ public class LinkController {
     @PostMapping("/paging")
     @ApiOperation("分页查询网站列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(@RequestBody LinkFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
-        Page<Link> data = linkService.paging(filterVo, sortVo, pageVo);
+    public Result paging(@RequestBody LinkFilterVo filterVo, PageVo pageVo) {
+        Page<Link> data = linkService.paging(filterVo, pageVo);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }

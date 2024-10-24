@@ -12,7 +12,6 @@ import liuyuyang.net.model.File;
 import liuyuyang.net.properties.OssProperties;
 import liuyuyang.net.service.FileService;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.SortVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -126,7 +125,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<File> list(String dir, SortVO sortVo) throws QiniuException {
+    public List<File> list(String dir) throws QiniuException {
         // 文件名前缀
         String prefix = "all".equals(dir) ? "" : dir + "/";
 
@@ -159,21 +158,14 @@ public class FileServiceImpl implements FileService {
             }
         }
 
-        switch (sortVo.getSort()) {
-            case "asc":
-                list.sort((a1, a2) -> a1.getCreateTime().compareTo(a2.getCreateTime()));
-                break;
-            case "desc":
-                list.sort((a1, a2) -> a2.getCreateTime().compareTo(a1.getCreateTime()));
-                break;
-        }
+       list.sort((a1, a2) -> a2.getCreateTime().compareTo(a1.getCreateTime()));
 
         return list;
     }
 
     @Override
-    public Page<File> paging(String dir, SortVO sortVo, PageVo pageVo) throws QiniuException {
-        List<File> list = list(dir, sortVo);
+    public Page<File> paging(String dir, PageVo pageVo) throws QiniuException {
+        List<File> list = list(dir);
 
         // 分页处理
         int currentPage = pageVo.getPage();

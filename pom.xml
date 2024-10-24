@@ -38,6 +38,7 @@
         <rome.version>1.18.0</rome.version>
         <oshi.version>6.2.2</oshi.version>
         <qiniu.version>7.13.0</qiniu.version>
+        <email.version>2.7.12</email.version>
     </properties>
 
     <!--配置dependencyManagement锁定依赖的版本-->
@@ -63,6 +64,12 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
+            </dependency>
+
+            <!-- redis -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
             </dependency>
 
             <!-- 提供API文档生成和调试功能 -->
@@ -121,13 +128,13 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-mail</artifactId>
-                <version>2.7.12</version>
+                <version>${email.version}</version>
             </dependency>
             <!-- 自定义模板 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-thymeleaf</artifactId>
-                <version>2.7.12</version>
+                <version>${email.version}</version>
             </dependency>
 
             <!-- 自定义模块 -->

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qiniu.common.QiniuException;
 import liuyuyang.net.model.File;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.SortVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ public interface FileService {
 
     public File get(String filePath) throws QiniuException;
 
-    public List<File> list(String dir, SortVO sortVo) throws QiniuException;
+    public List<File> list(String dir) throws QiniuException;
 
-    public Page<File> paging(String dir, SortVO sortVo, PageVo pageVo) throws QiniuException;
+    public Page<File> paging(String dir, PageVo pageVo) throws QiniuException;
 }

@@ -14,7 +14,6 @@ import liuyuyang.net.service.CommentService;
 import liuyuyang.net.utils.EmailUtils;
 import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.comment.CommentFilterVo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -111,8 +110,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public List<Comment> list(CommentFilterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Comment> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo, sortVo, "name");
+    public List<Comment> list(CommentFilterVo filterVo) {
+        QueryWrapper<Comment> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo, "name");
         queryWrapper.eq("audit_status", filterVo.getStatus());
         if (filterVo.getContent() != null && !filterVo.getContent().isEmpty()) {
             queryWrapper.like("content", filterVo.getContent());
@@ -134,8 +133,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public Page<Comment> paging(CommentFilterVo filterVo, SortVO sortVo, PageVo pageVo) {
-        List<Comment> list = list(filterVo, sortVo);
+    public Page<Comment> paging(CommentFilterVo filterVo, PageVo pageVo) {
+        List<Comment> list = list(filterVo);
         return yuYangUtils.getPageData(pageVo, list);
     }
 

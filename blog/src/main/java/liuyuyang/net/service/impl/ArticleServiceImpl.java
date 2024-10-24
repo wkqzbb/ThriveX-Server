@@ -14,7 +14,6 @@ import liuyuyang.net.model.Cate;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.service.CateService;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.SortVO;
 import liuyuyang.net.vo.article.ArticleFillterVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,15 +129,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<Article> list(ArticleFillterVo filterVo, SortVO sortVo) {
-        QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
+    public List<Article> list(ArticleFillterVo filterVo) {
+        QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo);
         List<Article> list = articleMapper.selectList(queryWrapper);
         return list.stream().map(article -> bindingData(article.getId())).collect(Collectors.toList());
     }
 
     @Override
-    public Page<Article> paging(ArticleFillterVo filterVo, SortVO sortVo, PageVo pageVo) {
-        QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo, sortVo);
+    public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo) {
+        QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo);
         Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
         articleMapper.selectPage(page, queryWrapper);
         page.setRecords(page.getRecords().stream().map(article -> bindingData(article.getId())).collect(Collectors.toList()));
@@ -234,18 +233,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     // 过滤文章数据
     @Override
-    public QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo, SortVO sortVo) {
+    public QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-
-        // 根据发布时间从早到晚排序
-        switch (sortVo.getSort()) {
-            case "asc":
-                queryWrapper.orderByAsc("create_time");
-                break;
-            case "desc":
-                queryWrapper.orderByDesc("create_time");
-                break;
-        }
+        queryWrapper.orderByDesc("create_time");
 
         // 根据关键字通过标题过滤出对应文章数据
         if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {
