@@ -62,9 +62,9 @@ public class ArticleController {
     @GetMapping("/{id}")
     @ApiOperation("获取文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<Article> get(@PathVariable Integer id, @RequestHeader(value = "Authorization", required = false) String token) {
-        Article data = articleService.get(id, token);
-
+    public Result<Article> get(@PathVariable Integer id, @RequestParam(defaultValue = "") String password, @RequestHeader(value = "Authorization", required = false) String token) {
+        password = !password.isEmpty() ? password : "";
+        Article data = articleService.get(id, password, token);
         return Result.success(data);
     }
 

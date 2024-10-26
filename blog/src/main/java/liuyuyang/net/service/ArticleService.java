@@ -18,7 +18,7 @@ public interface ArticleService extends IService<Article> {
 
     public void edit(Article article);
 
-    public Article get(Integer id, String token);
+    public Article get(Integer id, String password, String token);
 
     public List<Article> list(ArticleFillterVo filterVo, String token);
 

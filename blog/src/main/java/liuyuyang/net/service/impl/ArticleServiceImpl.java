@@ -126,20 +126,44 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public Article get(Integer id, String token) {
+    public Article get(Integer id, String password, String token) {
         Article data = bindingData(id);
+
+        String description = data.getDescription();
+        String content = data.getContent();
 
         Boolean isAdmin = yuYangUtils.isAdmin(token);
 
         ArticleConfig config = data.getConfig();
-        if (!isAdmin && "hide".equals(config.getStatus())) {
-            throw new CustomException(400, "该文章已被隐藏");
+
+        if (config.getPassword().isEmpty() && !password.isEmpty()) {
+            throw new CustomException(400, "该文章不需要访问密码");
         }
 
-        // 如果有密码就必须通过密码才能查看
-        if (config.getPassword().length() > 0) {
-            data.setDescription("该文章是加密的");
-            data.setContent("该文章是加密的");
+        // 管理员可以查看任何权限的文章
+        if (!isAdmin) {
+            if ("hide".equals(config.getStatus())) {
+                throw new CustomException(400, "该文章已被隐藏");
+            }
+
+            // 如果有密码就必须通过密码才能查看
+            if (!config.getPassword().isEmpty()) {
+                // 如果需要访问密码且没有传递密码参数
+                if (password.isEmpty()) {
+                    throw new CustomException(400, "请输入文章访问密码");
+                }
+
+                data.setDescription("该文章是加密的");
+                data.setContent("该文章是加密的");
+
+                // 验证密码是否正确
+                if (config.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))) {
+                    data.setDescription(description);
+                    data.setContent(content);
+                } else {
+                    throw new CustomException(400, "文章访问密码错误");
+                }
+            }
         }
 
         // 获取当前文章的创建时间
@@ -233,7 +257,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (ids.size() <= count) {
             // 如果文章数量少于或等于需要的数量，直接返回所有文章
             return ids.stream()
-                    .map(id -> get(id, ""))
+                    .map(id -> get(id, "", ""))
                     .collect(Collectors.toList());
         }
 
