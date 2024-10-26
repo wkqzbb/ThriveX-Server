@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.result.Result;
+import liuyuyang.net.result.cate.CateArticleCount;
 import liuyuyang.net.service.CateService;
 import liuyuyang.net.utils.Paging;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,5 +95,13 @@ public class CateController {
         Page<Cate> data = cateService.paging(page, size);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
+    }
+
+    @GetMapping("/article/count")
+    @ApiOperation("获取每个分类中的文章数量")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
+    public Result<List<CateArticleCount>> cateArticleCount() {
+        List<CateArticleCount> list = cateService.cateArticleCount();
+        return Result.success(list);
     }
 }

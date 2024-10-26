@@ -9,6 +9,7 @@ import liuyuyang.net.mapper.CateMapper;
 import liuyuyang.net.mapper.CommentMapper;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.Cate;
+import liuyuyang.net.result.cate.CateArticleCount;
 import liuyuyang.net.service.CateService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +92,11 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
         result.setTotal(cates.size());
 
         return result;
+    }
+
+    @Override
+    public List<CateArticleCount> cateArticleCount() {
+        return cateMapper.cateArticleCount();
     }
 
     @Override

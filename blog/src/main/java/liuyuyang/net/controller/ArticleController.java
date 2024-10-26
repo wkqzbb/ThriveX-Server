@@ -68,6 +68,7 @@ public class ArticleController {
         return Result.success(data);
     }
 
+    @NoTokenRequired
     @PostMapping("/list")
     @ApiOperation("获取文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
