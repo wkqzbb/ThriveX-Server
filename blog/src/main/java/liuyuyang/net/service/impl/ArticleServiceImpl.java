@@ -40,12 +40,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void add(Article article) {
         articleMapper.insert(article);
 
+        // 新增分类
         for (Integer id : article.getCateIds()) {
             ArticleCate articleCate = new ArticleCate();
             articleCate.setArticleId(article.getId());
             articleCate.setCateId(id);
             articleCateMapper.insert(articleCate);
         }
+
+        // 新增文章配置
+        ArticleConfig config = article.getConfig();
+        ArticleConfig articleConfig = new ArticleConfig();
+        articleConfig.setArticleId(article.getId());
+        articleConfig.setTop(config.getTop());
+        articleConfig.setStatus(config.getStatus());
+        articleConfigMapper.insert(articleConfig);
     }
 
     @Override
@@ -80,12 +89,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void edit(Article article) {
         if (article.getCateIds() == null) throw new CustomException(400, "编辑失败：请绑定分类");
 
-        // 先删除之前绑定的分类
-        QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("article_id", article.getId());
-        articleCateMapper.delete(queryWrapper);
+        // 删除之前绑定的分类
+        QueryWrapper<ArticleCate> queryArticleCateWrapper = new QueryWrapper<>();
+        queryArticleCateWrapper.in("article_id", article.getId());
+        articleCateMapper.delete(queryArticleCateWrapper);
 
-        // 再重新绑定分类
+        // 删除之前绑定的文章配置
+        QueryWrapper<ArticleConfig> queryArticleConfigWrapper = new QueryWrapper<>();
+        queryArticleConfigWrapper.in("article_id", article.getId());
+        articleConfigMapper.delete(queryArticleConfigWrapper);
+
+        // 重新绑定分类
         for (Integer id : article.getCateIds()) {
             ArticleCate articleCate = new ArticleCate();
             articleCate.setArticleId(article.getId());
@@ -93,6 +107,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             articleCateMapper.insert(articleCate);
         }
 
+        // 重新绑定文章配置
+        ArticleConfig config = article.getConfig();
+        ArticleConfig articleConfig = new ArticleConfig();
+        articleConfig.setArticleId(article.getId());
+        articleConfig.setTop(config.getTop());
+        articleConfig.setStatus(config.getStatus());
+        articleConfigMapper.insert(articleConfig);
+
+        // 修改文章
         articleMapper.updateById(article);
     }
 
