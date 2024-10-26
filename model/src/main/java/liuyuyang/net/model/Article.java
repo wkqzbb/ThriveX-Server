@@ -46,6 +46,10 @@ public class Article extends BaseModel {
     private List<Tag> tagList = new ArrayList<>();
 
     @TableField(exist = false)
+    @ApiModelProperty(value = "文章配置项")
+    private ArticleConfig config;
+
+    @TableField(exist = false)
     private Map prev;
     @TableField(exist = false)
     private Map next;

@@ -4,12 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.execption.CustomException;
-import liuyuyang.net.mapper.ArticleCateMapper;
-import liuyuyang.net.mapper.ArticleMapper;
-import liuyuyang.net.mapper.CateMapper;
-import liuyuyang.net.mapper.CommentMapper;
+import liuyuyang.net.mapper.*;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.model.ArticleCate;
+import liuyuyang.net.model.ArticleConfig;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.service.CateService;
@@ -29,6 +27,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ArticleMapper articleMapper;
     @Resource
     private ArticleCateMapper articleCateMapper;
+    @Resource
+    private ArticleConfigMapper articleConfigMapper;
     @Resource
     private CateMapper cateMapper;
     @Resource
@@ -228,6 +228,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         data.setTagList(articleMapper.getTagList(id));
         data.setComment(commentMapper.getCommentList(id).size());
+
+        // 查找文章配置
+        QueryWrapper<ArticleConfig> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("article_id", id);
+        ArticleConfig articleConfig = articleConfigMapper.selectOne(queryWrapper);
+        data.setConfig(articleConfig);
+
         return data;
     }
 
