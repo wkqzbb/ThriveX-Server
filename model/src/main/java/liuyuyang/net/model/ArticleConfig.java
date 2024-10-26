@@ -16,8 +16,11 @@ public class ArticleConfig {
     @ApiModelProperty(value = "文章是否置顶", example = "0")
     private Integer top;
 
-    @ApiModelProperty(value = "文章状态", example = "显示（show） 不在首页显示（no_home） 隐藏（hide） 私密（private）")
+    @ApiModelProperty(value = "文章状态", example = "显示（show） 不在首页显示（no_home） 隐藏（hide）")
     private String status;
+
+    @ApiModelProperty(value = "文章密码", example = "默认为空表示不加密")
+    private String password;
 
     @ApiModelProperty(value = "文章ID", example = "1", required = true)
     private Integer articleId;

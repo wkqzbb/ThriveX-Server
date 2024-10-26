@@ -25,6 +25,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RoleMapper roleMapper;
 
     @Override
+    public void register(User user) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", user.getUsername());
+
+        User data = userMapper.selectOne(queryWrapper);
+
+        // 判断用户名是否存在
+        if (data != null) {
+            throw new CustomException(400, "该用户已存在：" + user.getUsername());
+        }
+
+        // 密码加密
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+
+        userMapper.insert(user);
+    }
+
+    @Override
     public User get(Integer id) {
         User data = userMapper.selectById(id);
         data.setPassword("只有聪明的人才能看到密码");
@@ -64,24 +82,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         user.setPassword(DigestUtils.md5DigestAsHex(data.getNewPassword().getBytes()));
         userMapper.updateById(user);
-    }
-
-    @Override
-    public void register(User user) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUsername());
-
-        User data = userMapper.selectOne(queryWrapper);
-
-        // 判断用户名是否存在
-        if (data != null) {
-            throw new CustomException(400, "该用户已存在：" + user.getUsername());
-        }
-
-        // 密码加密
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-
-        userMapper.insert(user);
     }
 
     @Override

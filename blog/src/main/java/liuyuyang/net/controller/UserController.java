@@ -39,14 +39,9 @@ public class UserController {
     @PostMapping
     @ApiOperation("新增用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody User user) {
-        try {
-            boolean res = userService.save(user);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new CustomException(400, e.getMessage());
-        }
+    public Result register(@RequestBody User user) {
+        userService.register(user);
+        return Result.success("新增成功");
     }
 
     @DeleteMapping("/{id}")
@@ -112,17 +107,9 @@ public class UserController {
         return Result.success(result);
     }
 
-    @PostMapping("/register")
-    @ApiOperation("用户注册")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result register(@RequestBody User user) {
-        userService.register(user);
-        return Result.success("注册成功");
-    }
-
     @PostMapping("/login")
     @ApiOperation("用户登录")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result login(@RequestBody User user) {
         User data = userService.login(user);
 
@@ -142,7 +129,7 @@ public class UserController {
 
     @PatchMapping("/pass")
     @ApiOperation("修改用户密码")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
     public Result<String> editPass(@RequestBody EditPassDTO data) {
         userService.editPass(data);
         return Result.success("密码修改成功");

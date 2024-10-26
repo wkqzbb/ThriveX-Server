@@ -16,6 +16,7 @@ import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -57,6 +58,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setArticleId(article.getId());
         articleConfig.setTop(config.getTop());
         articleConfig.setStatus(config.getStatus());
+        articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
         articleConfigMapper.insert(articleConfig);
     }
 
@@ -116,6 +118,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setArticleId(article.getId());
         articleConfig.setTop(config.getTop());
         articleConfig.setStatus(config.getStatus());
+        articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
         articleConfigMapper.insert(articleConfig);
 
         // 修改文章
@@ -128,13 +131,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         Boolean isAdmin = yuYangUtils.isAdmin(token);
 
-        if (!isAdmin) {
-            switch (data.getConfig().getStatus()) {
-                case "hide":
-                    throw new CustomException(400, "该文章已被隐藏");
-                case "private":
-                    throw new CustomException(400, "该文章是私密的");
-            }
+        ArticleConfig config = data.getConfig();
+        if (!isAdmin && "hide".equals(config.getStatus())) {
+            throw new CustomException(400, "该文章已被隐藏");
+        }
+
+        // 如果有密码就必须通过密码才能查看
+        if (config.getPassword().length() > 0) {
+            data.setDescription("该文章是加密的");
+            data.setContent("该文章是加密的");
         }
 
         // 获取当前文章的创建时间
@@ -171,27 +176,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<Article> list = articleMapper.selectList(queryWrapper);
 
         Boolean isAdmin = yuYangUtils.isAdmin(token);
-        return list.stream()
+        list = list.stream()
                 .map(article -> bindingData(article.getId()))
                 // 如果是普通用户则不显示隐藏的文章，如果是管理员则显示
                 .filter(article -> isAdmin || !Objects.equals(article.getConfig().getStatus(), "hide"))
                 .collect(Collectors.toList());
+
+        for (Article article : list) {
+            ArticleConfig config = article.getConfig();
+            // 如果有密码就必须通过密码才能查看
+            if (!config.getPassword().isEmpty()) {
+                article.setDescription("该文章是加密的");
+                article.setContent("该文章是加密的");
+            }
+        }
+
+        return list;
     }
 
     @Override
     public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo, String token) {
-        QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo);
-        List<Article> list = articleMapper.selectList(queryWrapper);
-
-        Boolean isAdmin = yuYangUtils.isAdmin(token);
-        Page<Article> result = yuYangUtils.getPageData(
-                pageVo, list.stream()
-                        .map(article -> bindingData(article.getId()))
-                        // 如果是普通用户则不显示隐藏的文章，如果是管理员则显示
-                        .filter(article -> isAdmin || !Objects.equals(article.getConfig().getStatus(), "hide"))
-                        .collect(Collectors.toList())
-        );
-
+        List<Article> list = list(filterVo, token);
+        Page<Article> result = yuYangUtils.getPageData(pageVo, list);
         return result;
     }
 
