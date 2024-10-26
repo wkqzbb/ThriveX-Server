@@ -11,6 +11,7 @@ import liuyuyang.net.model.ArticleConfig;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.service.CateService;
+import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private CateService cateService;
     @Resource
     private CommentMapper commentMapper;
+    @Resource
+    private YuYangUtils yuYangUtils;
 
     @Override
     public void add(Article article) {
@@ -120,8 +123,19 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public Article get(Integer id) {
+    public Article get(Integer id, String token) {
         Article data = bindingData(id);
+
+        Boolean isAdmin = yuYangUtils.isAdmin(token);
+
+        if (!isAdmin) {
+            switch (data.getConfig().getStatus()) {
+                case "hide":
+                    throw new CustomException(400, "该文章已被隐藏");
+                case "private":
+                    throw new CustomException(400, "该文章是私密的");
+            }
+        }
 
         // 获取当前文章的创建时间
         String createTime = data.getCreateTime();
@@ -152,19 +166,33 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<Article> list(ArticleFillterVo filterVo) {
+    public List<Article> list(ArticleFillterVo filterVo, String token) {
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo);
         List<Article> list = articleMapper.selectList(queryWrapper);
-        return list.stream().map(article -> bindingData(article.getId())).collect(Collectors.toList());
+
+        Boolean isAdmin = yuYangUtils.isAdmin(token);
+        return list.stream()
+                .map(article -> bindingData(article.getId()))
+                // 如果是普通用户则不显示隐藏的文章，如果是管理员则显示
+                .filter(article -> isAdmin || !Objects.equals(article.getConfig().getStatus(), "hide"))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo) {
+    public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo, String token) {
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo);
-        Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
-        articleMapper.selectPage(page, queryWrapper);
-        page.setRecords(page.getRecords().stream().map(article -> bindingData(article.getId())).collect(Collectors.toList()));
-        return page;
+        List<Article> list = articleMapper.selectList(queryWrapper);
+
+        Boolean isAdmin = yuYangUtils.isAdmin(token);
+        Page<Article> result = yuYangUtils.getPageData(
+                pageVo, list.stream()
+                        .map(article -> bindingData(article.getId()))
+                        // 如果是普通用户则不显示隐藏的文章，如果是管理员则显示
+                        .filter(article -> isAdmin || !Objects.equals(article.getConfig().getStatus(), "hide"))
+                        .collect(Collectors.toList())
+        );
+
+        return result;
     }
 
     @Override
@@ -199,7 +227,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (ids.size() <= count) {
             // 如果文章数量少于或等于需要的数量，直接返回所有文章
             return ids.stream()
-                    .map(this::get)
+                    .map(id -> get(id, ""))
                     .collect(Collectors.toList());
         }
 
@@ -234,6 +262,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public Article bindingData(Integer id) {
         Article data = articleMapper.selectById(id);
+
         if (data == null) throw new CustomException(400, "获取文章失败：该文章不存在");
 
         // 查询当前文章的分类ID

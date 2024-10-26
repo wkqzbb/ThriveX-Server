@@ -18,11 +18,11 @@ public interface ArticleService extends IService<Article> {
 
     public void edit(Article article);
 
-    public Article get(Integer id);
+    public Article get(Integer id, String token);
 
-    public List<Article> list(ArticleFillterVo filterVo);
+    public List<Article> list(ArticleFillterVo filterVo, String token);
 
-    public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo);
+    public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo, String token);
 
     public Page<Article> getArticleList(Integer id, PageVo pageVo);
 
