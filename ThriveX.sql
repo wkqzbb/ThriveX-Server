@@ -19,6 +19,9 @@
 -- Table structure for table `article`
 --
 
+create database ThriveX;
+use ThriveX;
+
 DROP TABLE IF EXISTS `article`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -73,6 +76,34 @@ INSERT INTO `article_cate` VALUES (1432,2187,1);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `article_config`
+--
+
+DROP TABLE IF EXISTS `article_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `article_config` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `top` tinyint(1) DEFAULT '0' COMMENT '文章是否置顶',
+  `status` enum('show','no_home','hide') DEFAULT 'show' COMMENT '文章状态',
+  `password` varchar(100) DEFAULT '' COMMENT '是否文章加密',
+  `article_id` int NOT NULL COMMENT '对应的文章id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `article_config_pk_2` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章配置表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `article_config`
+--
+
+LOCK TABLES `article_config` WRITE;
+/*!40000 ALTER TABLE `article_config` DISABLE KEYS */;
+INSERT INTO `article_config` VALUES (1,0,'show','',2187);
+/*!40000 ALTER TABLE `article_config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `cate`
 --
 
@@ -91,7 +122,7 @@ CREATE TABLE `cate` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `name` (`name`) USING BTREE,
   UNIQUE KEY `cate_pk` (`mark`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +131,7 @@ CREATE TABLE `cate` (
 
 LOCK TABLES `cate` WRITE;
 /*!40000 ALTER TABLE `cate` DISABLE KEYS */;
-INSERT INTO `cate` VALUES (1,'测试分类','💻','/','kfbj',0,1,'cate'),(50,'首页','💎','/','home',0,0,'nav'),(51,'足迹','⛳️','/footprint','zj',0,8,'nav'),(52,'关于我','👋','/my','my',0,11,'nav'),(53,'友人','😇','/friend','yr',0,9,'nav'),(54,'留言墙','💌','/wall/all','wall',0,10,'nav'),(55,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav');
+INSERT INTO `cate` VALUES (1,'测试分类','💻','/','kfbj',0,1,'cate'),(50,'首页','💎','/','home',0,0,'nav'),(51,'足迹','⛳️','/footprint','zj',0,9,'nav'),(52,'关于我','👋','/my','my',0,12,'nav'),(53,'友人','😇','/friend','yr',0,10,'nav'),(54,'留言墙','💌','/wall/all','wall',0,11,'nav'),(55,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav'),(59,'统计','📊','/data','data',0,8,'nav');
 /*!40000 ALTER TABLE `cate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +225,7 @@ CREATE TABLE `link` (
 
 LOCK TABLES `link` WRITE;
 /*!40000 ALTER TABLE `link` DISABLE KEYS */;
-INSERT INTO `link` VALUES (6,'宇阳','记录所学知识，缩短和大神的差距！','3311118881@qq.com','https://q1.qlogo.cn/g?b=qq&nk=3311118881&s=640','https://liuyuyang.net','',2,1,'1723533206613'),(50,'这是一个网站','这是一个网站的描述','liuyuyang1024@yeah.net','http://127.0.0.1:5000/1.jpg','/','/',1,1,'1723533206613');
+INSERT INTO `link` VALUES (50,'这是一个网站','这是一个网站的描述','liuyuyang1024@yeah.net','http://127.0.0.1:5000/1.jpg','/','/',1,1,'1723533206613');
 /*!40000 ALTER TABLE `link` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,7 +243,7 @@ CREATE TABLE `link_type` (
   `order` int NOT NULL COMMENT '显示顺序',
   PRIMARY KEY (`id`),
   UNIQUE KEY `type_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='网站类型';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='网站类型';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -221,7 +252,7 @@ CREATE TABLE `link_type` (
 
 LOCK TABLES `link_type` WRITE;
 /*!40000 ALTER TABLE `link_type` DISABLE KEYS */;
-INSERT INTO `link_type` VALUES (1,'生活类',0,4),(2,'技术类',0,5),(3,'全站置顶',1,1),(4,'推荐',1,2),(5,'大佬',1,3);
+INSERT INTO `link_type` VALUES (1,'生活类',0,4),(2,'技术类',0,5),(3,'全站置顶',1,1),(4,'推荐',1,2),(5,'大佬',1,3),(6,'聚合类',0,6);
 /*!40000 ALTER TABLE `link_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -496,4 +527,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-18 18:21:42
+-- Dump completed on 2024-10-26 20:52:11
