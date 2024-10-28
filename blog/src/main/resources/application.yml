@@ -36,7 +36,11 @@ oss:
   secretKey: ${lyy.oss.secretKey}
   bucket: ${lyy.oss.bucket}
   # 目录白名单
-  dirList: ${lyy.oss.dirList}
+  dirList:
+    - default
+    - article
+    - swiper
+    - footprint
 
 # API文档配置
 knife4j:

@@ -19,5 +19,3 @@ lyy:
     accessKey: 七牛云的accessKey
     secretKey: 七牛云的secretKey
     bucket: thrive
-    # 目录白名单
-    dirList: [ "default","article","swiper","footprint" ]
