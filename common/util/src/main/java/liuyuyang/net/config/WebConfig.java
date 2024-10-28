@@ -18,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
     private static final Set<String> EXCLUDED_PATHS = new HashSet<>(Arrays.asList(
+            "/",
             "/doc.html",
             "/swagger-resources",
             "/webjars",
@@ -33,6 +34,8 @@ public class WebConfig implements WebMvcConfigurer {
 
             if (requestMapping != null && requestMapping.value().length > 0) {
                 String path = requestMapping.value()[0];
+                System.out.println(path);
+                System.out.println(33333);
                 return !EXCLUDED_PATHS.contains(path);
             }
             return true;
@@ -44,7 +47,6 @@ public class WebConfig implements WebMvcConfigurer {
         // 拦截指定请求
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/user/login")
-                .excludePathPatterns("/api/user/register");
+                .excludePathPatterns("/api/user/login");
     }
 }

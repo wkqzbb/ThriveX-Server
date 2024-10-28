@@ -154,8 +154,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     throw new CustomException(400, "请输入文章访问密码");
                 }
 
-                data.setDescription("该文章是加密的");
-                data.setContent("该文章是加密的");
+                data.setDescription("该文章需要密码才能查看");
+                data.setContent("该文章需要密码才能查看");
 
                 // 验证密码是否正确
                 if (config.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))) {

@@ -42,6 +42,9 @@ oss:
     - swiper
     - footprint
 
+cors:
+  domainWhitelist: ${lyy.cors.domainWhitelist}
+
 # API文档配置
 knife4j:
   enable: true
