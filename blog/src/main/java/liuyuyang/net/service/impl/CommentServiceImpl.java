@@ -85,9 +85,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         String template = templateEngine.process("comment_email", context);
 
         // 如果是一级评论则邮件提醒管理员，否则邮件提醒被回复人和管理员
-        String email = prev_comment != null ? prev_comment.getEmail() : from;
+        String email = (prev_comment != null && !prev_comment.getEmail().isEmpty()) ? prev_comment.getEmail() : from;
         emailUtils.send(email, "您有最新回复~", template);
-        if (Objects.equals(email, from) && email.isEmpty()) emailUtils.send(from, title, template);
+        if (email.isEmpty() && Objects.equals(email, from)) emailUtils.send(from, title, template);
     }
 
     @Override

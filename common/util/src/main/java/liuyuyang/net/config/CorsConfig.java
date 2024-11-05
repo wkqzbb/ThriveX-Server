@@ -12,10 +12,12 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // 所有接口
-                .allowedOriginPatterns(domainWhitelist) // 支持域
-                // .allowedOriginPatterns("http://*.liuyuyang.net", "https://*.liuyuyang.net") // 支持域
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS") // 支持方法
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
+                // .allowedOriginPatterns(domainWhitelist)
+                // .allowedOriginPatterns("http://*.liuyuyang.net", "https://*.liuyuyang.net")
+                .allowedMethods("*") // 支持方法
                 .allowedHeaders("*");
     }
 }

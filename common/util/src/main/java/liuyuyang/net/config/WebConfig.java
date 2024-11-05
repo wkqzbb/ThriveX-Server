@@ -34,8 +34,6 @@ public class WebConfig implements WebMvcConfigurer {
 
             if (requestMapping != null && requestMapping.value().length > 0) {
                 String path = requestMapping.value()[0];
-                System.out.println(path);
-                System.out.println(33333);
                 return !EXCLUDED_PATHS.contains(path);
             }
             return true;
