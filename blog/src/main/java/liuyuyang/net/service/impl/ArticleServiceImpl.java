@@ -60,7 +60,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setStatus(config.getStatus());
 
         // 如果密码不等于空则加密
-        if(!config.getPassword().isEmpty()) articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
+        if (!config.getPassword().isEmpty())
+            articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
 
         articleConfigMapper.insert(articleConfig);
     }
@@ -123,7 +124,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setStatus(config.getStatus());
 
         // 如果密码不等于空则加密
-        if(!config.getPassword().isEmpty()) articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
+        if (!config.getPassword().isEmpty())
+            articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
         articleConfigMapper.insert(articleConfig);
 
         // 修改文章
@@ -226,6 +228,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo, String token) {
         List<Article> list = list(filterVo, token);
+        Boolean isAdmin = yuYangUtils.isAdmin(token);
+        if (!isAdmin) {
+            list = list.stream().filter(k -> !Objects.equals(k.getConfig().getStatus(), "no_home")).collect(Collectors.toList());
+        }
         Page<Article> result = yuYangUtils.getPageData(pageVo, list);
         return result;
     }
