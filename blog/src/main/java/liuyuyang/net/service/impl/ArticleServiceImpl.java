@@ -58,7 +58,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setArticleId(article.getId());
         articleConfig.setTop(config.getTop());
         articleConfig.setStatus(config.getStatus());
-        articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
+
+        // 如果密码不等于空则加密
+        if(!config.getPassword().isEmpty()) articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
+
         articleConfigMapper.insert(articleConfig);
     }
 
@@ -118,6 +121,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setArticleId(article.getId());
         articleConfig.setTop(config.getTop());
         articleConfig.setStatus(config.getStatus());
+
         // 如果密码不等于空则加密
         if(!config.getPassword().isEmpty()) articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
         articleConfigMapper.insert(articleConfig);
