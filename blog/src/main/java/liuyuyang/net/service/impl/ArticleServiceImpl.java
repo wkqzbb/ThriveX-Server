@@ -56,7 +56,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ArticleConfig config = article.getConfig();
         ArticleConfig articleConfig = new ArticleConfig();
         articleConfig.setArticleId(article.getId());
-        articleConfig.setTop(config.getTop());
         articleConfig.setStatus(config.getStatus());
 
         // 如果密码不等于空则加密
@@ -120,7 +119,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ArticleConfig config = article.getConfig();
         ArticleConfig articleConfig = new ArticleConfig();
         articleConfig.setArticleId(article.getId());
-        articleConfig.setTop(config.getTop());
         articleConfig.setStatus(config.getStatus());
 
         // 如果密码不等于空则加密
@@ -258,7 +256,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.selectPage(page, queryWrapperArticle);
 
         for (Article article : page.getRecords()) {
-            ArticleConfig config = article.getConfig();
+            QueryWrapper<ArticleConfig> articleConfigQueryWrapper = new QueryWrapper<>();
+            articleConfigQueryWrapper.eq("article_id", article.getId());
+            ArticleConfig config = articleConfigMapper.selectOne(articleConfigQueryWrapper);
+
             // 如果有密码就必须通过密码才能查看
             if (!config.getPassword().isEmpty()) {
                 article.setDescription("该文章是加密的");
@@ -274,8 +275,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public List<Article> getRandomArticles(Integer count) {
         List<Integer> ids = articleMapper.selectList(null).stream()
-                // 只有正常且没有加密的文章显示
-                .filter(k -> k.getConfig().getPassword().isEmpty() && Objects.equals(k.getConfig().getStatus(), "default"))
+                .filter(k -> {
+                    QueryWrapper<ArticleConfig> articleConfigQueryWrapper = new QueryWrapper<>();
+                    articleConfigQueryWrapper.eq("article_id", k.getId());
+                    ArticleConfig config = articleConfigMapper.selectOne(articleConfigQueryWrapper);
+                    System.out.println(config);
+                    return "".equals(config.getPassword()) && Objects.equals(config.getStatus(), "default");
+                })
                 .map(Article::getId)
                 .collect(Collectors.toList());
 

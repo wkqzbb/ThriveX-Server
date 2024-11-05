@@ -13,9 +13,6 @@ public class ArticleConfig {
     @ApiModelProperty(value = "ID")
     private Integer id;
 
-    @ApiModelProperty(value = "文章是否置顶", example = "0")
-    private Integer top;
-
     @ApiModelProperty(value = "文章状态", example = "默认（default） 不在首页显示（no_home） 全站隐藏（hide）")
     private String status;
 
