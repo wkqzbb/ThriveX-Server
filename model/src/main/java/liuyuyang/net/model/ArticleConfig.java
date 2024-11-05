@@ -16,7 +16,7 @@ public class ArticleConfig {
     @ApiModelProperty(value = "文章是否置顶", example = "0")
     private Integer top;
 
-    @ApiModelProperty(value = "文章状态", example = "显示（show） 不在首页显示（no_home） 隐藏（hide）")
+    @ApiModelProperty(value = "文章状态", example = "默认（default） 不在首页显示（no_home） 全站隐藏（hide）")
     private String status;
 
     @ApiModelProperty(value = "文章密码", example = "默认为空表示不加密")

@@ -24,7 +24,7 @@ public interface ArticleService extends IService<Article> {
 
     public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo, String token);
 
-    public Page<Article> getArticleList(Integer id, PageVo pageVo);
+    public Page<Article> getCateArticleList(Integer id, PageVo pageVo);
 
     public List<Article> getRandomArticles(Integer count);
 

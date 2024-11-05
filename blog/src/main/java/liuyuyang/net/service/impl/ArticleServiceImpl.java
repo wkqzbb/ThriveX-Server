@@ -144,20 +144,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ArticleConfig config = data.getConfig();
 
         if (config.getPassword().isEmpty() && !password.isEmpty()) {
-            throw new CustomException(400, "该文章不需要访问密码");
+            throw new CustomException(610, "该文章不需要访问密码");
         }
 
         // 管理员可以查看任何权限的文章
         if (!isAdmin) {
             if ("hide".equals(config.getStatus())) {
-                throw new CustomException(400, "该文章已被隐藏");
+                throw new CustomException(611, "该文章已被隐藏");
             }
 
             // 如果有密码就必须通过密码才能查看
             if (!config.getPassword().isEmpty()) {
                 // 如果需要访问密码且没有传递密码参数
                 if (password.isEmpty()) {
-                    throw new CustomException(400, "请输入文章访问密码");
+                    throw new CustomException(612, "请输入文章访问密码");
                 }
 
                 data.setDescription("该文章需要密码才能查看");
@@ -168,7 +168,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     data.setDescription(description);
                     data.setContent(content);
                 } else {
-                    throw new CustomException(400, "文章访问密码错误");
+                    throw new CustomException(613, "文章访问密码错误");
                 }
             }
         }
@@ -237,7 +237,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public Page<Article> getArticleList(Integer id, PageVo pageVo) {
+    public Page<Article> getCateArticleList(Integer id, PageVo pageVo) {
         // 先通过分类id查询出所有文章id
         QueryWrapper<ArticleCate> queryWrapperArticleCate = new QueryWrapper<>();
         queryWrapperArticleCate.in("cate_id", id);
@@ -256,6 +256,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
         articleMapper.selectPage(page, queryWrapperArticle);
+
+        for (Article article : page.getRecords()) {
+            ArticleConfig config = article.getConfig();
+            // 如果有密码就必须通过密码才能查看
+            if (!config.getPassword().isEmpty()) {
+                article.setDescription("该文章是加密的");
+                article.setContent("该文章是加密的");
+            }
+        }
+
         page.setRecords(page.getRecords().stream().map(article -> bindingData(article.getId())).collect(Collectors.toList()));
 
         return page;
@@ -263,7 +273,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public List<Article> getRandomArticles(Integer count) {
-        List<Integer> ids = articleMapper.selectList(null).stream().map(Article::getId).collect(Collectors.toList());
+        List<Integer> ids = articleMapper.selectList(null).stream()
+                // 只有正常且没有加密的文章显示
+                .filter(k -> k.getConfig().getPassword().isEmpty() && Objects.equals(k.getConfig().getStatus(), "default"))
+                .map(Article::getId)
+                .collect(Collectors.toList());
 
         if (ids.size() <= count) {
             // 如果文章数量少于或等于需要的数量，直接返回所有文章
