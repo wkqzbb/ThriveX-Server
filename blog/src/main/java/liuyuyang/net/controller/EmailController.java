@@ -4,7 +4,6 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.NoTokenRequired;
-import liuyuyang.net.dto.email.CommentEmailDTO;
 import liuyuyang.net.dto.email.DismissEmailDTO;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.utils.EmailUtils;
@@ -15,7 +14,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
-import javax.mail.MessagingException;
 
 @Api(tags = "邮件管理")
 @RestController

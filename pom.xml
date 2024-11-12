@@ -11,12 +11,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <!-- 工具类 -->
-        <module>common</module>
         <!-- 实体类 -->
         <module>model</module>
         <!-- 核心业务 -->
         <module>blog</module>
+        <module>common</module>
     </modules>
 
     <parent>
@@ -140,7 +139,7 @@
             <!-- 自定义模块 -->
             <dependency>
                 <groupId>liuyuyang.net</groupId>
-                <artifactId>util</artifactId>
+                <artifactId>common</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
