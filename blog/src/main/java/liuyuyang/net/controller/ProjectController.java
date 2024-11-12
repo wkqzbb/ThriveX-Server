@@ -50,7 +50,7 @@ public class ProjectController {
         return Result.success(data);
     }
 
-    @PatchMapping("/layout")
+    @PatchMapping("/theme")
     @ApiOperation("修改布局")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result<String> editLayout(@RequestBody LayoutDTO data) {
@@ -61,7 +61,7 @@ public class ProjectController {
         return Result.success();
     }
 
-    @GetMapping("/layout")
+    @GetMapping("/theme")
     @ApiOperation("获取布局配置")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result getLayout() {
