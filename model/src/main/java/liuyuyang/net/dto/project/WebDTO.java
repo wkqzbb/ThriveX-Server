@@ -5,11 +5,14 @@ import lombok.Data;
 
 @Data
 public class WebDTO {
-    @ApiModelProperty(value = "封面图片列表", example = "[\"https://blog.liuyuyang.net/1.jpg\", \"https://blog.liuyuyang.net/2.jpg\"]")
-    private String covers;
+    // @ApiModelProperty(value = "封面图片列表", example = "[\"https://blog.liuyuyang.net/1.jpg\", \"https://blog.liuyuyang.net/2.jpg\"]")
+    // private String covers;
 
-    @ApiModelProperty(value = "暗色模式Logo", example = "https://blog.liuyuyang.net/dark_logo.png")
-    private String darkLogo;
+    // @ApiModelProperty(value = "亮色模式Logo", example = "https://blog.liuyuyang.net/light_logo.png")
+    // private String lightLogo;
+    //
+    // @ApiModelProperty(value = "暗色模式Logo", example = "https://blog.liuyuyang.net/dark_logo.png")
+    // private String darkLogo;
 
     @ApiModelProperty(value = "网站描述", example = "记录前端、Python、Java点点滴滴")
     private String description;
@@ -26,11 +29,8 @@ public class WebDTO {
     @ApiModelProperty(value = "关键词", example = "Thrive,前端,Python,Java", required = true)
     private String keyword;
 
-    @ApiModelProperty(value = "亮色模式Logo", example = "https://blog.liuyuyang.net/light_logo.png")
-    private String lightLogo;
-
-    @ApiModelProperty(value = "社交链接列表", example = "[{\"name\": \"GitHub\", \"url\": \"https://github.com/LiuYuYang01\"}, {\"name\": \"Gitee\", \"url\": \"https://gitee.com/liu_yu_yang666\"}]")
-    private String social;
+    // @ApiModelProperty(value = "社交链接列表", example = "[{\"name\": \"GitHub\", \"url\": \"https://github.com/LiuYuYang01\"}, {\"name\": \"Gitee\", \"url\": \"https://gitee.com/liu_yu_yang666\"}]")
+    // private String social;
 
     @ApiModelProperty(value = "副标题", example = "花有重开日, 人无再少年")
     private String subhead;

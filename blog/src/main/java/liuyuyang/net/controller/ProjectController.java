@@ -3,7 +3,7 @@ package liuyuyang.net.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.dto.project.LayoutDTO;
+import liuyuyang.net.dto.project.ThemeDTO;
 import liuyuyang.net.dto.project.SystemDTO;
 import liuyuyang.net.dto.project.WebDTO;
 import liuyuyang.net.mapper.ProjectMapper;
@@ -53,7 +53,7 @@ public class ProjectController {
     @PatchMapping("/theme")
     @ApiOperation("修改布局")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-    public Result<String> editLayout(@RequestBody LayoutDTO data) {
+    public Result<String> editLayout(@RequestBody ThemeDTO data) {
         Project project = new Project();
         BeanUtils.copyProperties(data, project);
         project.setId(1);
@@ -67,7 +67,7 @@ public class ProjectController {
     public Result getLayout() {
         Project config = projectMapper.selectById(1);
 
-        LayoutDTO data = new LayoutDTO();
+        ThemeDTO data = new ThemeDTO();
         BeanUtils.copyProperties(config, data);
 
         return Result.success(data);
