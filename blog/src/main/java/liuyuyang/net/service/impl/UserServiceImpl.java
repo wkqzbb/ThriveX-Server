@@ -92,6 +92,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         for (User user : list) {
             user.setPassword("只有聪明的人才能看到密码");
+            Role role = roleMapper.selectById(user.getRoleId());
+            user.setRole(role);
         }
 
         list = list.stream().sorted((o1, o2) -> o2.getCreateTime().compareTo(o1.getCreateTime())).collect(Collectors.toList());
