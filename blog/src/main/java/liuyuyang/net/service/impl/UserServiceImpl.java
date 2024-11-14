@@ -4,21 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.dto.user.EditPassDTO;
+import liuyuyang.net.dto.user.UserDTO;
 import liuyuyang.net.dto.user.UserInfoDTO;
+import liuyuyang.net.dto.user.UserLoginDTO;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.RoleMapper;
 import liuyuyang.net.mapper.UserMapper;
-import liuyuyang.net.model.Comment;
-import liuyuyang.net.model.Link;
-import liuyuyang.net.model.Role;
-import liuyuyang.net.model.User;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.model.*;
 import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.YuYangUtils;
-import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.comment.CommentFilterVo;
-import liuyuyang.net.vo.link.LinkFilterVo;
 import liuyuyang.net.vo.user.UserFillterVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -40,7 +35,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RoleMapper roleMapper;
 
     @Override
-    public void add(User user) {
+    public void add(UserDTO user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", user.getUsername());
 
@@ -52,7 +47,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 密码加密
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
 
-        userMapper.insert(user);
+        User temp = new User();
+        BeanUtils.copyProperties(user, temp);
+
+        userMapper.insert(temp);
     }
 
     @Override
@@ -62,10 +60,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void edit(UserInfoDTO data) {
-        User user = userMapper.selectById(data.getId());
-        BeanUtils.copyProperties(data, user);
-        userMapper.updateById(user);
+    public void delBatch(List<Integer> ids) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("id", ids);
+        userMapper.delete(queryWrapper);
+    }
+
+    @Override
+    public void edit(UserInfoDTO user) {
+        User data = userMapper.selectById(user.getId());
+        BeanUtils.copyProperties(user, data);
+        userMapper.updateById(data);
     }
 
     @Override
@@ -101,16 +106,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User login(User user) {
+    public User login(UserLoginDTO user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", user.getUsername());
         queryWrapper.eq("password", DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
 
         User data = userMapper.selectOne(queryWrapper);
 
-        if (data == null) {
-            throw new CustomException(400, "用户名或密码错误");
-        }
+        if (data == null) throw new CustomException(400, "用户名或密码错误");
 
         return data;
     }

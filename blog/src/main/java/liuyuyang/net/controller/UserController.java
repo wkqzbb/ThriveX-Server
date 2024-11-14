@@ -5,7 +5,9 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.dto.user.EditPassDTO;
+import liuyuyang.net.dto.user.UserDTO;
 import liuyuyang.net.dto.user.UserInfoDTO;
+import liuyuyang.net.dto.user.UserLoginDTO;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.User;
 import liuyuyang.net.properties.JwtProperties;
@@ -16,7 +18,6 @@ import liuyuyang.net.utils.JwtUtils;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.user.UserFillterVo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +41,9 @@ public class UserController {
     @PostMapping
     @ApiOperation("新增用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result register(@RequestBody User user) {
+    public Result<String> add(@RequestBody UserDTO user) {
         userService.add(user);
-        return Result.success("新增成功");
+        return Result.success();
     }
 
     @DeleteMapping("/{id}")
@@ -56,16 +57,16 @@ public class UserController {
     @DeleteMapping("/batch")
     @ApiOperation("批量删除用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-    public Result batchDel(@RequestBody List<Integer> ids) {
-        Boolean res = userService.removeByIds(ids);
-        return res ? Result.success() : Result.error();
+    public Result<String> batchDel(@RequestBody List<Integer> ids) {
+        userService.delBatch(ids);
+        return Result.success();
     }
 
     @PatchMapping
     @ApiOperation("编辑用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-    public Result<String> edit(@RequestBody UserInfoDTO data) {
-        userService.edit(data);
+    public Result<String> edit(@RequestBody UserInfoDTO user) {
+        userService.edit(user);
         return Result.success();
     }
 
@@ -97,7 +98,7 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation("用户登录")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result login(@RequestBody User user) {
+    public Result login(@RequestBody UserLoginDTO user) {
         User data = userService.login(user);
 
         Map<String, Object> claims = new HashMap<>();

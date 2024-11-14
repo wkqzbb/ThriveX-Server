@@ -29,6 +29,6 @@ public class User extends BaseModel {
     @ApiModelProperty(value = "用户角色ID", example = "1", required = true)
     private String roleId;
     @TableField(exist = false)
-    @ApiModelProperty(value = "用户角色信息", example = "...", required = true)
+    @ApiModelProperty(value = "用户角色信息", example = "...")
     private Role role;
 }
