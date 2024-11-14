@@ -6,7 +6,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.dto.user.EditPassDTO;
 import liuyuyang.net.dto.user.UserInfoDTO;
-import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.User;
 import liuyuyang.net.properties.JwtProperties;
@@ -15,6 +14,8 @@ import liuyuyang.net.service.RoleService;
 import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.JwtUtils;
 import liuyuyang.net.utils.Paging;
+import liuyuyang.net.vo.PageVo;
+import liuyuyang.net.vo.user.UserFillterVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class UserController {
     @ApiOperation("新增用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result register(@RequestBody User user) {
-        userService.register(user);
+        userService.add(user);
         return Result.success("新增成功");
     }
 
@@ -48,12 +49,8 @@ public class UserController {
     @ApiOperation("删除用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@PathVariable Integer id) {
-        User data = userService.getById(id);
-        if (data == null) return Result.error("该数据不存在");
-
-        Boolean res = userService.removeById(id);
-
-        return res ? Result.success() : Result.error();
+        userService.del(id);
+        return Result.success();
     }
 
     @DeleteMapping("/batch")
@@ -61,7 +58,6 @@ public class UserController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
         Boolean res = userService.removeByIds(ids);
-
         return res ? Result.success() : Result.error();
     }
 
@@ -69,12 +65,8 @@ public class UserController {
     @ApiOperation("编辑用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result<String> edit(@RequestBody UserInfoDTO data) {
-        User user = userService.getById(data.getId());
-        BeanUtils.copyProperties(data, user);
-
-        boolean res = userService.updateById(user);
-
-        return res ? Result.success() : Result.error();
+        userService.edit(data);
+        return Result.success();
     }
 
     @GetMapping("/{id}")
@@ -85,24 +77,19 @@ public class UserController {
         return Result.success(data);
     }
 
-    @GetMapping("/all")
+    @PostMapping("/list")
     @ApiOperation("获取用户列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<User>> list() {
-        List<User> list = userService.list();
-
-        for (User user : list) {
-            user.setPassword("只有聪明的人才能看到密码");
-        }
-
+    public Result<List<User>> list(@RequestBody UserFillterVo filterVo) {
+        List<User> list = userService.list(filterVo);
         return Result.success(list);
     }
 
-    @GetMapping
+    @PostMapping("/paging")
     @ApiOperation("分页查询用户列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        Page<User> data = userService.paging(page, size);
+    public Result paging(UserFillterVo filterVo, PageVo pageVo) {
+        Page<User> data = userService.paging(filterVo, pageVo);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }
