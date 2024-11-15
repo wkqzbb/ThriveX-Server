@@ -5,5 +5,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import liuyuyang.net.model.Tag;
 
 public interface TagService extends IService<Tag> {
-    public Page<Tag> list(Integer page, Integer size);
+    Page<Tag> list(Integer page, Integer size);
 }

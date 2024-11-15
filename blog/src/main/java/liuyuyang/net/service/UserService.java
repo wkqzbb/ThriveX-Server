@@ -13,14 +13,21 @@ import liuyuyang.net.vo.user.UserFilterVo;
 import java.util.List;
 
 public interface UserService extends IService<User> {
-    public User get(Integer id);
-    public void add(UserDTO data);
-    public void del(Integer id);
-    public void delBatch(List<Integer> ids);
-    public void edit(UserInfoDTO data);
-    public List<User> list(UserFilterVo filterVo);
-    public Page<User> paging(UserFilterVo filterVo, PageVo pageVo);
+    User get(Integer id);
 
-    public User login(UserLoginDTO user);
-    public void editPass(EditPassDTO data);
+    void add(UserDTO data);
+
+    void del(Integer id);
+
+    void delBatch(List<Integer> ids);
+
+    void edit(UserInfoDTO data);
+
+    List<User> list(UserFilterVo filterVo);
+
+    Page<User> paging(UserFilterVo filterVo, PageVo pageVo);
+
+    User login(UserLoginDTO user);
+
+    void editPass(EditPassDTO data);
 }

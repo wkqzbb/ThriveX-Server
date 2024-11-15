@@ -10,13 +10,15 @@ import liuyuyang.net.vo.wall.WallFilterVo;
 import java.util.List;
 
 public interface WallService extends IService<Wall> {
-    public void add(Wall wall) throws Exception;
-    public Wall get(Integer id);
+    void add(Wall wall) throws Exception;
 
-    public Page<Wall> getCateWallList(Integer cateId, PageVo pageVo);
-    public List<WallCate> getCateList();
+    Wall get(Integer id);
 
-    public List<Wall> list(WallFilterVo filterVo);
+    Page<Wall> getCateWallList(Integer cateId, PageVo pageVo);
 
-    public Page<Wall> paging(WallFilterVo filterVo, PageVo pageVo);
+    List<WallCate> getCateList();
+
+    List<Wall> list(WallFilterVo filterVo);
+
+    Page<Wall> paging(WallFilterVo filterVo, PageVo pageVo);
 }
