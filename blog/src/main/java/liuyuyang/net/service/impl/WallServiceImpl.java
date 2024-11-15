@@ -13,6 +13,7 @@ import liuyuyang.net.utils.EmailUtils;
 import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.wall.WallFilterVo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +32,13 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
     @Resource
     private EmailUtils emailUtils;
 
+    @Value("${spring.mail.username}")
+    private String from;
+
     @Override
     public void add(Wall wall) throws Exception {
         wallMapper.insert(wall);
-        emailUtils.send(null, "您有新的留言等待审核", "");
+        emailUtils.send(from, "您有新的留言等待审核", "");
     }
 
     @Override
