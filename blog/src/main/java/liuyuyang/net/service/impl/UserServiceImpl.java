@@ -14,7 +14,7 @@ import liuyuyang.net.model.*;
 import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.user.UserFillterVo;
+import liuyuyang.net.vo.user.UserFilterVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +57,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void del(Integer id) {
         User data = userMapper.selectById(id);
         if (data == null) throw new CustomException(400, "该用户不存在");
+        userMapper.deleteById(id);
     }
 
     @Override
@@ -85,8 +86,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<User> list(UserFillterVo filterVo) {
-        QueryWrapper<User> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo);
+    public List<User> list(UserFilterVo filterVo) {
+        QueryWrapper<User> queryWrapper = yuYangUtils.queryWrapperFilter(filterVo, "name");
+        if (filterVo.getRoleId() != null) {
+            queryWrapper.eq("role_id", filterVo.getRoleId());
+        }
 
         List<User> list = userMapper.selectList(queryWrapper);
 
@@ -102,7 +106,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Page<User> paging(UserFillterVo filterVo, PageVo pageVo) {
+    public Page<User> paging(UserFilterVo filterVo, PageVo pageVo) {
         List<User> list = list(filterVo);
         return yuYangUtils.getPageData(pageVo, list);
     }

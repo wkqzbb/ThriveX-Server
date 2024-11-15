@@ -17,7 +17,7 @@ import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.JwtUtils;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;
-import liuyuyang.net.vo.user.UserFillterVo;
+import liuyuyang.net.vo.user.UserFilterVo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,7 +81,7 @@ public class UserController {
     @PostMapping("/list")
     @ApiOperation("获取用户列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<User>> list(@RequestBody UserFillterVo filterVo) {
+    public Result<List<User>> list(@RequestBody UserFilterVo filterVo) {
         List<User> list = userService.list(filterVo);
         return Result.success(list);
     }
@@ -89,7 +89,7 @@ public class UserController {
     @PostMapping("/paging")
     @ApiOperation("分页查询用户列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(UserFillterVo filterVo, PageVo pageVo) {
+    public Result paging(UserFilterVo filterVo, PageVo pageVo) {
         Page<User> data = userService.paging(filterVo, pageVo);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);

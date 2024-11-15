@@ -8,6 +8,9 @@ public class UserInfoDTO {
     @ApiModelProperty(value = "用户ID")
     private Integer id;
 
+    @ApiModelProperty(value = "用户账号", example = "liuyuyang", required = true)
+    private String username;
+
     @ApiModelProperty(value = "用户名称", example = "宇阳", required = true)
     private String name;
 
@@ -19,4 +22,7 @@ public class UserInfoDTO {
 
     @ApiModelProperty(value = "用户头像", example = "yuyang.jpg")
     private String avatar;
+
+    @ApiModelProperty(value = "用户角色ID", example = "1", required = true)
+    private String roleId;
 }
