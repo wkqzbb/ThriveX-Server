@@ -9,6 +9,7 @@ import liuyuyang.net.model.Article;
 import liuyuyang.net.model.ArticleCate;
 import liuyuyang.net.model.ArticleConfig;
 import liuyuyang.net.model.Cate;
+import liuyuyang.net.service.ArticleCateService;
 import liuyuyang.net.service.ArticleService;
 import liuyuyang.net.service.CateService;
 import liuyuyang.net.utils.YuYangUtils;
@@ -30,6 +31,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private ArticleCateMapper articleCateMapper;
     @Resource
+    private ArticleCateService articleCateService;
+    @Resource
     private ArticleConfigMapper articleConfigMapper;
     @Resource
     private CateMapper cateMapper;
@@ -45,11 +48,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.insert(article);
 
         // 新增分类
-        for (Integer id : article.getCateIds()) {
-            ArticleCate articleCate = new ArticleCate();
-            articleCate.setArticleId(article.getId());
-            articleCate.setCateId(id);
-            articleCateMapper.insert(articleCate);
+        List<Integer> cateIdList = article.getCateIds();
+        if (!cateIdList.isEmpty()) {
+            ArrayList<ArticleCate> cateArrayList = new ArrayList<>(cateIdList.size());
+            for (Integer id : cateIdList) {
+                ArticleCate articleCate = new ArticleCate();
+                articleCate.setArticleId(article.getId());
+                articleCate.setCateId(id);
+                cateArrayList.add(articleCate);
+            }
+            articleCateService.saveBatch(cateArrayList);
         }
 
         // 新增文章配置
