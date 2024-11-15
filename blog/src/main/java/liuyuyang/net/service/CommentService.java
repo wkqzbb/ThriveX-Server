@@ -9,9 +9,13 @@ import liuyuyang.net.vo.comment.CommentFilterVo;
 import java.util.List;
 
 public interface CommentService extends IService<Comment> {
-    public void add(Comment comment) throws Exception;
-    public Comment get(Integer id);
-    public Page<Comment> getArticleCommentList(Integer articleId, PageVo pageVo);
-    public List<Comment> list(CommentFilterVo filterVo);
-    public Page<Comment> paging(CommentFilterVo filterVo, PageVo pageVo);
+    void add(Comment comment) throws Exception;
+
+    Comment get(Integer id);
+
+    Page<Comment> getArticleCommentList(Integer articleId, PageVo pageVo);
+
+    List<Comment> list(CommentFilterVo filterVo);
+
+    Page<Comment> paging(CommentFilterVo filterVo, PageVo pageVo);
 }

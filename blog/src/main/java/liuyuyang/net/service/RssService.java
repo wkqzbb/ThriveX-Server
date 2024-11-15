@@ -5,5 +5,5 @@ import liuyuyang.net.model.Rss;
 import java.util.List;
 
 public interface RssService {
-    public List<Rss> list();
+    List<Rss> list();
 }

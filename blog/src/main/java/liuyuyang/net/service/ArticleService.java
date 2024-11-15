@@ -10,29 +10,29 @@ import liuyuyang.net.vo.article.ArticleFillterVo;
 import java.util.List;
 
 public interface ArticleService extends IService<Article> {
-    public void add(Article article);
+    void add(Article article);
 
-    public void del(Integer id);
+    void del(Integer id);
 
-    public void delBatch(List<Integer> ids);
+    void delBatch(List<Integer> ids);
 
-    public void edit(Article article);
+    void edit(Article article);
 
-    public Article get(Integer id, String password, String token);
+    Article get(Integer id, String password, String token);
 
-    public List<Article> list(ArticleFillterVo filterVo, String token);
+    List<Article> list(ArticleFillterVo filterVo, String token);
 
-    public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo, String token);
+    Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo, String token);
 
-    public Page<Article> getCateArticleList(Integer id, PageVo pageVo);
+    Page<Article> getCateArticleList(Integer id, PageVo pageVo);
 
-    public List<Article> getRandomArticles(Integer count);
+    List<Article> getRandomArticles(Integer count);
 
-    public List<Article> getRecommendedArticles(Integer count);
+    List<Article> getRecommendedArticles(Integer count);
 
-    public void recordView(Integer id);
+    void recordView(Integer id);
 
-    public Article bindingData(Integer id);
+    Article bindingData(Integer id);
 
-    public QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo);
+    QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo);
 }

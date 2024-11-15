@@ -7,7 +7,7 @@ import liuyuyang.net.model.Route;
 import java.util.List;
 
 public interface RoleService extends IService<Role> {
-    public List<Route> getRouteList(Integer id);
+    List<Route> getRouteList(Integer id);
 
-    public void bindingRoute(Integer id, List<Integer> ids);
+    void bindingRoute(Integer id, List<Integer> ids);
 }

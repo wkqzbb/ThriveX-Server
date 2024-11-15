@@ -7,5 +7,5 @@ import liuyuyang.net.vo.FilterVo;
 import java.util.List;
 
 public interface FootprintService extends IService<Footprint> {
-    public List<Footprint> list(FilterVo filterVo);
+    List<Footprint> list(FilterVo filterVo);
 }

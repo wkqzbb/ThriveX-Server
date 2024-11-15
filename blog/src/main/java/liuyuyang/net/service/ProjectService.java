@@ -5,5 +5,5 @@ import liuyuyang.net.dto.project.SystemDTO;
 import liuyuyang.net.model.Project;
 
 public interface ProjectService extends IService<Project> {
-    public SystemDTO getSystemInfo();
+    SystemDTO getSystemInfo();
 }
