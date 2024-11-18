@@ -24,8 +24,8 @@ public class EmailController {
     private EmailUtils emailUtils;
     @Resource
     private TemplateEngine templateEngine;
-    @Value("${spring.mail.username}")
-    private String from;
+    // @Value("${spring.mail.username}")
+    // private String from;
 
     @PostMapping("/dismiss")
     @NoTokenRequired
@@ -41,7 +41,7 @@ public class EmailController {
         context.setVariable("url", email.getUrl());
         String template = templateEngine.process("dismiss_email", context);
 
-        emailUtils.send(email.getTo() != null ? email.getTo() : from, email.getSubject(), template);
+        emailUtils.send(email.getTo() != null ? email.getTo() : null, email.getSubject(), template);
 
         return Result.success();
     }

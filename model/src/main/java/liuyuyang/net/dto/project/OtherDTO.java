@@ -2,7 +2,6 @@ package liuyuyang.net.dto.project;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import springfox.documentation.spring.web.json.Json;
 
 @Data
 public class OtherDTO {
