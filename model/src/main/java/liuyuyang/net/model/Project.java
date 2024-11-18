@@ -62,6 +62,9 @@ public class Project {
     @ApiModelProperty(value = "打字机文本", example = "[\"这是第一段文本\", \"这是第二段文本\", \"...\"]")
     private String swiperText;
 
+    @ApiModelProperty(value = "作者推荐文章", example = "1,2,3")
+    private String recoArticle;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "操作系统名称", example = "Windows 10")
     private String osName;

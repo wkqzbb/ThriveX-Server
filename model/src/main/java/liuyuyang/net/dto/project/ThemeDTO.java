@@ -26,6 +26,9 @@ public class ThemeDTO {
     @ApiModelProperty(value = "社交链接列表", example = "[{\"name\": \"GitHub\", \"url\": \"https://github.com/LiuYuYang01\"}, {\"name\": \"Gitee\", \"url\": \"https://gitee.com/liu_yu_yang666\"}]")
     private String social;
 
+    @ApiModelProperty(value = "作者推荐文章", example = "1,2,3")
+    private String recoArticle;
+
     @ApiModelProperty(value = "打字机文本", example = "[\"这是第一段文本\", \"这是第二段文本\", \"...\"]")
     private String swiperText;
 }
