@@ -82,26 +82,26 @@ public class ProjectController {
         return Result.success(data);
     }
 
-    @GetMapping("/other")
-    @ApiOperation("获取其他配置")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result getOtherConfig() {
-        Project config = projectMapper.selectById(1);
-
-        OtherDTO data = new OtherDTO();
-        BeanUtils.copyProperties(config, data);
-
-        return Result.success(data);
-    }
-
-    @PatchMapping("/other")
-    @ApiOperation("修改其他配置")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result<String> editOtherConfig(@RequestBody OtherDTO data) {
-        Project project = new Project();
-        BeanUtils.copyProperties(data, project);
-        project.setId(1);
-        projectMapper.updateById(project);
-        return Result.success();
-    }
+    // @GetMapping("/other")
+    // @ApiOperation("获取其他配置")
+    // @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
+    // public Result getOtherConfig() {
+    //     Project config = projectMapper.selectById(1);
+    //
+    //     OtherDTO data = new OtherDTO();
+    //     BeanUtils.copyProperties(config, data);
+    //
+    //     return Result.success(data);
+    // }
+    //
+    // @PatchMapping("/other")
+    // @ApiOperation("修改其他配置")
+    // @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
+    // public Result<String> editOtherConfig(@RequestBody OtherDTO data) {
+    //     Project project = new Project();
+    //     BeanUtils.copyProperties(data, project);
+    //     project.setId(1);
+    //     projectMapper.updateById(project);
+    //     return Result.success();
+    // }
 }

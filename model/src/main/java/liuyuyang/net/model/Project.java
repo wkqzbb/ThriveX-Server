@@ -81,7 +81,4 @@ public class Project {
     @TableField(exist = false)
     @ApiModelProperty(value = "内存使用率 (%)", example = "50.0")
     private Float memoryUsage;
-
-    @ApiModelProperty(value = "邮箱配置", example = "{}", required = true)
-    private String email;
 }

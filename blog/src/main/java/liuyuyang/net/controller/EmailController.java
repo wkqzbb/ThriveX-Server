@@ -24,8 +24,6 @@ public class EmailController {
     private EmailUtils emailUtils;
     @Resource
     private TemplateEngine templateEngine;
-    // @Value("${spring.mail.username}")
-    // private String from;
 
     @PostMapping("/dismiss")
     @NoTokenRequired
