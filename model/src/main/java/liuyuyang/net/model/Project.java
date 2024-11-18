@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import springfox.documentation.spring.web.json.Json;
 
 @Data
 @TableName("project")
@@ -80,4 +81,16 @@ public class Project {
     @TableField(exist = false)
     @ApiModelProperty(value = "内存使用率 (%)", example = "50.0")
     private Float memoryUsage;
+
+    @ApiModelProperty(value = "邮箱配置", example = "{}", required = true)
+    private String email;
+
+    // @ApiModelProperty(value = "邮箱服务器", example = "smtp.qq.com", required = true)
+    // private String host;
+    // @ApiModelProperty(value = "邮箱端口", example = "465", required = true)
+    // private String port;
+    // @ApiModelProperty(value = "邮箱用户名", example = "3311118881@qq.com", required = true)
+    // private String username;
+    // @ApiModelProperty(value = "邮箱授权码", example = "adasdadadadaasd", required = true)
+    // private String password;
 }

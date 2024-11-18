@@ -19,7 +19,3 @@ lyy:
     accessKey: 七牛云的accessKey
     secretKey: 七牛云的secretKey
     bucket: thrive
-
-  cors:
-    domainWhitelist:
-      - 你的域名

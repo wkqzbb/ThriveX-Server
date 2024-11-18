@@ -19,8 +19,7 @@
 -- Table structure for table `article`
 --
 
-create database ThriveX;
-use ThriveX;
+use blog;
 
 DROP TABLE IF EXISTS `article`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -84,8 +83,7 @@ DROP TABLE IF EXISTS `article_config`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article_config` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `top` tinyint(1) DEFAULT '0' COMMENT '文章是否置顶',
-  `status` enum('show','no_home','hide') DEFAULT 'show' COMMENT '文章状态',
+  `status` enum('default','no_home','hide') DEFAULT 'default' COMMENT '文章状态',
   `password` varchar(100) DEFAULT '' COMMENT '是否文章加密',
   `article_id` int NOT NULL COMMENT '对应的文章id',
   PRIMARY KEY (`id`),
@@ -99,7 +97,7 @@ CREATE TABLE `article_config` (
 
 LOCK TABLES `article_config` WRITE;
 /*!40000 ALTER TABLE `article_config` DISABLE KEYS */;
-INSERT INTO `article_config` VALUES (1,0,'show','',2187);
+INSERT INTO `article_config` VALUES (1,'default','',2187);
 /*!40000 ALTER TABLE `article_config` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +129,7 @@ CREATE TABLE `cate` (
 
 LOCK TABLES `cate` WRITE;
 /*!40000 ALTER TABLE `cate` DISABLE KEYS */;
-INSERT INTO `cate` VALUES (1,'测试分类','💻','/','kfbj',0,1,'cate'),(50,'首页','💎','/','home',0,0,'nav'),(51,'足迹','⛳️','/footprint','zj',0,9,'nav'),(52,'关于我','👋','/my','my',0,12,'nav'),(53,'友人','😇','/friend','yr',0,10,'nav'),(54,'留言墙','💌','/wall/all','wall',0,11,'nav'),(55,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav'),(59,'统计','📊','/data','data',0,8,'nav');
+INSERT INTO `cate` VALUES (1,'测试分类','💻','/','kfbj',0,1,'cate'),(51,'足迹','⛳️','/footprint','zj',0,9,'nav'),(52,'关于我','👋','/my','my',0,12,'nav'),(53,'友人','😇','/friend','yr',0,10,'nav'),(54,'留言墙','💌','/wall/all','wall',0,11,'nav'),(55,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav'),(59,'统计','📊','/data','data',0,8,'nav');
 /*!40000 ALTER TABLE `cate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -347,7 +345,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
-INSERT INTO `route` VALUES (1,'/','仪表盘'),(2,'/create','创作'),(5,'/setup','系统'),(6,'/article','文章管理'),(7,'/tag','标签管理'),(8,'/comment','评论管理'),(9,'/cate','分类管理'),(10,'/web','网站管理'),(11,'/swiper','轮播图管理'),(12,'/user','用户管理'),(13,'/role','角色管理'),(14,'/rss','订阅中心'),(15,'/chart','文件系统'),(16,'/stats','数据可视化'),(17,'/iter','更新日志'),(20,'/route','路由管理'),(21,'/file','文件管理'),(23,'/footprint','足迹管理'),(24,'/work','工作台'),(25,'/wall','留言管理');
+INSERT INTO `route` VALUES (1,'/','仪表盘'),(2,'/create','创作'),(5,'/setup','系统'),(6,'/article','文章管理'),(7,'/tag','标签管理'),(8,'/comment','评论管理'),(9,'/cate','分类管理'),(10,'/web','网站管理'),(11,'/swiper','轮播图管理'),(12,'/user','用户管理'),(13,'/role','角色管理'),(14,'/rss','订阅中心'),(15,'/chart','文件系统'),(17,'/iter','更新日志'),(20,'/route','路由管理'),(21,'/file','文件管理'),(23,'/footprint','足迹管理'),(24,'/work','工作台'),(25,'/wall','留言管理');
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -527,4 +525,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-26 20:52:11
+-- Dump completed on 2024-11-16 20:46:45
