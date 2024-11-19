@@ -1,5 +1,6 @@
 package liuyuyang.net.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
@@ -14,7 +15,6 @@ import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.RoleService;
 import liuyuyang.net.service.UserService;
-import liuyuyang.net.utils.JwtUtils;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.user.UserFilterVo;
@@ -101,11 +101,15 @@ public class UserController {
     public Result login(@RequestBody UserLoginDTO user) {
         User data = userService.login(user);
 
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("user", data);
-        String token = JwtUtils.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
+        // Map<String, Object> claims = new HashMap<>();
+        // claims.put("user", data);
+        // String token = JwtUtils.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
+
+        StpUtil.login(data.getId());
+        String token = StpUtil.getTokenValue();
 
         Role role = roleService.getById(data.getRoleId());
+        StpUtil.getSession().set("role", role.getMark());
 
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
