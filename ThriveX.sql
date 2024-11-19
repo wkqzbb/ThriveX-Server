@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.39, for macos14 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.24, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: test_thrive
+-- Host: localhost    Database: blog
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.24
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -19,8 +19,6 @@
 -- Table structure for table `article`
 --
 
-use blog;
-
 DROP TABLE IF EXISTS `article`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -35,7 +33,7 @@ CREATE TABLE `article` (
   `tag_ids` varchar(100) DEFAULT NULL COMMENT '该文章所绑定的标签ID',
   `create_time` varchar(255) NOT NULL COMMENT '文章创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2188 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=2189 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +42,7 @@ CREATE TABLE `article` (
 
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
-INSERT INTO `article` VALUES (2187,'Hello World','当你看到这篇文章时就证明安装完成，一切就绪！','当你看到这篇文章时就证明安装完成，一切就绪！\n',NULL,2,0,'3','1729224230508');
+INSERT INTO `article` VALUES (2187,'Hello World','当你看到这篇文章时就意味着安装成功，一切就绪！','当你看到这篇文章时就意味着安装成功，一切就绪！\n',NULL,4,0,'3','1729224230508'),(2188,'🎉 ThriveX 现代化博客管理系统','Thrive 是一个简而不简单的现代化博客管理系统，专注于分享技术文章和知识，为技术爱好者和从业者提供一个分享、交流和学习的平台。用户可以在平台上发表自己的技术文章，或浏览其他用户分享的文章，并与他们进行讨论和互动。','# ThriveX 现代化博客管理系统 🎉\n\n**🔥 首先最重要的事情放第一**\n\n**开源不易，麻烦占用** `10` 秒钟的时间帮忙点个免费的 `Star`，再此万分感谢！\n\n**下面开始进入主题↓↓↓**\n\n**🌈 项目介绍：** Thrive 是一个简而不简单的现代化博客管理系统，专注于分享技术文章和知识，为技术爱好者和从业者提供一个分享、交流和学习的平台。用户可以在平台上发表自己的技术文章，或浏览其他用户分享的文章，并与他们进行讨论和互动。\n\n**🗂️ 项目预览：** [https://liuyuyang.net/](https://liuyuyang.net/)\n\n**🛠️ 技术架构：**\n\n**前端：** React 、**Nextjs**、TypeScript、Zustand、**TailwindCSS**、Antd、Scss、Echarts\n\n**后端：** **Spring Boot**、Mybatis Plus、MySQL、Qiniu、Socket.io、Swagger\n\n**❤️ 项目初衷：**\n\n一直对网站开发领域很感兴趣，从小就希望有一个属于自己的网站，因此踏上了 `Web` 全栈开发的旅途，立志有朝一日也能开发一款属于自己的网站。如今历时1年有余，一个人从0到1独立完成前端、控制端、后端、数据库。也算是完成了从小的一个心愿吧\n\n## 项目演示\n\n### 前端\n\n**只演示部分，具体查看：** [https://liuyuyang.net](https://liuyuyang.net)\n\n![首页](https://bu.dusays.com/2024/10/17/6710eae3b6453.png)\n\n![足迹](https://bu.dusays.com/2024/09/17/66e97036dddcb.png)\n\n### 控制端\n\n![数据分析](https://bu.dusays.com/2024/09/17/66e97035726ae.png)\n\n![文件系统](https://bu.dusays.com/2024/09/17/66e97031cd456.png)\n\n## 项目运行\n\n**前端 or 控制端**\n\n**环境：** Nodejs18及以上\n\n```bash\nnpm i\nnpm run dev\n```\n\n**后端**\n\n**Java8**\n\n**直接安装maven依赖，配置相关的秘钥，最后运行**\n\n## 开源地址\n\n### 最新版（Nextjs + Spring Boot）\n\n**前端：**[LiuYuYang01/ThriveX-Blog (github.com)](https://github.com/LiuYuYang01/ThriveX-Blog)\n\n**控制端：**[LiuYuYang01/ThriveX-Admin (github.com)](https://github.com/LiuYuYang01/ThriveX-Admin)\n\n**后端：**[LiuYuYang01/ThriveX-Server (github.com)](https://github.com/LiuYuYang01/ThriveX-Server)\n\n### 旧版（Vue3 + Python Flask）\n\n**前端：**[LiuYuYang01/Thrive\\_Blog (github.com)](https://github.com/LiuYuYang01/Thrive_Blog)\n\n**控制端：**[LiuYuYang01/Thrive\\_Admin (github.com)](https://github.com/LiuYuYang01/Thrive_Admin)\n\n**后端：**[LiuYuYang01/Thrive\\_Server (github.com)](https://github.com/LiuYuYang01/Thrive_Server)\n\n![后台](https://bu.dusays.com/2024/09/17/66e96ca781d49.png)\n\n## 项目部署\n\n**等有时间单独教大家如何部署**\n\n## 技术支持\n\n**如果大家在部署过程中有任何疑问，可以选择付费（不提倡）或者选择给本项目拉人点** `10` 个 `star`\n\n**联系方式：**\n\n**微信：** liuyuyang2023\n\n**邮箱：**[liuyuyang1024@yeah.net](mailto:liuyuyang1024@yeah.net)\n\n## 最后\n\n**这个项目从前端到后端都是我从** `0` 到 `1` 敲出来的，所以刚开始一定会有很多隐藏的 `BUG`，希望大家能够及时在 `GitHub` 反馈，这样我也好加以改正，不断改善，成为最佳！\n\n**当然如果大家能够提交** `PR` 那再好不过了\n','https://bu.dusays.com/2024/09/17/66e97036dddcb.png',2,0,'3','1731833778995');
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +59,7 @@ CREATE TABLE `article_cate` (
   `cate_id` int NOT NULL COMMENT '分类ID',
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_cate_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1433 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章和分类的中间表';
+) ENGINE=InnoDB AUTO_INCREMENT=1435 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章和分类的中间表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +68,7 @@ CREATE TABLE `article_cate` (
 
 LOCK TABLES `article_cate` WRITE;
 /*!40000 ALTER TABLE `article_cate` DISABLE KEYS */;
-INSERT INTO `article_cate` VALUES (1432,2187,1);
+INSERT INTO `article_cate` VALUES (1433,2188,1),(1434,2187,1);
 /*!40000 ALTER TABLE `article_cate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +86,7 @@ CREATE TABLE `article_config` (
   `article_id` int NOT NULL COMMENT '对应的文章id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_config_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章配置表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章配置表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +95,7 @@ CREATE TABLE `article_config` (
 
 LOCK TABLES `article_config` WRITE;
 /*!40000 ALTER TABLE `article_config` DISABLE KEYS */;
-INSERT INTO `article_config` VALUES (1,'default','',2187);
+INSERT INTO `article_config` VALUES (2,'default','',2188),(3,'default','',2187);
 /*!40000 ALTER TABLE `article_config` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,7 +221,7 @@ CREATE TABLE `link` (
 
 LOCK TABLES `link` WRITE;
 /*!40000 ALTER TABLE `link` DISABLE KEYS */;
-INSERT INTO `link` VALUES (50,'这是一个网站','这是一个网站的描述','liuyuyang1024@yeah.net','http://127.0.0.1:5000/1.jpg','/','/',1,1,'1723533206613');
+INSERT INTO `link` VALUES (50,'宇阳','ThriveX 博客管理系统作者','liuyuyang1024@yeah.net','https://q1.qlogo.cn/g?b=qq&nk=3311118881&s=640','https://liuyuyang.net/','https://liuyuyang.net/api/rss',4,1,'1723533206613');
 /*!40000 ALTER TABLE `link` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,7 +287,7 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` VALUES (1,'classics','[\"author\", \"hotArticle\", \"newComments\"]','https://bu.dusays.com/2024/04/24/6628990012b51.jpg','[\"这是第一行1\", \"这是第二行2\", \"这是第三行3\"]','[]','https://res.liuyuyang.net/usr/images/dark_logo.png','记录所学知识，缩短和大神的差距！','https://res.liuyuyang.net/usr/images/favicon.ico','https://res.liuyuyang.net/LXGWWenKai.ttf','一直对网站开发领域很感兴趣，从小就希望有一个属于自己的网站，在17年时候成功进入站长圈，并通过各种自学，以及各种折腾，才有了你现在看到的这个网站','宇阳,Thrive,前端,Python,Java','https://res.liuyuyang.net/usr/images/light_logo.png','花有重开日, 人无再少年','[{\"name\":\"GitHub\",\"url\":\"https://github.com/LiuYuYang01\"},{\"name\":\"Gitee\",\"url\":\"https://gitee.com/liu_yu_yang666\"},{\"name\":\"Juejin\",\"url\":\"https://juejin.cn/user/3083456627092078/posts\"},{\"name\":\"CSDN\",\"url\":\"https://blog.csdn.net/haodian666?type=blog\"},{\"name\":\"QQ\",\"url\":\"http://wpa.qq.com/msgrd?v=3&uin=3311118881&site=qq&menu=yes\"}]','宇阳','https://liuyuyang.net/');
+INSERT INTO `project` VALUES (1,'classics','[\"author\", \"hotArticle\", \"newComments\"]','https://bu.dusays.com/2024/04/24/6628990012b51.jpg','[\"System.out.print(\\\"欢迎使用 ThriveX 博客管理系统！\\\"); \",\"print(\\\"这是一个 Nextjs + Spring Boot 的产物\\\") \"]','[\"https://bu.dusays.com/2023/11/10/654e2da1d80f8.jpg\",\"https://bu.dusays.com/2023/11/10/654e2d719d31c.jpg\",\"https://bu.dusays.com/2023/11/10/654e2cf92cd45.jpg\",\"https://bu.dusays.com/2023/11/10/654e2cf6055b0.jpg\",\"https://bu.dusays.com/2023/11/10/654e2db0889fe.jpg\",\"https://bu.dusays.com/2023/11/10/654e2d50015a9.jpg\",\"https://bu.dusays.com/2023/11/05/65473848ed863.jpg\",\"https://bu.dusays.com/2023/11/10/654e2c870e280.jpg\",\"https://bu.dusays.com/2023/11/10/654e2c717eb73.jpg\",\"https://bu.dusays.com/2023/11/10/654e2c5d75d5b.jpg\",\"https://bu.dusays.com/2023/11/10/654e2da27801e.jpg\",\"https://bu.dusays.com/2023/11/10/654e2d2a67517.jpg\",\"https://bu.dusays.com/2023/11/10/654e2cf47f17a.jpg\",\"https://bu.dusays.com/2023/11/05/65473848ed863.jpg\"]','https://bu.dusays.com/2024/05/03/663481106dcfd.png','也许会是最好用的博客管理系统','https://res.liuyuyang.net/usr/images/favicon.ico','https://res.liuyuyang.net/LXGWWenKai.ttf','真诚邀请大家成为 ThriveX 博客管理系统的贡献者，一起参与项目开发，构建一个强大的博客管理系统！','宇阳,Thrive,前端,Python,Java','https://bu.dusays.com/2024/05/03/663481106e2a4.png','现代化博客管理系统','[\"{\\\"name\\\":\\\"GitHub\\\",\\\"url\\\":\\\"https://github.com/LiuYuYang01\\\"}\",\"{\\\"name\\\":\\\"Gitee\\\",\\\"url\\\":\\\"https://gitee.com/liu_yu_yang666\\\"}\",\"{\\\"name\\\":\\\"Juejin\\\",\\\"url\\\":\\\"https://juejin.cn/user/3083456627092078/posts\\\"}\",\"{\\\"name\\\":\\\"CSDN\\\",\\\"url\\\":\\\"https://blog.csdn.net/haodian666?type=blog\\\"}\",\"{\\\"name\\\":\\\"QQ\\\",\\\"url\\\":\\\"http://wpa.qq.com/msgrd?v=3&uin=3311118881&site=qq&menu=yes\\\"}\"]','ThriveX','https://liuyuyang.net/');
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -454,7 +452,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','E10ADC3949BA59ABBE56E057F20F883E','宇阳','3311118881@qq.com','https://res.liuyuyang.net/usr/images/avatar.jpg','再渺小的星光，也有属于他的光芒!','1','1723533206613');
+INSERT INTO `user` VALUES (1,'admin','E10ADC3949BA59ABBE56E057F20F883E','宇阳','3311118881@qq.com','https://bu.dusays.com/2024/11/17/6739adf188f64.png','ThriveX 博客管理系统作者','1','1723533206613');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -515,6 +513,14 @@ LOCK TABLES `wall_cate` WRITE;
 INSERT INTO `wall_cate` VALUES (1,'全部','all',1),(2,'想对我说的话','info',2),(3,'对我的建议','suggest',3),(6,'其他','other',6);
 /*!40000 ALTER TABLE `wall_cate` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'blog'
+--
+
+--
+-- Dumping routines for database 'blog'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -525,4 +531,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-16 20:46:45
+-- Dump completed on 2024-11-19  4:09:52
