@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Main {
     public static void main(String[] args) {
         System.out.println("服务已启动");
-        SpringApplication.run(Main.class);
+        SpringApplication.run(Main.class, args);
     }
 }

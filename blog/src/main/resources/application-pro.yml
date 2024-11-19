@@ -4,18 +4,19 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql:3306/ThriveX?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: liuyuyang
+#    url: jdbc:mysql://mysql:3306/ThriveX?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/${DB_NAME}?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
 lyy:
   email:
-    host: smtp.qq.com
-    port: 465
-    username: 你的邮箱账号
-    password: 你的邮箱授权码
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
 
   oss:
-    accessKey: 七牛云的accessKey
-    secretKey: 七牛云的secretKey
-    bucket: thrive
+    accessKey: ${OSS_ACCESS_KEY}
+    secretKey: ${OSS_SECRET_KEY}
+    bucket: ${OSS_BUCKET}
