@@ -15,9 +15,9 @@ import liuyuyang.net.utils.EmailUtils;
 import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.comment.CommentFilterVo;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -83,9 +83,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         // 如果是一级评论则邮件提醒管理员，否则邮件提醒被回复人和管理员
         String email = (prev_comment != null && !prev_comment.getEmail().isEmpty()) ? prev_comment.getEmail() : null;
-        emailUtils.send(email, "您有最新回复~", template);
-        // if (email.isEmpty() && Objects.equals(email, from)) emailUtils.send(from, title, template);
-        if (email == null) emailUtils.send(null, title, template);
+
+        // 如果是一级评论则邮件提醒管理员，否则邮件提醒被回复人和管理员
+        if (email != null) {
+            emailUtils.send(email, "您有最新回复~", template);
+        } else {
+            emailUtils.send(null, title, template);
+        }
     }
 
     @Override
