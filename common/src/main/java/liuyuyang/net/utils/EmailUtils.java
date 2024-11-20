@@ -21,6 +21,7 @@ public class EmailUtils {
     @Async
     public void send(String to, String subject, String template) {
         MimeMessage message = mailSender.createMimeMessage();
+
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
@@ -34,6 +35,5 @@ public class EmailUtils {
             // todo 引入更可靠的日志框架
             System.out.println("邮件发送失败！");
         }
-
     }
 }

@@ -81,12 +81,6 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot-starter</artifactId>
-            <version>1.39.0</version>
-        </dependency>
-
         <!-- 自定义依赖 -->
         <dependency>
             <groupId>liuyuyang.net</groupId>
