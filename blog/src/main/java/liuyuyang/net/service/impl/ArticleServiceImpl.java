@@ -287,7 +287,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     QueryWrapper<ArticleConfig> articleConfigQueryWrapper = new QueryWrapper<>();
                     articleConfigQueryWrapper.eq("article_id", k.getId());
                     ArticleConfig config = articleConfigMapper.selectOne(articleConfigQueryWrapper);
-                    System.out.println(config);
                     return "".equals(config.getPassword()) && Objects.equals(config.getStatus(), "default");
                 })
                 .map(Article::getId)
