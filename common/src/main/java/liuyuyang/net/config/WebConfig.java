@@ -1,6 +1,6 @@
 package liuyuyang.net.config;
 
-import liuyuyang.net.interceptor.JwtTokenAdminInterceptor;
+import liuyuyang.net.interceptor.SaTokenAdminInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import java.util.Set;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
-    private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    private SaTokenAdminInterceptor saTokenAdminInterceptor;
 
     private static final Set<String> EXCLUDED_PATHS = new HashSet<>(Arrays.asList(
             "/",
@@ -43,7 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 拦截指定请求
-        registry.addInterceptor(jwtTokenAdminInterceptor)
+        registry.addInterceptor(saTokenAdminInterceptor)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/user/login");
     }
