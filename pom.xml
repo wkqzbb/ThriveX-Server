@@ -51,6 +51,13 @@
                 <scope>runtime</scope>
             </dependency>
 
+            <!-- 引入aop切面支持 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
             <!-- mybatis-plus 持久层 -->
             <dependency>
                 <groupId>com.baomidou</groupId>

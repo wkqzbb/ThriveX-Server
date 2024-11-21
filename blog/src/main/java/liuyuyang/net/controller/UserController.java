@@ -101,11 +101,12 @@ public class UserController {
     public Result login(@RequestBody UserLoginDTO user) {
         User data = userService.login(user);
 
+        Role role = roleService.getById(data.getRoleId());
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("user", data);
+        claims.put("role", role);
         String token = JwtUtils.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
-
-        Role role = roleService.getById(data.getRoleId());
 
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);
