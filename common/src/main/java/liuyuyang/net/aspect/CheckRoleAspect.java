@@ -1,6 +1,5 @@
 package liuyuyang.net.aspect;
 
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
@@ -28,45 +27,53 @@ public class CheckRoleAspect {
     @Resource
     private JwtProperties jwtProperties;
 
-    // 定义切点
-    @Pointcut("@annotation(liuyuyang.net.annotation.CheckRole)")
+    // 定义切点，支持类和方法上的注解
+    @Pointcut("@within(liuyuyang.net.annotation.CheckRole) || @annotation(liuyuyang.net.annotation.CheckRole)")
     private void cut() {
     }
 
     @Before("cut()")
     public void before(JoinPoint joinPoint) {
+        CheckRole checkRole = getCheckRoleAnnotation(joinPoint);
+
+        if (checkRole != null) {
+            String[] roles = checkRole.value();
+            System.out.println("自定义注解前置通知！角色：" + String.join(", ", roles));
+
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (attributes != null) {
+                HttpServletRequest request = attributes.getRequest();
+                HttpServletResponse response = attributes.getResponse();
+
+                String token = request.getHeader("Authorization");
+                System.out.println("Authorization Header: " + token);
+
+                if (token != null && token.startsWith("Bearer ")) {
+                    token = token.substring(7);
+                }
+
+                Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
+                Map<String, Object> role = (Map<String, Object>) claims.get("role");
+
+                boolean isPerm = Arrays.asList(roles).contains(role.get("mark"));
+
+                if (!isPerm) {
+                    response.setStatus(401);
+                    throw new CustomException(401, "该权限只有" + String.join(", ", roles) + "可以访问");
+                }
+            }
+        }
+    }
+
+    private CheckRole getCheckRoleAnnotation(JoinPoint joinPoint) {
         Method method = getCurrentMethod(joinPoint);
         if (method != null) {
             CheckRole checkRole = method.getAnnotation(CheckRole.class);
             if (checkRole != null) {
-                String[] roles = checkRole.value();
-                System.out.println("自定义注解前置通知！角色：" + String.join(", ", roles));
-                // 在这里可以添加角色检查逻辑
-
-                // 获取当前请求的 HttpServletRequest
-                ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-                if (attributes != null) {
-                    HttpServletRequest request = attributes.getRequest();
-                    HttpServletResponse response = attributes.getResponse();
-
-                    // 获取请求头中的某个值，比如 "Authorization"
-                    String token = request.getHeader("Authorization");
-                    System.out.println("Authorization Header: " + token);
-
-                    if (token.startsWith("Bearer ")) token = token.substring(7);
-                    Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
-                    Map<String, Object> role = (Map<String, Object>) claims.get("role");
-
-                    // 判断注解权限中是否包含该用户
-                    boolean isPerm = Arrays.asList(roles).contains(role.get("mark"));
-
-                    if (!isPerm) {
-                        response.setStatus(401);
-                        throw new CustomException(401, "该权限只有" + String.join(", ", roles) + "可以访问");
-                    }
-                }
+                return checkRole;
             }
         }
+        return joinPoint.getTarget().getClass().getAnnotation(CheckRole.class);
     }
 
     private Method getCurrentMethod(JoinPoint joinPoint) {
