@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 @Api(tags = "数据管理")
 @RestController
 @RequestMapping("/data")
-@CheckRole({"admin"})
+@CheckRole
 public class DataController {
     @Resource
     private DataService dataService;

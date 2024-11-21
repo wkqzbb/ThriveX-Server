@@ -3,6 +3,7 @@ package liuyuyang.net.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Route;
 import liuyuyang.net.result.Result;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/route")
 @Transactional
+@CheckRole
 public class RouteController {
     @Resource
     private RouteService routeService;

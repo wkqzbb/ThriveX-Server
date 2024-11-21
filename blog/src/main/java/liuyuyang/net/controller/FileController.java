@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.qiniu.common.QiniuException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.model.File;
 import liuyuyang.net.properties.OssProperties;
 import liuyuyang.net.result.Result;
@@ -26,6 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/file")
 @Transactional
+@CheckRole
 public class FileController {
     @Resource
     private FileService fileService;

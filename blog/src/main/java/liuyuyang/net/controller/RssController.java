@@ -3,6 +3,7 @@ package liuyuyang.net.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Rss;
 import liuyuyang.net.result.Result;
@@ -17,6 +18,7 @@ import java.util.*;
 @Api(tags = "订阅管理")
 @RestController
 @RequestMapping("/rss")
+@CheckRole
 public class RssController {
     @Resource
     private RssService rssService;

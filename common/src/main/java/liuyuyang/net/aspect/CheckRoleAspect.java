@@ -1,7 +1,9 @@
 package liuyuyang.net.aspect;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import io.jsonwebtoken.Claims;
@@ -38,7 +40,8 @@ public class CheckRoleAspect {
 
         if (checkRole != null) {
             String[] roles = checkRole.value();
-            System.out.println("自定义注解前置通知！角色：" + String.join(", ", roles));
+            List<String> rolesList = new ArrayList<>(Arrays.asList(roles));
+            rolesList.add("admin");
 
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (attributes != null) {
@@ -52,14 +55,19 @@ public class CheckRoleAspect {
                     token = token.substring(7);
                 }
 
-                Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
-                Map<String, Object> role = (Map<String, Object>) claims.get("role");
+                try {
+                    Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
+                    Map<String, Object> role = (Map<String, Object>) claims.get("role");
 
-                boolean isPerm = Arrays.asList(roles).contains(role.get("mark"));
+                    boolean isPerm = rolesList.contains(role.get("mark"));
 
-                if (!isPerm) {
+                    if (!isPerm) {
+                        response.setStatus(401);
+                        throw new CustomException(401, "该权限只有 " + String.join(", ", rolesList) + " 可以访问");
+                    }
+                } catch (Exception e) {
                     response.setStatus(401);
-                    throw new CustomException(401, "该权限只有" + String.join(", ", roles) + "可以访问");
+                    throw new CustomException(401, "身份验证失败：无效或过期的token");
                 }
             }
         }

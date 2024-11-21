@@ -3,6 +3,7 @@ package liuyuyang.net.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.dto.email.DismissEmailDTO;
 import liuyuyang.net.result.Result;
@@ -25,6 +26,7 @@ public class EmailController {
     @Resource
     private TemplateEngine templateEngine;
 
+    @CheckRole
     @PostMapping("/dismiss")
     @NoTokenRequired
     @ApiOperation("驳回通知邮件")

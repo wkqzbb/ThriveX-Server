@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Comment;
@@ -36,6 +37,7 @@ public class CommentController {
         return Result.success();
     }
 
+    @CheckRole
     @DeleteMapping("/{id}")
     @ApiOperation("删除评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -46,6 +48,7 @@ public class CommentController {
         return Result.success();
     }
 
+    @CheckRole
     @DeleteMapping("/batch")
     @ApiOperation("批量删除评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -54,6 +57,7 @@ public class CommentController {
         return Result.success();
     }
 
+    @CheckRole
     @PatchMapping
     @ApiOperation("编辑评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
@@ -99,6 +103,7 @@ public class CommentController {
         return Result.success(result);
     }
 
+    @CheckRole
     @PatchMapping("/audit/{id}")
     @ApiOperation("审核指定评论")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)

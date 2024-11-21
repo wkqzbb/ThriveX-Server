@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.result.Result;
@@ -29,6 +30,7 @@ public class ArticleController {
 
     @PostMapping
     @ApiOperation("新增文章")
+    @CheckRole({"author"})
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestBody Article article) {
         articleService.add(article);
@@ -53,6 +55,7 @@ public class ArticleController {
 
     @PatchMapping
     @ApiOperation("编辑文章")
+    @CheckRole({"admin"})
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result<String> edit(@RequestBody Article article) {
         articleService.edit(article);

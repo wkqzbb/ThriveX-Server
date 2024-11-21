@@ -3,6 +3,7 @@ package liuyuyang.net.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.dto.project.OtherDTO;
 import liuyuyang.net.dto.project.ThemeDTO;
 import liuyuyang.net.dto.project.SystemDTO;
@@ -27,6 +28,7 @@ public class ProjectController {
     @Resource
     private ProjectService projectService;
 
+    @CheckRole
     @PatchMapping("/web")
     @ApiOperation("修改网站")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -43,14 +45,12 @@ public class ProjectController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result getWebConfig() {
         Project config = projectMapper.selectById(1);
-
         WebDTO data = new WebDTO();
-
         BeanUtils.copyProperties(config, data);
-
         return Result.success(data);
     }
 
+    @CheckRole
     @PatchMapping("/theme")
     @ApiOperation("修改主题")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -74,6 +74,7 @@ public class ProjectController {
         return Result.success(data);
     }
 
+    @CheckRole
     @GetMapping("/system")
     @ApiOperation("获取系统配置")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)

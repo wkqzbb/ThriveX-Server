@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.result.Result;
@@ -26,6 +27,7 @@ public class CateController {
     @Resource
     private CateService cateService;
 
+    @CheckRole
     @PostMapping
     @ApiOperation("新增分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -34,6 +36,7 @@ public class CateController {
         return Result.success();
     }
 
+    @CheckRole
     @DeleteMapping("/{id}")
     @ApiOperation("删除分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -49,6 +52,7 @@ public class CateController {
         return Result.success();
     }
 
+    @CheckRole
     @DeleteMapping("/batch")
     @ApiOperation("批量删除分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -62,6 +66,7 @@ public class CateController {
         return Result.success();
     }
 
+    @CheckRole
     @PatchMapping
     @ApiOperation("编辑分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
