@@ -171,8 +171,9 @@ lyy:
 
 ## 开源协议
 
-该项目仅针对个人或公司使用，请遵守开源协议：**AGPL-3.0 license** 
-如果对该项目进行二次开发，需将项目进行开源，禁止任何商业行为
+如果对该项目进行二次开发，需将项目进行开源并保留版权 且 禁止任何商业行为
+
+希望大家能够请遵守开源协议：**AGPL-3.0 license** 
 
 弘扬开源精神，从你我做起！
 
@@ -189,6 +190,12 @@ lyy:
 [https://blog.zwying.com/](https://blog.zwying.com/)
 [https://www.blatr.cn/](https://www.blatr.cn/)
 [https://poetize.cn/](https://poetize.cn/)
+
+
+
+## 🔥 技术交流群
+
+加微信拉群：liuyuyang2023
 
 
 
