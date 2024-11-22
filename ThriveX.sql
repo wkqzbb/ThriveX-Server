@@ -59,7 +59,7 @@ CREATE TABLE `article_cate` (
   `cate_id` int NOT NULL COMMENT '分类ID',
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_cate_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1435 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章和分类的中间表';
+) ENGINE=InnoDB AUTO_INCREMENT=1436 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章和分类的中间表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `article_cate` (
 
 LOCK TABLES `article_cate` WRITE;
 /*!40000 ALTER TABLE `article_cate` DISABLE KEYS */;
-INSERT INTO `article_cate` VALUES (1433,2188,1),(1434,2187,1);
+INSERT INTO `article_cate` VALUES (1434,2187,1),(1435,2188,1);
 /*!40000 ALTER TABLE `article_cate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,7 +86,7 @@ CREATE TABLE `article_config` (
   `article_id` int NOT NULL COMMENT '对应的文章id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_config_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章配置表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章配置表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE `article_config` (
 
 LOCK TABLES `article_config` WRITE;
 /*!40000 ALTER TABLE `article_config` DISABLE KEYS */;
-INSERT INTO `article_config` VALUES (2,'default','',2188),(3,'default','',2187);
+INSERT INTO `article_config` VALUES (3,'default','',2187),(4,'default','',2188);
 /*!40000 ALTER TABLE `article_config` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +113,7 @@ CREATE TABLE `cate` (
   `url` varchar(255) DEFAULT '/' COMMENT '分类链接',
   `mark` varchar(100) NOT NULL COMMENT '分类标识',
   `level` int DEFAULT NULL COMMENT '分类级别',
-  `order` int NOT NULL COMMENT '分类顺序',
+  `order` int NOT NULL DEFAULT '0' COMMENT '分类顺序',
   `type` varchar(10) DEFAULT 'cate' COMMENT '导航还是分类',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `name` (`name`) USING BTREE,
@@ -208,6 +208,7 @@ CREATE TABLE `link` (
   `image` varchar(255) NOT NULL COMMENT '网站logo',
   `url` varchar(500) DEFAULT NULL COMMENT '网站链接',
   `rss` varchar(500) DEFAULT NULL,
+  `order` int NOT NULL DEFAULT '0' COMMENT '友联顺序',
   `type_id` int NOT NULL COMMENT '网站所绑定的类型',
   `audit_status` int NOT NULL DEFAULT '0' COMMENT '是否审核',
   `create_time` varchar(255) NOT NULL COMMENT '网站创建时间',
@@ -221,7 +222,7 @@ CREATE TABLE `link` (
 
 LOCK TABLES `link` WRITE;
 /*!40000 ALTER TABLE `link` DISABLE KEYS */;
-INSERT INTO `link` VALUES (50,'宇阳','ThriveX 博客管理系统作者','liuyuyang1024@yeah.net','https://q1.qlogo.cn/g?b=qq&nk=3311118881&s=640','https://liuyuyang.net/','https://liuyuyang.net/api/rss',4,1,'1723533206613');
+INSERT INTO `link` VALUES (50,'宇阳','ThriveX 博客管理系统作者','liuyuyang1024@yeah.net','https://q1.qlogo.cn/g?b=qq&nk=3311118881&s=640','https://liuyuyang.net/','https://liuyuyang.net/api/rss',0,4,1,'1723533206613');
 /*!40000 ALTER TABLE `link` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,7 +237,7 @@ CREATE TABLE `link_type` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL COMMENT '类型名称',
   `is_admin` int NOT NULL DEFAULT '0' COMMENT '用户是否可选择',
-  `order` int NOT NULL COMMENT '显示顺序',
+  `order` int NOT NULL DEFAULT '0' COMMENT '显示顺序',
   PRIMARY KEY (`id`),
   UNIQUE KEY `type_pk_2` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='网站类型';
@@ -317,7 +318,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'超级管理员','admin','最高权限'),(2,'用户','user','普通用户'),(5,'作者','author','发布文章、查看文章列表');
+INSERT INTO `role` VALUES (1,'超级管理员','admin','最高权限'),(2,'游客','user','普通用户'),(5,'作者','author','发布文章、查看文章列表');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -361,7 +362,7 @@ CREATE TABLE `route_role` (
   `role_id` int NOT NULL COMMENT '角色id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `routes_role_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=229 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=266 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -370,7 +371,7 @@ CREATE TABLE `route_role` (
 
 LOCK TABLES `route_role` WRITE;
 /*!40000 ALTER TABLE `route_role` DISABLE KEYS */;
-INSERT INTO `route_role` VALUES (54,1,5),(55,6,5),(56,2,5),(57,7,2),(58,9,2),(59,8,2),(60,6,2),(61,2,2),(62,5,2),(63,4,2),(209,25,1),(210,24,1),(211,23,1),(212,21,1),(213,14,1),(214,17,1),(215,20,1),(216,1,1),(217,2,1),(218,5,1),(219,6,1),(220,7,1),(221,8,1),(222,9,1),(223,10,1),(224,11,1),(225,12,1),(226,13,1),(227,15,1),(228,16,1);
+INSERT INTO `route_role` VALUES (54,1,5),(55,6,5),(56,2,5),(209,25,1),(210,24,1),(211,23,1),(212,21,1),(213,14,1),(214,17,1),(215,20,1),(216,1,1),(217,2,1),(218,5,1),(219,6,1),(220,7,1),(221,8,1),(222,9,1),(223,10,1),(224,11,1),(225,12,1),(226,13,1),(227,15,1),(228,16,1),(249,2,2),(250,5,2),(251,6,2),(252,7,2),(253,8,2),(254,10,2),(255,11,2),(256,12,2),(257,14,2),(258,23,2),(259,21,2),(260,17,2),(261,15,2),(262,24,2),(263,25,2),(264,9,2),(265,1,2);
 /*!40000 ALTER TABLE `route_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -412,7 +413,7 @@ CREATE TABLE `tag` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -524,4 +525,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-20 17:47:43
+-- Dump completed on 2024-11-22 17:12:48

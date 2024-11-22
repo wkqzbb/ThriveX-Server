@@ -26,4 +26,7 @@ public class Link extends BaseModel {
     private String rss;
     @ApiModelProperty(value = "评论是否审核通过", example = "1")
     private Integer auditStatus;
+    @TableField("`order`")
+    @ApiModelProperty(value = "网站顺序", example = "1")
+    private Integer order;
 }
