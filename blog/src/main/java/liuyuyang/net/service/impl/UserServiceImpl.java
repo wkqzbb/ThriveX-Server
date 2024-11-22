@@ -21,8 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 @Transactional
@@ -138,5 +142,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         user.setPassword(DigestUtils.md5DigestAsHex(data.getNewPassword().getBytes()));
         userMapper.updateById(user);
+    }
+
+    @Override
+    public void check(String token) {
+        boolean isCheck = yuYangUtils.isAdmin(token);
+
+        if (!isCheck) {
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletResponse response = attributes.getResponse();
+            response.setStatus(401);
+            throw new CustomException(400, "身份验证失败：无效或过期的Token");
+        }
     }
 }

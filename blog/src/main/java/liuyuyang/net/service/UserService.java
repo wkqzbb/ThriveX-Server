@@ -14,20 +14,13 @@ import java.util.List;
 
 public interface UserService extends IService<User> {
     User get(Integer id);
-
     void add(UserDTO data);
-
     void del(Integer id);
-
     void delBatch(List<Integer> ids);
-
     void edit(UserInfoDTO data);
-
     List<User> list(UserFilterVo filterVo);
-
     Page<User> paging(UserFilterVo filterVo, PageVo pageVo);
-
     User login(UserLoginDTO user);
-
     void editPass(EditPassDTO data);
+    void check(String token);
 }

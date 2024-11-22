@@ -61,10 +61,10 @@ public class YuYangUtils {
         if (token != null) {
             if (token.startsWith("Bearer ")) token = token.substring(7);
             Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
-            Map<String, Object> user = (Map<String, Object>) claims.get("user");
+            Map<String, Object> role = (Map<String, Object>) claims.get("role");
 
             // 是超级管理员
-            return "1".equals(user.get("roleId"));
+            return "admin".equals(role.get("mark"));
         }
 
         return false;

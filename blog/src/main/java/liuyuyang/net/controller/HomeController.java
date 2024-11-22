@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "首页")
 @RestController
 @RequestMapping("/")
-public class HelloController {
+public class HomeController {
     @GetMapping
     public String Home() {
         return "<h1>Hello ThriveX</h1>";

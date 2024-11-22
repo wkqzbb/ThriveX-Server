@@ -75,7 +75,6 @@ public class UserController {
         return Result.success();
     }
 
-    @CheckRole
     @GetMapping("/{id}")
     @ApiOperation("获取用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
@@ -130,5 +129,13 @@ public class UserController {
     public Result<String> editPass(@RequestBody EditPassDTO data) {
         userService.editPass(data);
         return Result.success("密码修改成功");
+    }
+
+    @GetMapping("/check")
+    @ApiOperation("校验当前用户Token是否有效")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
+    public Result checkPrem(String token) {
+        userService.check(token);
+        return Result.success();
     }
 }
