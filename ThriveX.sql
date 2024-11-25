@@ -338,7 +338,7 @@ CREATE TABLE `route` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `routes_pk_2` (`id`),
   UNIQUE KEY `routes_pk` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -347,7 +347,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
-INSERT INTO `route` VALUES (1,'/','仪表盘'),(2,'/create','创作'),(5,'/setup','系统'),(6,'/article','文章管理'),(7,'/tag','标签管理'),(8,'/comment','评论管理'),(9,'/cate','分类管理'),(10,'/web','网站管理'),(11,'/swiper','轮播图管理'),(12,'/user','用户管理'),(13,'/role','角色管理'),(14,'/rss','订阅中心'),(15,'/chart','文件系统'),(17,'/iter','更新日志'),(20,'/route','路由管理'),(21,'/file','文件管理'),(23,'/footprint','足迹管理'),(24,'/work','工作台'),(25,'/wall','留言管理');
+INSERT INTO `route` VALUES (1,'/','仪表盘'),(2,'/create','创作'),(5,'/setup','系统'),(6,'/article','文章管理'),(7,'/tag','标签管理'),(8,'/comment','评论管理'),(9,'/cate','分类管理'),(10,'/web','网站管理'),(11,'/swiper','轮播图管理'),(12,'/user','用户管理'),(13,'/role','角色管理'),(14,'/rss','订阅中心'),(15,'/chart','文件系统'),(17,'/iter','更新日志'),(20,'/route','路由管理'),(21,'/file','文件管理'),(23,'/footprint','足迹管理'),(24,'/work','工作台'),(25,'/wall','留言管理'),(26,'/draft','草稿箱'),(27,'/recycle','回收站');
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -364,7 +364,7 @@ CREATE TABLE `route_role` (
   `role_id` int NOT NULL COMMENT '角色id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `routes_role_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=266 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=287 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -373,7 +373,7 @@ CREATE TABLE `route_role` (
 
 LOCK TABLES `route_role` WRITE;
 /*!40000 ALTER TABLE `route_role` DISABLE KEYS */;
-INSERT INTO `route_role` VALUES (54,1,5),(55,6,5),(56,2,5),(209,25,1),(210,24,1),(211,23,1),(212,21,1),(213,14,1),(214,17,1),(215,20,1),(216,1,1),(217,2,1),(218,5,1),(219,6,1),(220,7,1),(221,8,1),(222,9,1),(223,10,1),(224,11,1),(225,12,1),(226,13,1),(227,15,1),(228,16,1),(249,2,2),(250,5,2),(251,6,2),(252,7,2),(253,8,2),(254,10,2),(255,11,2),(256,12,2),(257,14,2),(258,23,2),(259,21,2),(260,17,2),(261,15,2),(262,24,2),(263,25,2),(264,9,2),(265,1,2);
+INSERT INTO `route_role` VALUES (54,1,5),(55,6,5),(56,2,5),(249,2,2),(250,5,2),(251,6,2),(252,7,2),(253,8,2),(254,10,2),(255,11,2),(256,12,2),(257,14,2),(258,23,2),(259,21,2),(260,17,2),(261,15,2),(262,24,2),(263,25,2),(264,9,2),(265,1,2),(266,27,1),(267,26,1),(268,25,1),(269,24,1),(270,23,1),(271,21,1),(272,14,1),(273,17,1),(274,20,1),(275,1,1),(276,2,1),(277,5,1),(278,6,1),(279,7,1),(280,8,1),(281,9,1),(282,10,1),(283,11,1),(284,12,1),(285,13,1),(286,15,1);
 /*!40000 ALTER TABLE `route_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -527,4 +527,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-25 15:59:34
+-- Dump completed on 2024-11-25 17:36:07
