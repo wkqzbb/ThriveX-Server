@@ -210,6 +210,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public List<Article> list(ArticleFillterVo filterVo, String token) {
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo);
+        queryWrapper.eq("is_draft", filterVo.getIsDraft());
         List<Article> list = articleMapper.selectList(queryWrapper);
 
         Boolean isAdmin = yuYangUtils.isAdmin(token);

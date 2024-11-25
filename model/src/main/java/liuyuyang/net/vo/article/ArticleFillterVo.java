@@ -12,4 +12,6 @@ public class ArticleFillterVo extends FilterVo {
     private List<Integer> cateIds;
     @ApiModelProperty(value = "根据标签进行筛选")
     private Integer tagId;
+    @ApiModelProperty(value = "是否为草稿", example = "默认：0，草稿：1")
+    private Integer isDraft = 0;
 }

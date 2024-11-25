@@ -30,6 +30,9 @@ public class Article extends BaseModel {
     @ApiModelProperty(value = "文章评论数量", example = "20")
     private Integer comment;
 
+    @ApiModelProperty(value = "是否为草稿", example = "默认：0，草稿：1")
+    private Integer isDraft;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3")
     private List<Integer> cateIds;
