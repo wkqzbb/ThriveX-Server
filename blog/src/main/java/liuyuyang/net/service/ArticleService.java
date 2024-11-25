@@ -12,7 +12,8 @@ import java.util.List;
 public interface ArticleService extends IService<Article> {
     void add(Article article);
 
-    void del(Integer id);
+    void del(Integer id, Integer is_del);
+    void reduction(Integer id);
 
     void delBatch(List<Integer> ids);
 

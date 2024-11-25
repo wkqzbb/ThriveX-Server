@@ -33,6 +33,9 @@ public class Article extends BaseModel {
     @ApiModelProperty(value = "是否为草稿", example = "默认：0，草稿：1")
     private Integer isDraft;
 
+    @ApiModelProperty(value = "是否严格删除", example = "默认：0，严格删除：1")
+    private Integer isDel;
+
     @TableField(exist = false)
     @ApiModelProperty(value = "该文章所绑定的分类ID", example = "1,2,3")
     private List<Integer> cateIds;

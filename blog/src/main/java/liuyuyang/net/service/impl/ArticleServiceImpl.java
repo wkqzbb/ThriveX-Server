@@ -74,15 +74,41 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public void del(Integer id) {
-        // 先删除之前绑定的分类
-        QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("article_id", id);
-        articleCateMapper.delete(queryWrapper);
+    public void del(Integer id, Integer is_del) {
+        Article article = articleMapper.selectById(id);
 
-        // 再删除当前文章
-        int res = articleMapper.deleteById(id);
-        if (res == 0) throw new CustomException(400, "删除文章失败");
+        if (is_del == 0) {
+            // 严格删除：直接从数据库删除
+            // 删除之前绑定的分类
+            QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
+            queryWrapper.in("article_id", id);
+            articleCateMapper.delete(queryWrapper);
+
+            // 删除文章配置
+            QueryWrapper<ArticleConfig> queryArticleConfigWrapper = new QueryWrapper<>();
+            queryArticleConfigWrapper.in("article_id", article.getId());
+            articleConfigMapper.delete(queryArticleConfigWrapper);
+
+            // 删除当前文章
+            articleMapper.deleteById(id);
+        }
+
+        if (is_del == 1) {
+            // 普通删除：更改 is_del 字段，到时候可以通过更改字段恢复
+            article.setIsDel(1);
+            articleMapper.updateById(article);
+        }
+
+        if (is_del != 0 && is_del != 1) {
+            throw new CustomException(400, "参数有误：请选择是否严格删除");
+        }
+    }
+
+    @Override
+    public void reduction(Integer id) {
+        Article article = articleMapper.selectById(id);
+        article.setIsDel(0);
+        articleMapper.updateById(article);
     }
 
     @Override
@@ -211,6 +237,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public List<Article> list(ArticleFillterVo filterVo, String token) {
         QueryWrapper<Article> queryWrapper = queryWrapperArticle(filterVo);
         queryWrapper.eq("is_draft", filterVo.getIsDraft());
+        queryWrapper.eq("is_del", filterVo.getIsDel());
         List<Article> list = articleMapper.selectList(queryWrapper);
 
         Boolean isAdmin = yuYangUtils.isAdmin(token);
