@@ -2,7 +2,6 @@ package liuyuyang.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liuyuyang.net.dto.project.SystemDTO;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.ConfigMapper;
 import liuyuyang.net.model.Config;
@@ -26,6 +25,11 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
     private ConfigMapper configMapper;
 
     @Override
+    public Object get(String name){
+        return configMapper.selectOne(new LambdaQueryWrapper<Config>().eq(Config::getName, name)).getValue();
+    }
+
+    @Override
     public Map<String, Object> list(String group) {
         List<Config> list;
         Map<String, Object> result;
@@ -43,14 +47,7 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
                 wrapper.eq(Config::getGroup, "layout");
                 break;
             case "system":
-                SystemDTO systemInfo = getSystemInfo();
-                result = new HashMap<>();
-                result.put("osName", systemInfo.getOsName());
-                result.put("osVersion", systemInfo.getOsVersion());
-                result.put("totalMemory", systemInfo.getTotalMemory());
-                result.put("availableMemory", systemInfo.getAvailableMemory());
-                result.put("memoryUsage", systemInfo.getMemoryUsage());
-                return result;
+                return getSystemInfo();
             default:
                 throw new CustomException(400, "未知的分组");
         }
@@ -65,22 +62,6 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
     public void edit(String group, Map<String, String> data) {
         System.out.println(data);
 
-        // switch (group) {
-        //     case "layout":
-        //         for (Map.Entry<String, String> entry : data.entrySet()) {
-        //             String name = entry.getKey();
-        //             String value = entry.getValue();
-        //
-        //             LambdaQueryWrapper<Config> wrapper = new LambdaQueryWrapper<>();
-        //             wrapper.eq(Config::getName, name);
-        //             Config config = new Config();
-        //             config.setValue(value);
-        //             configMapper.update(config, wrapper);
-        //         }
-        //
-        //         break;
-        // }
-
         for (Map.Entry<String, String> entry : data.entrySet()) {
             String name = entry.getKey();
             String value = entry.getValue();
@@ -94,7 +75,7 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
     }
 
     @Override
-    public SystemDTO getSystemInfo() {
+    public Map getSystemInfo() {
         SystemInfo systemInfo = new SystemInfo();
 
         // 获取操作系统信息
@@ -113,13 +94,13 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
         // 内存使用率
         double memoryUsage = (double) (totalMemory - availableMemory) / totalMemory * 100;
 
-        SystemDTO data = new SystemDTO();
-        data.setOsName(osName);
-        data.setOsVersion(osVersion);
-        data.setTotalMemory((int) (totalMemory / (1024.0 * 1024 * 1024)));
-        data.setAvailableMemory((int) (availableMemory / (1024.0 * 1024 * 1024)));
-        data.setMemoryUsage(Float.valueOf(String.format("%.2f", memoryUsage)));
+        Map<String, Object> result = new HashMap<>();
+        result.put("osName", osName);
+        result.put("osVersion", osVersion);
+        result.put("totalMemory", (int) (totalMemory / (1024.0 * 1024 * 1024)));
+        result.put("availableMemory", (int) (availableMemory / (1024.0 * 1024 * 1024)));
+        result.put("memoryUsage", Float.valueOf(String.format("%.2f", memoryUsage)));
 
-        return data;
+        return result;
     }
 }
