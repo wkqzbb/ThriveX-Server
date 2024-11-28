@@ -65,20 +65,31 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
     public void edit(String group, Map<String, String> data) {
         System.out.println(data);
 
-        switch (group) {
-            case "layout":
-                for (Map.Entry<String, String> entry : data.entrySet()) {
-                    String name = entry.getKey();
-                    String value = entry.getValue();
+        // switch (group) {
+        //     case "layout":
+        //         for (Map.Entry<String, String> entry : data.entrySet()) {
+        //             String name = entry.getKey();
+        //             String value = entry.getValue();
+        //
+        //             LambdaQueryWrapper<Config> wrapper = new LambdaQueryWrapper<>();
+        //             wrapper.eq(Config::getName, name);
+        //             Config config = new Config();
+        //             config.setValue(value);
+        //             configMapper.update(config, wrapper);
+        //         }
+        //
+        //         break;
+        // }
 
-                    LambdaQueryWrapper<Config> wrapper = new LambdaQueryWrapper<>();
-                    wrapper.eq(Config::getName, name);
-                    Config config = new Config();
-                    config.setValue(value);
-                    configMapper.update(config, wrapper);
-                }
+        for (Map.Entry<String, String> entry : data.entrySet()) {
+            String name = entry.getKey();
+            String value = entry.getValue();
 
-                break;
+            LambdaQueryWrapper<Config> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Config::getName, name);
+            Config config = new Config();
+            config.setValue(value);
+            configMapper.update(config, wrapper);
         }
     }
 
