@@ -60,8 +60,6 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
 
     @Override
     public void edit(String group, Map<String, String> data) {
-        System.out.println(data);
-
         for (Map.Entry<String, String> entry : data.entrySet()) {
             String name = entry.getKey();
             String value = entry.getValue();

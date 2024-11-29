@@ -1,0 +1,82 @@
+package liuyuyang.net.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.annotation.CheckRole;
+import liuyuyang.net.annotation.NoTokenRequired;
+import liuyuyang.net.model.Record;
+import liuyuyang.net.result.Result;
+import liuyuyang.net.service.RecordService;
+import liuyuyang.net.utils.Paging;
+import liuyuyang.net.vo.PageVo;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+@Api(tags = "说说管理")
+@RestController
+@RequestMapping("/record")
+@Transactional
+public class RecordController {
+    @Resource
+    private RecordService recordService;
+
+    @CheckRole
+    @PostMapping
+    @ApiOperation("新增说说")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
+    public Result<String> add(@RequestBody Record record) {
+        recordService.save(record);
+        return Result.success();
+    }
+
+    @CheckRole
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除说说")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
+    public Result<String> del(@PathVariable Integer id) {
+        recordService.removeById(id);
+        return Result.success();
+    }
+
+    @CheckRole
+    @PatchMapping
+    @ApiOperation("编辑说说")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
+    public Result<String> edit(@RequestBody Record record) {
+        recordService.updateById(record);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("获取说说")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
+    public Result<Record> get(@PathVariable Integer id) {
+        Record data = recordService.getById(id);
+        return Result.success(data);
+    }
+
+    @NoTokenRequired
+    @PostMapping("/list")
+    @ApiOperation("获取说说列表")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
+    public Result<List<Record>> list() {
+        List<Record> data = recordService.list();
+        return Result.success(data);
+    }
+
+    @NoTokenRequired
+    @PostMapping("/paging")
+    @ApiOperation("分页查询说说列表")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
+    public Result paging(PageVo pageVo) {
+        Page<Record> data = recordService.paging(pageVo);
+        Map<String, Object> result = Paging.filter(data);
+        return Result.success(result);
+    }
+}
