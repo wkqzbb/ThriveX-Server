@@ -10,6 +10,7 @@ import liuyuyang.net.model.Record;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.RecordService;
 import liuyuyang.net.utils.Paging;
+import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -65,8 +66,8 @@ public class RecordController {
     @PostMapping("/list")
     @ApiOperation("获取说说列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Record>> list() {
-        List<Record> data = recordService.list();
+    public Result<List<Record>> list(@RequestBody FilterVo filterVo) {
+        List<Record> data = recordService.list(filterVo);
         return Result.success(data);
     }
 
@@ -74,8 +75,8 @@ public class RecordController {
     @PostMapping("/paging")
     @ApiOperation("分页查询说说列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-    public Result paging(PageVo pageVo) {
-        Page<Record> data = recordService.paging(pageVo);
+    public Result paging(@RequestBody FilterVo filterVo, PageVo pageVo) {
+        Page<Record> data = recordService.paging(filterVo, pageVo);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }

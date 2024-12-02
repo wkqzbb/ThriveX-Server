@@ -3,8 +3,12 @@ package liuyuyang.net.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import liuyuyang.net.model.Record;
+import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
 
+import java.util.List;
+
 public interface RecordService extends IService<Record> {
-    Page<Record> paging(PageVo pageVo);
+    List<Record> list(FilterVo filterVo);
+    Page<Record> paging(FilterVo filterVo, PageVo pageVo);
 }
