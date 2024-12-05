@@ -123,8 +123,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 再批量删除文章
         QueryWrapper<Article> queryWrapperArticle = new QueryWrapper<>();
         queryWrapperArticle.in("id", ids);
-        int res = articleMapper.delete(queryWrapperArticle);
-        if (res == 0) throw new CustomException(400, "批量删除文章失败");
+        articleMapper.delete(queryWrapperArticle);
     }
 
     @Override

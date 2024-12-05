@@ -87,7 +87,7 @@ public class CateController {
     @PostMapping("/list")
     @ApiOperation("获取分类列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Cate>> list(@ApiParam(value = "默认为recursion模式，表示将子分类都递归到children中。如果设置了list模式，则直接返回所有评论") @RequestParam(defaultValue = "recursion") String pattern) {
+    public Result<List<Cate>> list(@ApiParam(value = "默认为tree树性结构，设置为list表示列表结构") @RequestParam(defaultValue = "recursion") String pattern) {
         List<Cate> data = cateService.list(pattern);
         return Result.success(data);
     }

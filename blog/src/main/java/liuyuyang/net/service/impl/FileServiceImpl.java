@@ -49,7 +49,7 @@ public class FileServiceImpl implements FileService {
             // 存储桶名称
             this.bucket = ossProperties.getBucket();
             // 存储桶域名
-            this.url = "http://" + bucketManager.domainList(bucket)[0] + "/";
+            this.url = "https://" + bucketManager.domainList(bucket)[0] + "/";
         }catch (Exception e){
             System.out.println(e);
         }
