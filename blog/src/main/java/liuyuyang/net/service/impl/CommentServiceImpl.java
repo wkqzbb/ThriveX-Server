@@ -83,11 +83,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         String email = (prev_comment != null && !prev_comment.getEmail().isEmpty()) ? prev_comment.getEmail() : null;
 
         // 如果是一级评论则邮件提醒管理员，否则邮件提醒被回复人和管理员
-        if (email != null) {
-            emailUtils.send(email, "您有最新回复~", template);
-        } else {
-            emailUtils.send(null, title, template);
-        }
+        String emailTitle = (email != null) ? "您有最新回复~" : title;
+        emailUtils.send(email, emailTitle, template);
+
+        // if (email != null) {
+        //     emailUtils.send(email, "您有最新回复~", template);
+        // } else {
+        //     emailUtils.send(null, title, template);
+        // }
     }
 
     @Override

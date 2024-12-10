@@ -14,7 +14,7 @@ public class Result<T> {
 
     // 成功响应
     public static Result<String> success() {
-        return new Result<>(200, "success", null);
+        return new Result<>(200, "ok", null);
     }
 
     public static <T> Result<T> success(String message) {
@@ -22,11 +22,11 @@ public class Result<T> {
     }
 
     public static <T> Result<T> success(T data) {
-        return new Result<>(200, "success", data);
+        return new Result<>(200, "ok", data);
     }
 
     public static Result<Map<String, Object>> ok(Map<String, Object> data) {
-        return new Result<>(200, "success", data);
+        return new Result<>(200, "ok", data);
     }
 
     public static <T> Result<T> success(String message, T data) {
@@ -35,7 +35,7 @@ public class Result<T> {
 
     // 失败响应
     public static Result<String> error() {
-        return new Result<>(400, "error", null);
+        return new Result<>(400, "no", null);
     }
 
     public static <T> Result<T> error(String message) {
