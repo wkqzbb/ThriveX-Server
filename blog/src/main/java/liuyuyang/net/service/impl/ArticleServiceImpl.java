@@ -278,6 +278,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 然后通过文章的id查询出对应的文章数据
         QueryWrapper<Article> queryWrapperArticle = new QueryWrapper<>();
+        queryWrapperArticle.eq("is_draft", 0);
+        queryWrapperArticle.eq("is_del", 0);
         queryWrapperArticle.orderByDesc("create_time");
 
         // 有数据就查询，没有就返回空数组
@@ -310,12 +312,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public List<Article> getRandomArticles(Integer count) {
         List<Integer> ids = articleMapper.selectList(null).stream()
+                // 不能是加密文章，且能够正常显示
                 .filter(k -> {
                     QueryWrapper<ArticleConfig> articleConfigQueryWrapper = new QueryWrapper<>();
                     articleConfigQueryWrapper.eq("article_id", k.getId());
                     ArticleConfig config = articleConfigMapper.selectOne(articleConfigQueryWrapper);
                     return "".equals(config.getPassword()) && Objects.equals(config.getStatus(), "default");
                 })
+                // 不能是已删除或草稿
+                .filter(k -> k.getIsDel() == 0 && k.getIsDraft() == 0)
                 .map(Article::getId)
                 .collect(Collectors.toList());
 
