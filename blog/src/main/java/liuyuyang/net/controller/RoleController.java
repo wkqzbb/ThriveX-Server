@@ -62,6 +62,7 @@ public class RoleController {
         return res ? Result.success() : Result.error();
     }
 
+    @CheckRole
     @GetMapping("/{id}")
     @ApiOperation("获取角色")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
@@ -79,6 +80,7 @@ public class RoleController {
         return Result.success(data);
     }
 
+    @CheckRole
     @GetMapping("/route")
     @ApiOperation("获取指定角色的路由列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
