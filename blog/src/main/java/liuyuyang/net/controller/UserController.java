@@ -140,4 +140,12 @@ public class UserController {
         userService.check(token);
         return Result.success();
     }
+
+    @GetMapping("/author")
+    @ApiOperation("获取作者信息")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 11)
+    public Result<User> getAuthor() {
+        User data = userService.get(1);
+        return Result.success(data);
+    }
 }
