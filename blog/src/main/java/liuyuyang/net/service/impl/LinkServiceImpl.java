@@ -31,8 +31,6 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
     private LinkTypeMapper linkTypeMapper;
     @Resource
     private EmailUtils emailUtils;
-    // @Value("${spring.mail.username}")
-    // private String from;
 
     @Override
     public void add(Link link, String token) throws Exception {
