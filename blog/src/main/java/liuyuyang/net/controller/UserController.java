@@ -108,6 +108,7 @@ public class UserController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result login(@RequestBody UserLoginDTO user) {
         User data = userService.login(user);
+        data.setPassword("只有聪明的人才能看到密码");
 
         Role role = roleService.getById(data.getRoleId());
 
@@ -120,6 +121,8 @@ public class UserController {
         result.put("token", token);
         result.put("user", data);
         result.put("role", role);
+
+        System.out.println(result);
 
         return Result.success("登录成功", result);
     }
