@@ -9,17 +9,17 @@ import liuyuyang.net.model.Oss;
 import liuyuyang.net.service.OssService;
 import liuyuyang.net.utils.OssUtil;
 import liuyuyang.net.vo.PageVo;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-
 @Service
 public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssService {
+<<<<<<< HEAD
     @Lazy
     @Resource
     private OssUtil ossUtil;
+=======
+>>>>>>> fbf693f (feat:新增oss上传接口，并添加了测试类，在项目初始化去加载是否有oss需要添加到存储平台)
 
     @Resource
     private OssMapper ossMapper;
@@ -50,7 +50,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         }
 
         Oss oss = this.getById(id);
-        ossUtil.registerPlatform(oss);
+        OssUtil.registerPlatform(oss);
     }
 
     public Oss getEnableOss() {

@@ -9,7 +9,6 @@ import org.dromara.x.file.storage.core.FileStorageServiceBuilder;
 import org.dromara.x.file.storage.core.platform.FileStorage;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -21,17 +20,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Data
 @Component
 public class OssUtil {
-    private String platform;
+    private static String platform;
 
-    @Resource
-    private FileStorageService fileStorageService;
+    public static String getPlatform() {
+        if (platform == null) {
+            FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
+            platform = fileStorageService.getDefaultPlatform();
+        }
+        return platform;
+    }
 
     /**
      * 将华为配置信息设置到存储平台
+     *
      * @param oss
      */
-    public void setHuaweiConfig(Oss oss) {
+    public static void setHuaweiConfig(Oss oss) {
         //获得存储平台 List
+        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.HuaweiObsConfig config = new FileStorageProperties.HuaweiObsConfig();
         config.setPlatform(oss.getPlatform());
@@ -49,7 +55,8 @@ public class OssUtil {
     /**
      * 将阿里云配置信息设置到存储平台
      */
-    public void setAliyunConfig(Oss oss) {
+    public static void setAliyunConfig(Oss oss) {
+        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.AliyunOssConfig config = new FileStorageProperties.AliyunOssConfig();
         config.setPlatform(oss.getPlatform());
@@ -58,6 +65,7 @@ public class OssUtil {
         config.setEndPoint(oss.getEndPoint());
         config.setBucketName(oss.getBucketName());
         config.setDomain(oss.getDomain());
+        config.setBasePath(oss.getBasePath());
 
         list.addAll(FileStorageServiceBuilder.buildAliyunOssFileStorage(Collections.singletonList(config), null));
     }
@@ -65,7 +73,8 @@ public class OssUtil {
     /**
      * 将千牛云配置信息设置到存储平台
      */
-    public void setQiniuConfig(Oss oss) {
+    public static void setQiniuConfig(Oss oss) {
+        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.QiniuKodoConfig config = new FileStorageProperties.QiniuKodoConfig();
         config.setPlatform(oss.getPlatform());
@@ -73,14 +82,15 @@ public class OssUtil {
         config.setSecretKey(oss.getSecretKey());
         config.setBucketName(oss.getBucketName());
         config.setDomain(oss.getDomain());
-
+        config.setBasePath(oss.getBasePath());
         list.addAll(FileStorageServiceBuilder.buildQiniuKodoFileStorage(Collections.singletonList(config), null));
     }
 
     /**
      * 将腾讯云配置信息设置到存储平台
      */
-    public void setTencentConfig(Oss oss) {
+    public static void setTencentConfig(Oss oss) {
+        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.TencentCosConfig config = new FileStorageProperties.TencentCosConfig();
         config.setPlatform(oss.getPlatform());
@@ -97,7 +107,8 @@ public class OssUtil {
     /**
      * 将minio配置信息设置到存储平台
      */
-    public void setMinioConfig(Oss oss) {
+    public static void setMinioConfig(Oss oss) {
+        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.MinioConfig config = new FileStorageProperties.MinioConfig();
         config.setPlatform(oss.getPlatform());
@@ -113,27 +124,29 @@ public class OssUtil {
 
     // 加载指定的平台
     public void registerPlatform(Oss oss) {
+
         switch (oss.getPlatform()) {
             case "huawei":
                 setHuaweiConfig(oss);
                 platform = oss.getPlatform();
-                break;
+                return;
             case "aliyun":
                 setAliyunConfig(oss);
                 platform = oss.getPlatform();
-                break;
+                return;
             case "qiniu":
                 setQiniuConfig(oss);
                 platform = oss.getPlatform();
-                break;
+                return;
             case "tencent":
                 setTencentConfig(oss);
                 platform = oss.getPlatform();
-                break;
+                return;
             case "minio":
                 setMinioConfig(oss);
                 platform = oss.getPlatform();
-                break;
+                return;
         }
+        throw new RuntimeException("No such platform");
     }
 }
