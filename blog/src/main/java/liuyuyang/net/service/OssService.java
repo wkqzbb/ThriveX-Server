@@ -17,4 +17,6 @@ public interface OssService extends IService<Oss> {
      * 获取当前启用的oss
      */
     Oss getEnableOss();
+
+    void disable(Integer id);
 }
