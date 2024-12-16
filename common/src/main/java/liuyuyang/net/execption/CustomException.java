@@ -20,6 +20,11 @@ public class CustomException extends RuntimeException {
         this.message = message;
     }
 
+    public CustomException(String message) {
+        super(message);
+        this.code = 400;
+    }
+
     @Override
     public String toString() {
         return "CustomException{" +

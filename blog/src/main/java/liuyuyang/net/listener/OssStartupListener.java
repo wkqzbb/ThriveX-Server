@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class OssStartupListener implements ApplicationListener<ContextRefreshedEvent> {
 
     private final OssService ossService;
-    private final OssUtil ossUtil;
 
 
     @Override
@@ -35,6 +34,6 @@ public class OssStartupListener implements ApplicationListener<ContextRefreshedE
     }
 
     private void registerOssToPlatform(Oss oss) {
-        ossUtil.registerPlatform(oss);
+        OssUtil.registerPlatform(oss);
     }
 }

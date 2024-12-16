@@ -12,6 +12,10 @@ public class Result<T> {
     private String message; // 响应码 描述字符串
     private T data; // 返回的数据
 
+    public static <T> Result<T> status(boolean flag) {
+        return flag ? success("操作成功") : error("操作失败");
+    }
+
     // 成功响应
     public static Result<String> success() {
         return new Result<>(200, "ok", null);
