@@ -32,11 +32,10 @@ public class OssUtil {
 
     /**
      * 将华为配置信息设置到存储平台
-     *
      * @param oss
      */
     public static void setHuaweiConfig(Oss oss) {
-        //获得存储平台 List
+        // 获得存储平台 List
         FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.HuaweiObsConfig config = new FileStorageProperties.HuaweiObsConfig();
@@ -123,7 +122,7 @@ public class OssUtil {
     }
 
     // 加载指定的平台
-    public void registerPlatform(Oss oss) {
+    public static void registerPlatform(Oss oss) {
 
         switch (oss.getPlatform()) {
             case "huawei":
@@ -147,6 +146,6 @@ public class OssUtil {
                 platform = oss.getPlatform();
                 return;
         }
-        throw new RuntimeException("No such platform");
+        throw new RuntimeException("暂不支持该平台");
     }
 }

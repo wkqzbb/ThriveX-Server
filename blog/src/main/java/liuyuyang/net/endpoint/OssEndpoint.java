@@ -15,6 +15,7 @@ import liuyuyang.net.vo.PageVo;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
 import org.dromara.x.file.storage.core.get.ListFilesResult;
+import org.dromara.x.file.storage.core.get.RemoteDirInfo;
 import org.dromara.x.file.storage.core.get.RemoteFileInfo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 统一文件上传
@@ -32,7 +31,7 @@ import java.util.Map;
  * @author laifeng
  * @date 2024/12/14
  */
-@Api(tags = "文件管理")
+@Api(tags = "文件管理plus")
 @RestController
 @RequestMapping("/file/plus")
 @Transactional
@@ -41,20 +40,20 @@ public class OssEndpoint {
     @Resource
     private FileStorageService fileStorageService;
 
-
     @PostMapping
     @ApiOperation("文件上传")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<Object> add(@RequestParam MultipartFile[] files) throws IOException {
+    public Result<Object> add(@RequestParam(defaultValue = "") String dir, @RequestParam MultipartFile[] files) throws IOException {
         List<String> urls = new ArrayList<>();
+
         for (MultipartFile file : files) {
-            FileInfo fileInfo = fileStorageService.of(file)
+            FileInfo result = fileStorageService.of(file)
                     .setPlatform(OssUtil.getPlatform())
+                    .setPath(dir)
                     .upload();
-            if (fileInfo == null) {
-                throw new CustomException("上传文件失败");
-            }
-            urls.add(fileInfo.getUrl());
+
+            if (result == null) throw new CustomException("上传文件失败");
+            urls.add(result.getUrl());
         }
 
         return Result.success("文件上传成功：", urls);
@@ -63,8 +62,9 @@ public class OssEndpoint {
     @DeleteMapping
     @ApiOperation("删除文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
-    public Result<String> del(@RequestParam String filePath) throws QiniuException {
+    public Result<String> del(@RequestParam String filePath) {
         boolean delete = fileStorageService.delete(filePath);
+        System.out.println(delete);
         return Result.status(delete);
     }
 
@@ -92,29 +92,40 @@ public class OssEndpoint {
     @PostMapping("/list")
     @ApiOperation("获取文件列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<List<RemoteFileInfo>> list(@RequestParam(defaultValue = "all") String dir) throws QiniuException {
+    public Result<List<Map>> list(@RequestParam(defaultValue = "") String dir) {
         ListFilesResult result = fileStorageService.listFiles()
                 .setPlatform(OssUtil.getPlatform())
                 .setPath(dir) // 指定目录
                 .listFiles();
+
+        // 获取目录列表
+        List<RemoteDirInfo> dirList = result.getDirList();
+        for (RemoteDirInfo dirInfo : dirList) {
+            System.out.println(11111);
+            System.out.println(dirInfo);
+        }
+
+        // 获取文件列表
+        List<Map> list = new ArrayList<>();
         List<RemoteFileInfo> fileList = result.getFileList();
-        return Result.success(fileList);
+        for (RemoteFileInfo fileInfo : fileList) {
+            // 如果是目录就略过
+            if (Objects.equals(fileInfo.getExt(), "")) continue;
+
+            Map<String, Object> fileInfoMap = new HashMap<>();
+
+            fileInfoMap.put("platform", fileInfo.getPlatform());
+            fileInfoMap.put("dir", fileInfo.getBasePath());
+            fileInfoMap.put("file", fileInfo.getFilename());
+            fileInfoMap.put("url", fileInfo.getUrl());
+            fileInfoMap.put("size", fileInfo.getSize());
+            fileInfoMap.put("type", fileInfo.getExt());
+            fileInfoMap.put("original", fileInfo.getOriginal());
+            fileInfoMap.put("name", fileInfo.getBasePath() + fileInfo.getFilename());
+
+            list.add(fileInfoMap);
+        }
+
+        return Result.success(list);
     }
-
-//    @PostMapping("/paging")
-//    @ApiOperation("分页查询文件列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-//    public Result paging(@RequestParam(defaultValue = "all") String dir, PageVo pageVo) throws QiniuException {
-//        Page<File> list = fileService.paging(dir, pageVo);
-//        Map<String, Object> result = Paging.filter((list));
-//        return Result.success(result);
-//    }
-
-//    @GetMapping("/dir")
-//    @ApiOperation("获取目录列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-//    public Result<List<String>> dirList() {
-//        List<String> list = ossProperties.getDirList();
-//        return Result.success(list);
-//    }
 }
