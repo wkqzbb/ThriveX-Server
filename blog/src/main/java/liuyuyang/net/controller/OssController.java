@@ -10,8 +10,8 @@ import liuyuyang.net.result.Result;
 import liuyuyang.net.service.OssService;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;
-import org.springframework.web.bind.annotation.*;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -68,10 +68,30 @@ public class OssController {
     }
 
     @PatchMapping("/enable/{id}")
-    @ApiOperation("启用/禁用oss配置")
+    @ApiOperation("启用oss配置")
     @ApiOperationSupport(author = "laifeng", order = 6)
     public Result enable(@PathVariable Integer id) {
         ossService.enable(id);
         return Result.success();
+    }
+
+    @PatchMapping("/disable/{id}")
+    @ApiOperation("禁用oss配置")
+    @ApiOperationSupport(author = "laifeng", order = 7)
+    public Result disable(@PathVariable Integer id) {
+        ossService.disable(id);
+        return Result.success();
+    }
+
+    /**
+     * 获取启用的oss配置
+     *
+     * @return
+     */
+    @GetMapping("/getEnableOss")
+    @ApiOperation("获取启用的oss配置")
+    @ApiOperationSupport(author = "laifeng", order = 8)
+    public Result<Oss> getEnableOss() {
+        return Result.success(ossService.getEnableOss());
     }
 }
