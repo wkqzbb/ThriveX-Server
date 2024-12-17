@@ -26,11 +26,7 @@ import java.util.Map;
  */
 @Service
 public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail> implements FileRecorder {
-
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Autowired
-    private FilePartDetailService filePartDetailService;
 
     /**
      * 保存文件信息到数据库
@@ -87,7 +83,6 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
      */
     @Override
     public void saveFilePart(FilePartInfo filePartInfo) {
-        filePartDetailService.saveFilePart(filePartInfo);
     }
 
     /**
@@ -95,7 +90,6 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
      */
     @Override
     public void deleteFilePartByUploadId(String uploadId) {
-        filePartDetailService.deleteFilePartByUploadId(uploadId);
     }
 
     /**

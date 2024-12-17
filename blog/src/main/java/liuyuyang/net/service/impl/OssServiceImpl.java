@@ -12,15 +12,10 @@ import liuyuyang.net.vo.PageVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 @Service
 public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssService {
-<<<<<<< HEAD
-    @Lazy
-    @Resource
-    private OssUtil ossUtil;
-=======
->>>>>>> fbf693f (feat:新增oss上传接口，并添加了测试类，在项目初始化去加载是否有oss需要添加到存储平台)
-
     @Resource
     private OssMapper ossMapper;
 
@@ -56,7 +51,15 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     public Oss getEnableOss() {
         QueryWrapper<Oss> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Oss::getIsEnable, 1);
-
         return ossMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public void disable(Integer id) {
+        boolean temp1 = this.update(Wrappers.<Oss>update().lambda().set(Oss::getIsEnable, 0));
+        if (!temp1) {
+            throw new RuntimeException("更新失败");
+        }
+        OssUtil.setPlatformToDefault();
     }
 }

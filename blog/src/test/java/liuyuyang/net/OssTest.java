@@ -76,7 +76,6 @@ public class OssTest {
      */
     @Test
     public void testDeleteNoAuth() {
-
         FileInfo fileInfo = new FileInfo();
         fileInfo.setBasePath("upload/");
         fileInfo.setPath("month/");
