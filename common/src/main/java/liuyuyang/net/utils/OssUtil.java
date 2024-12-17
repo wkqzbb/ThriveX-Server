@@ -30,8 +30,13 @@ public class OssUtil {
         return platform;
     }
 
+    public static void setPlatformToDefault() {
+        platform = "local-plus";
+    }
+
     /**
      * 将华为配置信息设置到存储平台
+     *
      * @param oss
      */
     public static void setHuaweiConfig(Oss oss) {
