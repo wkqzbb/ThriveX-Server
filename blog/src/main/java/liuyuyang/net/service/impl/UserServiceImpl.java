@@ -146,7 +146,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void check(String token) {
-        boolean isCheck = yuYangUtils.isAdmin(token);
+        // boolean isCheck = yuYangUtils.isAdmin(token);
+        boolean isCheck = yuYangUtils.check(token);
 
         if (!isCheck) {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

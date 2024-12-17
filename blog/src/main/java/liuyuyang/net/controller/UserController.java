@@ -127,7 +127,6 @@ public class UserController {
         return Result.success("登录成功", result);
     }
 
-    @CheckRole
     @PatchMapping("/pass")
     @ApiOperation("修改用户密码")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)

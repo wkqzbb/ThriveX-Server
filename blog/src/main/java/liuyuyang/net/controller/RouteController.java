@@ -18,11 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/route")
 @Transactional
-@CheckRole
 public class RouteController {
     @Resource
     private RouteService routeService;
 
+    @CheckRole
     @PostMapping
     @ApiOperation("新增路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -36,6 +36,7 @@ public class RouteController {
         }
     }
 
+    @CheckRole
     @DeleteMapping("/{id}")
     @ApiOperation("删除路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -48,6 +49,7 @@ public class RouteController {
         return res ? Result.success() : Result.error();
     }
 
+    @CheckRole
     @DeleteMapping("/batch")
     @ApiOperation("批量删除路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -57,6 +59,7 @@ public class RouteController {
         return res ? Result.success() : Result.error();
     }
 
+    @CheckRole
     @PatchMapping
     @ApiOperation("编辑路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
@@ -70,6 +73,7 @@ public class RouteController {
         }
     }
 
+    @CheckRole({"admin", "author", "user"})
     @GetMapping("/{id}")
     @ApiOperation("获取路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
@@ -78,6 +82,7 @@ public class RouteController {
         return Result.success(data);
     }
 
+    @CheckRole
     @GetMapping
     @ApiOperation("获取路由列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)

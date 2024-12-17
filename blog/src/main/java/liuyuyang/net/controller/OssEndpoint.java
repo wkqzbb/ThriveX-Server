@@ -1,17 +1,13 @@
-package liuyuyang.net.endpoint;
+package liuyuyang.net.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.qiniu.common.QiniuException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.execption.CustomException;
-import liuyuyang.net.model.File;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.utils.OssUtil;
-import liuyuyang.net.utils.Paging;
-import liuyuyang.net.vo.PageVo;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
 import org.dromara.x.file.storage.core.get.ListFilesResult;

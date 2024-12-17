@@ -69,4 +69,19 @@ public class YuYangUtils {
 
         return false;
     }
+
+    // 校验当前JWT是否有效
+    public boolean check(String token) {
+        try {
+            if (token != null) {
+                if (token.startsWith("Bearer ")) token = token.substring(7);
+                JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

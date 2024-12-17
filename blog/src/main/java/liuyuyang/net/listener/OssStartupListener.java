@@ -14,9 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class OssStartupListener implements ApplicationListener<ContextRefreshedEvent> {
-
     private final OssService ossService;
-
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -28,7 +26,7 @@ public class OssStartupListener implements ApplicationListener<ContextRefreshedE
                 // 注册到存储平台
                 registerOssToPlatform(enabledOss);
             } else {
-                System.out.println("No enabled OSS configuration found.");
+                System.out.println("没有发现启用的OSS配置。");
             }
         }
     }
