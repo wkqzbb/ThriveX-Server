@@ -82,6 +82,6 @@ dromara:
         enable-storage: true  # 启用存储
         enable-access: true # 启用访问（线上请使用 Nginx 配置，效率更高）
         domain: http://127.0.0.1:8080/file/ # 访问域名，例如：“http://127.0.0.1:8030/file/”，注意后面要和 path-patterns 保持一致，“/”结尾，本地存储建议使用相对路径，方便后期更换域名
-        base-path: local-plus/ # 基础路径
+        base-path: upload/ # 基础路径
         path-patterns: /file/** # 访问路径
-#        storage-path: D:/Temp/ # 存储路径
+        storage-path: ${user.dir}/ # 存储路径
