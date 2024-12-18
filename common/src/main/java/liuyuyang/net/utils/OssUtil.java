@@ -7,7 +7,6 @@ import org.dromara.x.file.storage.core.FileStorageProperties;
 import org.dromara.x.file.storage.core.FileStorageService;
 import org.dromara.x.file.storage.core.FileStorageServiceBuilder;
 import org.dromara.x.file.storage.core.platform.FileStorage;
-import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,20 +17,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @date 2024/12/10 21:21
  */
 @Data
-@Component
 public class OssUtil {
     private static String platform;
+    public static final String DEFAULT_PLATFORM = "local-plus";
+    private static final FileStorageService fileStorageService = SpringUtil.getBean(FileStorageService.class);
 
     public static String getPlatform() {
         if (platform == null) {
-            FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
-            platform = fileStorageService.getDefaultPlatform();
+            platform = DEFAULT_PLATFORM;
         }
         return platform;
     }
 
     public static void setPlatformToDefault() {
-        platform = "local-plus";
+        platform = DEFAULT_PLATFORM;
     }
 
     /**
@@ -41,7 +40,6 @@ public class OssUtil {
      */
     public static void setHuaweiConfig(Oss oss) {
         // 获得存储平台 List
-        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.HuaweiObsConfig config = new FileStorageProperties.HuaweiObsConfig();
         config.setPlatform(oss.getPlatform());
@@ -60,7 +58,6 @@ public class OssUtil {
      * 将阿里云配置信息设置到存储平台
      */
     public static void setAliyunConfig(Oss oss) {
-        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.AliyunOssConfig config = new FileStorageProperties.AliyunOssConfig();
         config.setPlatform(oss.getPlatform());
@@ -78,7 +75,6 @@ public class OssUtil {
      * 将千牛云配置信息设置到存储平台
      */
     public static void setQiniuConfig(Oss oss) {
-        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.QiniuKodoConfig config = new FileStorageProperties.QiniuKodoConfig();
         config.setPlatform(oss.getPlatform());
@@ -94,7 +90,6 @@ public class OssUtil {
      * 将腾讯云配置信息设置到存储平台
      */
     public static void setTencentConfig(Oss oss) {
-        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.TencentCosConfig config = new FileStorageProperties.TencentCosConfig();
         config.setPlatform(oss.getPlatform());
@@ -112,7 +107,6 @@ public class OssUtil {
      * 将minio配置信息设置到存储平台
      */
     public static void setMinioConfig(Oss oss) {
-        FileStorageService fileStorageService = SpringContextHolder.getBean(FileStorageService.class);
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
         FileStorageProperties.MinioConfig config = new FileStorageProperties.MinioConfig();
         config.setPlatform(oss.getPlatform());
