@@ -120,7 +120,7 @@ CREATE TABLE `cate` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `name` (`name`) USING BTREE,
   UNIQUE KEY `cate_pk` (`mark`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,6 +188,54 @@ LOCK TABLES `config` WRITE;
 /*!40000 ALTER TABLE `config` DISABLE KEYS */;
 INSERT INTO `config` VALUES ('covers','[\"https://bu.dusays.com/2023/11/10/654e2da1d80f8.jpg\",\"https://bu.dusays.com/2023/11/10/654e2d719d31c.jpg\",\"https://bu.dusays.com/2023/11/10/654e2cf92cd45.jpg\",\"https://bu.dusays.com/2023/11/10/654e2cf6055b0.jpg\",\"https://bu.dusays.com/2023/11/10/654e2db0889fe.jpg\",\"https://bu.dusays.com/2023/11/10/654e2d50015a9.jpg\",\"https://bu.dusays.com/2023/11/05/65473848ed863.jpg\",\"https://bu.dusays.com/2023/11/10/654e2c870e280.jpg\",\"https://bu.dusays.com/2023/11/10/654e2c717eb73.jpg\",\"https://bu.dusays.com/2023/11/10/654e2c5d75d5b.jpg\",\"https://bu.dusays.com/2023/11/10/654e2da27801e.jpg\",\"https://bu.dusays.com/2023/11/10/654e2d2a67517.jpg\",\"https://bu.dusays.com/2023/11/10/654e2cf47f17a.jpg\",\"https://bu.dusays.com/2023/11/05/65473848ed863.jpg\"]','layout','文章随机封面'),('dark_logo','https://bu.dusays.com/2024/05/03/663481106dcfd.png','layout','暗色LOGO'),('description','也许会是最好用的博客管理系统','web','网站描述'),('favicon','https://res.liuyuyang.net/usr/images/favicon.ico','web','网站ico图标'),('font','https://res.liuyuyang.net/LXGWWenKai.ttf','web','网站字体'),('footer','真诚邀请大家成为 ThriveX 博客管理系统的贡献者，一起参与项目开发，构建一个强大的博客管理系统！','web','网站底部信息'),('is_article_layout','classics','layout','网站布局'),('keyword','宇阳,刘宇阳,Thrive,前端,Python,Java,Thrive,ThriveX','web','网站关键词'),('light_logo','https://bu.dusays.com/2024/05/03/663481106e2a4.png','layout','亮色LOGO'),('reco_article','','layout','作者推荐的文章'),('right_sidebar','[\"author\",\"hotArticle\",\"newComments\",\"randomArticle\"]','layout','侧边栏布局'),('social','[\"{\\\"name\\\":\\\"GitHub\\\",\\\"url\\\":\\\"https://github.com/LiuYuYang01\\\"}\",\"{\\\"name\\\":\\\"Gitee\\\",\\\"url\\\":\\\"https://gitee.com/liu_yu_yang666\\\"}\",\"{\\\"name\\\":\\\"Juejin\\\",\\\"url\\\":\\\"https://juejin.cn/user/3083456627092078/posts\\\"}\",\"{\\\"name\\\":\\\"CSDN\\\",\\\"url\\\":\\\"https://blog.csdn.net/haodian666?type=blog\\\"}\",\"{\\\"name\\\":\\\"QQ\\\",\\\"url\\\":\\\"http://wpa.qq.com/msgrd?v=3&uin=3311118881&site=qq&menu=yes\\\"}\"]','layout','社交网站'),('subhead','现代化博客管理系统','web','网站副标题'),('swiper_image','https://bu.dusays.com/2024/04/24/6628990012b51.jpg','layout','首页轮播图'),('swiper_text','[\"System.out.print(\\\"欢迎使用 ThriveX 博客管理系统！\\\"); \",\"print(\\\"这是一个 Nextjs + Spring Boot 的产物\\\") \"]','layout','首页轮播图打字机文案'),('title','ThriveX','web','网站名称'),('url','https://liuyuyang.net/','web','网站地址');
 /*!40000 ALTER TABLE `config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `file_detail`
+--
+
+DROP TABLE IF EXISTS `file_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `file_detail` (
+  `id` varchar(32) NOT NULL COMMENT '文件id',
+  `url` varchar(512) NOT NULL COMMENT '文件访问地址',
+  `size` bigint DEFAULT NULL COMMENT '文件大小，单位字节',
+  `filename` varchar(256) DEFAULT NULL COMMENT '文件名称',
+  `original_filename` varchar(256) DEFAULT NULL COMMENT '原始文件名',
+  `base_path` varchar(256) DEFAULT NULL COMMENT '基础存储路径',
+  `path` varchar(256) DEFAULT NULL COMMENT '存储路径',
+  `ext` varchar(32) DEFAULT NULL COMMENT '文件扩展名',
+  `content_type` varchar(128) DEFAULT NULL COMMENT 'MIME类型',
+  `platform` varchar(32) DEFAULT NULL COMMENT '存储平台',
+  `th_url` varchar(512) DEFAULT NULL COMMENT '缩略图访问路径',
+  `th_filename` varchar(256) DEFAULT NULL COMMENT '缩略图名称',
+  `th_size` bigint DEFAULT NULL COMMENT '缩略图大小，单位字节',
+  `th_content_type` varchar(128) DEFAULT NULL COMMENT '缩略图MIME类型',
+  `object_id` varchar(32) DEFAULT NULL COMMENT '文件所属对象id',
+  `object_type` varchar(32) DEFAULT NULL COMMENT '文件所属对象类型，例如用户头像，评价图片',
+  `metadata` text COMMENT '文件元数据',
+  `user_metadata` text COMMENT '文件用户元数据',
+  `th_metadata` text COMMENT '缩略图元数据',
+  `th_user_metadata` text COMMENT '缩略图用户元数据',
+  `attr` text COMMENT '附加属性',
+  `file_acl` varchar(32) DEFAULT NULL COMMENT '文件ACL',
+  `th_file_acl` varchar(32) DEFAULT NULL COMMENT '缩略图文件ACL',
+  `hash_info` text COMMENT '哈希信息',
+  `upload_id` varchar(128) DEFAULT NULL COMMENT '上传ID，仅在手动分片上传时使用',
+  `upload_status` int DEFAULT NULL COMMENT '上传状态，仅在手动分片上传时使用，1：初始化完成，2：上传完成',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC COMMENT='文件记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file_detail`
+--
+
+LOCK TABLES `file_detail` WRITE;
+/*!40000 ALTER TABLE `file_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `file_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -278,6 +326,36 @@ LOCK TABLES `link_type` WRITE;
 /*!40000 ALTER TABLE `link_type` DISABLE KEYS */;
 INSERT INTO `link_type` VALUES (1,'生活类',0,4),(2,'技术类',0,5),(3,'全站置顶',1,1),(4,'推荐',1,2),(5,'大佬',1,3),(6,'聚合类',0,6);
 /*!40000 ALTER TABLE `link_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `oss`
+--
+
+DROP TABLE IF EXISTS `oss`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `oss` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `platform` varchar(255) NOT NULL COMMENT '平台',
+  `access_key` varchar(100) DEFAULT NULL COMMENT 'key',
+  `secret_key` varchar(255) DEFAULT '/' COMMENT '密钥',
+  `end_point` varchar(100) DEFAULT NULL COMMENT 'endPoint',
+  `bucket_name` varchar(255) DEFAULT NULL,
+  `domain` varchar(255) DEFAULT NULL,
+  `base_path` varchar(255) DEFAULT NULL,
+  `is_enable` int DEFAULT NULL COMMENT '是否启用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='oss配置表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oss`
+--
+
+LOCK TABLES `oss` WRITE;
+/*!40000 ALTER TABLE `oss` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oss` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -538,4 +616,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-03 14:44:26
+-- Dump completed on 2024-12-24 12:09:56
