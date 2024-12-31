@@ -174,7 +174,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         ArticleConfig config = data.getConfig();
 
-        if (data.getIsEncrypt() == 0) {
+        if (data.getIsEncrypt() == 0 && !password.isEmpty()) {
             throw new CustomException(610, "该文章不需要访问密码");
         }
 
@@ -185,7 +185,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             }
 
             // 如果有密码就必须通过密码才能查看
-            if (!config.getPassword().isEmpty()) {
+            if (data.getIsEncrypt() == 1) {
                 // 如果需要访问密码且没有传递密码参数
                 if (password.isEmpty()) {
                     throw new CustomException(612, "请输入文章访问密码");
