@@ -174,7 +174,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         ArticleConfig config = data.getConfig();
 
-        if (config.getPassword().isEmpty() && !password.isEmpty()) {
+        if (data.getIsEncrypt() == 0) {
             throw new CustomException(610, "该文章不需要访问密码");
         }
 
@@ -247,9 +247,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .collect(Collectors.toList());
 
         for (Article article : list) {
-            ArticleConfig config = article.getConfig();
             // 如果有密码就必须通过密码才能查看
-            if (!config.getPassword().isEmpty()) {
+            if (article.getIsEncrypt() == 1) {
                 article.setDescription("该文章是加密的");
                 article.setContent("该文章是加密的");
             }
@@ -295,10 +294,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         for (Article article : page.getRecords()) {
             QueryWrapper<ArticleConfig> articleConfigQueryWrapper = new QueryWrapper<>();
             articleConfigQueryWrapper.eq("article_id", article.getId());
-            ArticleConfig config = articleConfigMapper.selectOne(articleConfigQueryWrapper);
 
             // 如果有密码就必须通过密码才能查看
-            if (!config.getPassword().isEmpty()) {
+            if (article.getIsEncrypt() == 1) {
                 article.setDescription("该文章是加密的");
                 article.setContent("该文章是加密的");
             }
