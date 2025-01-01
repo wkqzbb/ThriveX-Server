@@ -30,7 +30,7 @@ services:
     command: /bin/sh -c "while true; do mysqldump -h mysql -u root -pliuyuyang ThriveX > /backup/ThriveX_$(date +%F_%T).sql; sleep 10800; done"
     # 将容器中的目录映射到当前目录
     volumes:
-      - ./backup:/backup
+      - ./docker/backup:/backup
     networks:
       - thrive_network
     depends_on:
@@ -47,29 +47,17 @@ services:
     depends_on:
       - mysql
     environment:
-      #      PORT: 9003
-      #      DB_NAME: blog
-      #      DB_USERNAME: blog
-      #      DB_PASSWORD: YFWyPwW2tNw7a3Bz
-      #      EMAIL_HOST: smtp.qq.com
-      #      EMAIL_PORT: 465
-      #      EMAIL_USERNAME: 3311118881@qq.com
-      #      EMAIL_PASSWORD: eqtadasdasdadqhcjdi
-      #      OSS_ACCESS_KEY: YlsypGvYxasdadadadadadwbsoDU0szu3
-      #      OSS_SECRET_KEY: oZqTx69xaddadawWadadadpcJasdadp9SURATGhH
-      #      OSS_BUCKET: thrive
       PORT: 9003
-      DB_NAME: ThriveX
+      DB_INFO: localhost:3306/ThriveX
       DB_USERNAME: root
-      DB_PASSWORD: liuyuyang
+      DB_PASSWORD: yyds
       EMAIL_HOST: smtp.qq.com
       EMAIL_PORT: 465
-      EMAIL_USERNAME: 3311118881@qq.com
-      EMAIL_PASSWORD: srqsbubtucnscjhc
-      OSS_ACCESS_KEY: SvnboAme1hfzHjhaKo4ZYG1KkpliBMo8DiZCwXFz
-      OSS_SECRET_KEY: 6uoGK-6Ij_aCaeeQOLMoRmr-c7pYxGYhEYlJ2d73
-      OSS_BUCKET: thrive
-
+      EMAIL_USERNAME:
+      EMAIL_PASSWORD:
+      OSS_ACCESS_KEY:
+      OSS_SECRET_KEY:
+      OSS_BUCKET:
 
 # 网络配置
 networks:
