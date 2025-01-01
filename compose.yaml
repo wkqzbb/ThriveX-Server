@@ -1,0 +1,77 @@
+services:
+  # 数据库
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    networks:
+      # 加入网络
+      - thrive_network
+    environment:
+      # 数据库密码
+      MYSQL_ROOT_PASSWORD: yyds
+      # 创建数据库
+      MYSQL_DATABASE: ThriveX
+    volumes:
+      # 默认数据卷位置
+      # - mysql_data:/var/lib/mysql
+      # 将 mysql_data 映射到宿主机的当前目录
+      - ./docker/mysql_data:/var/lib/mysql
+      # 执行当前目录data中的sql脚本（只在初始化时执行）
+      - ./docker/data:/docker-entrypoint-initdb.d
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  # 备份服务
+  backup:
+    image: mysql:8.0
+    container_name: mysql_backup
+    # 每3小时自动备份数据
+    command: /bin/sh -c "while true; do mysqldump -h mysql -u root -pliuyuyang ThriveX > /backup/ThriveX_$(date +%F_%T).sql; sleep 10800; done"
+    # 将容器中的目录映射到当前目录
+    volumes:
+      - ./backup:/backup
+    networks:
+      - thrive_network
+    depends_on:
+      - mysql
+
+  # 后端项目
+  server:
+    container_name: server
+    build: ./docker
+    ports:
+      - "9003:9003"
+    networks:
+      - thrive_network
+    depends_on:
+      - mysql
+    environment:
+      #      PORT: 9003
+      #      DB_NAME: blog
+      #      DB_USERNAME: blog
+      #      DB_PASSWORD: YFWyPwW2tNw7a3Bz
+      #      EMAIL_HOST: smtp.qq.com
+      #      EMAIL_PORT: 465
+      #      EMAIL_USERNAME: 3311118881@qq.com
+      #      EMAIL_PASSWORD: eqtadasdasdadqhcjdi
+      #      OSS_ACCESS_KEY: YlsypGvYxasdadadadadadwbsoDU0szu3
+      #      OSS_SECRET_KEY: oZqTx69xaddadawWadadadpcJasdadp9SURATGhH
+      #      OSS_BUCKET: thrive
+      PORT: 9003
+      DB_NAME: ThriveX
+      DB_USERNAME: root
+      DB_PASSWORD: liuyuyang
+      EMAIL_HOST: smtp.qq.com
+      EMAIL_PORT: 465
+      EMAIL_USERNAME: 3311118881@qq.com
+      EMAIL_PASSWORD: srqsbubtucnscjhc
+      OSS_ACCESS_KEY: SvnboAme1hfzHjhaKo4ZYG1KkpliBMo8DiZCwXFz
+      OSS_SECRET_KEY: 6uoGK-6Ij_aCaeeQOLMoRmr-c7pYxGYhEYlJ2d73
+      OSS_BUCKET: thrive
+
+
+# 网络配置
+networks:
+  # 创建网络
+  thrive_network:
