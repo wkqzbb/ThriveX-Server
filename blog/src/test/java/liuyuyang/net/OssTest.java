@@ -35,15 +35,6 @@ public class OssTest {
     @Resource
     private FileStorageService fileStorageService;//
 
-    @Test
-    public void test1() {
-        PageVo pageVo = new PageVo();
-        pageVo.setPage(1);
-        pageVo.setSize(10);
-        Page<Oss> ossPage = ossService.ossPage(null, pageVo);
-        System.out.println(ossPage.getRecords());
-    }
-
     /**
      * 测试上传
      */

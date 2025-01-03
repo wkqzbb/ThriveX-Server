@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import liuyuyang.net.model.Oss;
 import liuyuyang.net.vo.PageVo;
 
+import java.util.List;
+
 public interface OssService extends IService<Oss> {
     /**
      * 分页
      */
-    Page<Oss> ossPage(Oss oss, PageVo pageVo);
+    List<Oss> list();
 
     void enable(Integer id);
 

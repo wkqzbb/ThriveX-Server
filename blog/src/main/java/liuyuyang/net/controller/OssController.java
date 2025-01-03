@@ -9,10 +9,10 @@ import liuyuyang.net.model.Oss;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.OssService;
 import liuyuyang.net.utils.Paging;
-import liuyuyang.net.vo.PageVo;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Api(tags = "对象存储管理")
@@ -60,13 +60,12 @@ public class OssController {
         return Result.success(ossService.getById(id));
     }
 
-    @PostMapping("/page")
-    @ApiOperation("获取oss配置分页")
+    @PostMapping("/list")
+    @ApiOperation("获取oss配置列表")
     @ApiOperationSupport(author = "laifeng", order = 5)
-    public Result<Object> page(@RequestBody Oss oss, PageVo pageVo) {
-        Page<Oss> list = ossService.ossPage(oss, pageVo);
-        Map<String, Object> result = Paging.filter(list);
-        return Result.success(result);
+    public Result<Object> page() {
+        List<Oss> list = ossService.list();
+        return Result.success(list);
     }
 
     @PatchMapping("/enable/{id}")

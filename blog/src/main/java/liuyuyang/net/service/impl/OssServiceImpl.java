@@ -2,18 +2,17 @@ package liuyuyang.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.OssMapper;
 import liuyuyang.net.model.Oss;
 import liuyuyang.net.service.OssService;
 import liuyuyang.net.utils.OssUtil;
-import liuyuyang.net.vo.PageVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssService {
@@ -21,13 +20,17 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     private OssMapper ossMapper;
 
     @Override
-    public Page<Oss> ossPage(Oss oss, PageVo pageVo) {
+    public List<Oss> list() {
         QueryWrapper<Oss> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().orderByDesc(Oss::getId);
-        Page<Oss> page = new Page<>(pageVo.getPage(), pageVo.getSize());
+        List<Oss> list = ossMapper.selectList(queryWrapper);
 
-        ossMapper.selectPage(page, queryWrapper);
-        return page;
+        for (Oss data : list) {
+            data.setAccessKey(maskMiddleTen(data.getAccessKey()));
+            data.setSecretKey(maskMiddleTen(data.getSecretKey()));
+        }
+
+        return list;
     }
 
     @Override
@@ -87,5 +90,21 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
             throw new CustomException("平台已存在");
         }
         this.save(oss);
+    }
+
+    public static String maskMiddleTen(String input) {
+        if (input.length() <= 10) {
+            return input; // 如果长度小于或等于10，不做处理
+        }
+
+        int start = (input.length() - 10) / 2;
+        int end = start + 10;
+
+        StringBuilder masked = new StringBuilder(input);
+        for (int i = start; i < end; i++) {
+            masked.setCharAt(i, '*');
+        }
+
+        return masked.toString();
     }
 }
