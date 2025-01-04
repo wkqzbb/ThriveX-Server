@@ -10,7 +10,6 @@ import liuyuyang.net.service.OssService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +44,7 @@ public class OssController {
     @ApiOperation("更新oss配置")
     @ApiOperationSupport(author = "laifeng", order = 3)
     public Result<String> update(@RequestBody Oss oss) {
-        if (oss.getIsEnable() == 1) return Result.error("删除oss配置失败：该配置正在使用中");
+        // if (oss.getIsEnable() == 1) return Result.error("删除oss配置失败：该配置正在使用中");
         // 不允许更改平台
         oss.setPlatform(null);
         ossService.updateById(oss);

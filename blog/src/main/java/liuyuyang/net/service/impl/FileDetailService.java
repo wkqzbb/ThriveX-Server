@@ -63,6 +63,7 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
     @SneakyThrows
     @Override
     public FileInfo getByUrl(String url) {
+        System.out.println(url);
         return toFileInfo(getOne(new QueryWrapper<FileDetail>().lambda().eq(FileDetail::getUrl, url)));
     }
 

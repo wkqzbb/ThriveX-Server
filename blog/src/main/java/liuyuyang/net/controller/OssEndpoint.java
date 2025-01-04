@@ -45,7 +45,7 @@ public class OssEndpoint {
         for (MultipartFile file : files) {
             FileInfo result = fileStorageService.of(file)
                     .setPlatform(OssUtil.getPlatform())
-                    .setPath(dir)
+                    .setPath(dir + '/')
                     .upload();
 
             if (result == null) throw new CustomException("上传文件失败");
@@ -70,9 +70,7 @@ public class OssEndpoint {
     public Result batchDel(@RequestBody String[] pathList) throws QiniuException {
         for (String url : pathList) {
             boolean delete = fileStorageService.delete(url);
-            if (!delete) {
-                throw new CustomException("删除文件失败");
-            }
+            if (!delete) throw new CustomException("删除文件失败");
         }
         return Result.success();
     }
@@ -81,38 +79,70 @@ public class OssEndpoint {
     @ApiOperation("获取文件信息")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result<FileInfo> get(@RequestParam String filePath) throws QiniuException {
+        System.out.println(filePath);
+        System.out.println(44444);
         FileInfo fileInfo = fileStorageService.getFileInfoByUrl(filePath);
+        System.out.println(fileInfo);
+        System.out.println(55555);
         return Result.success(fileInfo);
     }
 
-    @PostMapping("/list")
-    @ApiOperation("获取文件列表")
+    @GetMapping("/dir")
+    @ApiOperation("获取目录列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<List<Map>> list(@RequestParam(defaultValue = "") String dir) {
+    public Result<List<Map>> getDirList() {
         ListFilesResult result = fileStorageService.listFiles()
                 .setPlatform(OssUtil.getPlatform())
-                .setPath(dir) // 指定目录
+                .listFiles();
+
+        // 获取文件列表
+        List<Map> list = new ArrayList<>();
+        List<RemoteDirInfo> fileList = result.getDirList();
+
+        for (RemoteDirInfo item : fileList) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("name", item.getName());
+            data.put("path", item.getOriginal());
+            list.add(data);
+        }
+
+        return Result.success(list);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("获取指定目录中的文件")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
+    public Result<List<Map>> getFileList(@RequestParam String dir) {
+        if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "目录名不能为空");
+
+        ListFilesResult result = fileStorageService.listFiles()
+                .setPlatform(OssUtil.getPlatform())
+                .setPath(dir + '/')
                 .listFiles();
 
         // 获取文件列表
         List<Map> list = new ArrayList<>();
         List<RemoteFileInfo> fileList = result.getFileList();
-        for (RemoteFileInfo fileInfo : fileList) {
+
+        for (RemoteFileInfo item : fileList) {
             // 如果是目录就略过
-            if (Objects.equals(fileInfo.getExt(), "")) continue;
+            if (Objects.equals(item.getExt(), "")) continue;
 
-            Map<String, Object> fileInfoMap = new HashMap<>();
+            Map<String, Object> data = new HashMap<>();
 
-            fileInfoMap.put("platform", fileInfo.getPlatform());
-            fileInfoMap.put("dir", fileInfo.getBasePath());
-            fileInfoMap.put("file", fileInfo.getFilename());
-            fileInfoMap.put("url", fileInfo.getUrl());
-            fileInfoMap.put("size", fileInfo.getSize());
-            fileInfoMap.put("type", fileInfo.getExt());
-            fileInfoMap.put("original", fileInfo.getOriginal());
-            fileInfoMap.put("name", fileInfo.getBasePath() + fileInfo.getFilename());
+            System.out.println(item.getBasePath());
+            System.out.println(item.getPath());
+            System.out.println(item.getFilename());
 
-            list.add(fileInfoMap);
+            data.put("basePath", item.getBasePath());
+            data.put("dir", dir);
+            data.put("path", item.getBasePath() + item.getPath() + item.getFilename());
+            data.put("name", item.getFilename());
+            data.put("size", item.getSize());
+            data.put("type", item.getExt());
+            data.put("url", item.getUrl());
+
+            list.add(data);
         }
 
         return Result.success(list);

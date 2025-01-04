@@ -20,3 +20,6 @@ lyy:
     accessKey: ${OSS_ACCESS_KEY}
     secretKey: ${OSS_SECRET_KEY}
     bucket: ${OSS_BUCKET}
+
+  storage:
+    domain: ${DOMAIN}

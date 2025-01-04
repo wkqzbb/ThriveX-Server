@@ -7,19 +7,19 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
-public class ConfigurationPrinter {
-    private static final Logger logger = LoggerFactory.getLogger(ConfigurationPrinter.class);
+public class PrintConfig {
+    private static final Logger logger = LoggerFactory.getLogger(PrintConfig.class);
     private final ConfigurableEnvironment environment;
     private final AtomicBoolean printed = new AtomicBoolean(false);
 
     private static final Map<String, String> CONFIG_MAPPINGS = new LinkedHashMap<>();
     static {
+        CONFIG_MAPPINGS.put("storage.domain", "DOMAIN");
         CONFIG_MAPPINGS.put("server.port", "PORT");
         CONFIG_MAPPINGS.put("spring.datasource.url", "DB_INFO");
         CONFIG_MAPPINGS.put("spring.datasource.username", "DB_USERNAME");
@@ -33,7 +33,7 @@ public class ConfigurationPrinter {
         CONFIG_MAPPINGS.put("lyy.oss.bucket", "OSS_BUCKET");
     }
 
-    public ConfigurationPrinter(ConfigurableEnvironment environment) {
+    public PrintConfig(ConfigurableEnvironment environment) {
         this.environment = environment;
     }
 
