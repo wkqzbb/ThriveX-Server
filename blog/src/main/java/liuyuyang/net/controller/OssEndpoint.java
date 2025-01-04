@@ -52,7 +52,7 @@ public class OssEndpoint {
                     .upload();
 
             if (result == null) throw new CustomException("上传文件失败");
-            urls.add(result.getUrl());
+            urls.add("https://" + result.getUrl());
         }
 
         return Result.success("文件上传成功：", urls);
@@ -129,17 +129,13 @@ public class OssEndpoint {
 
             Map<String, Object> data = new HashMap<>();
 
-            System.out.println(item.getBasePath());
-            System.out.println(item.getPath());
-            System.out.println(item.getFilename());
-
             data.put("basePath", item.getBasePath());
             data.put("dir", dir);
             data.put("path", item.getBasePath() + item.getPath() + item.getFilename());
             data.put("name", item.getFilename());
             data.put("size", item.getSize());
             data.put("type", item.getExt());
-            data.put("url", item.getUrl());
+            data.put("url", "http://" + item.getUrl());
 
             list.add(data);
         }

@@ -65,10 +65,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ArticleConfig articleConfig = new ArticleConfig();
         articleConfig.setArticleId(article.getId());
         articleConfig.setStatus(config.getStatus());
+        articleConfig.setPassword(config.getPassword());
 
         // 如果密码不等于空则加密
-        if (!config.getPassword().isEmpty())
-            articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
+        // if (!config.getPassword().isEmpty())
+        //     articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
 
         articleConfigMapper.insert(articleConfig);
     }
@@ -153,10 +154,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ArticleConfig articleConfig = new ArticleConfig();
         articleConfig.setArticleId(article.getId());
         articleConfig.setStatus(config.getStatus());
+        articleConfig.setPassword(config.getPassword());
 
         // 如果密码不等于空则加密
-        if (!config.getPassword().isEmpty())
-            articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
+        // if (!config.getPassword().isEmpty())
+        //     articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
         articleConfigMapper.insert(articleConfig);
 
         // 修改文章
@@ -195,7 +197,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 data.setContent("该文章需要密码才能查看");
 
                 // 验证密码是否正确
-                if (config.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))) {
+                // if (config.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))) {
+                if (config.getPassword().equals(password)) {
                     data.setDescription(description);
                     data.setContent(content);
                 } else {
