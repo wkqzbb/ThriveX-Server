@@ -128,7 +128,6 @@ public class OssUtil {
 
     // 加载指定的平台
     public static void registerPlatform(Oss oss) {
-
         switch (oss.getPlatform()) {
             case "huawei":
                 setHuaweiConfig(oss);

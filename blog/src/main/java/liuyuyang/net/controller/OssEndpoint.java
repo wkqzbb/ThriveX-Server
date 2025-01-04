@@ -94,13 +94,6 @@ public class OssEndpoint {
                 .setPath(dir) // 指定目录
                 .listFiles();
 
-        // 获取目录列表
-        List<RemoteDirInfo> dirList = result.getDirList();
-        for (RemoteDirInfo dirInfo : dirList) {
-            System.out.println(11111);
-            System.out.println(dirInfo);
-        }
-
         // 获取文件列表
         List<Map> list = new ArrayList<>();
         List<RemoteFileInfo> fileList = result.getFileList();

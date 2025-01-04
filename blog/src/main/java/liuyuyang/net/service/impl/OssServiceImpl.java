@@ -20,6 +20,22 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     private OssMapper ossMapper;
 
     @Override
+    public void saveOss(Oss oss) {
+        // 判断是否有重复
+        Integer count = this.lambdaQuery().eq(Oss::getPlatform, oss.getPlatform()).count();
+        if (count > 0) throw new CustomException("该平台已存在，请勿重复添加");
+        this.save(oss);
+    }
+
+    @Override
+    public void delOss(Integer id) {
+        Oss oss = this.getById(id);
+        if (oss == null) throw new CustomException("删除失败");
+        boolean result = this.removeById(id);
+        if (result) OssUtil.removeStorage(OssUtil.getStorageList(), oss.getPlatform());
+    }
+
+    @Override
     public List<Oss> list() {
         QueryWrapper<Oss> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().orderByDesc(Oss::getId);
@@ -28,6 +44,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         for (Oss data : list) {
             data.setAccessKey(maskMiddleTen(data.getAccessKey()));
             data.setSecretKey(maskMiddleTen(data.getSecretKey()));
+            data.setPlatformName(platformName(data.getPlatform()));
         }
 
         return list;
@@ -38,18 +55,22 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     public void enable(Integer id) {
         // 先禁用所有的配置
         boolean temp1 = this.update(Wrappers.<Oss>update().lambda().set(Oss::getIsEnable, 0));
-        if (!temp1) {
-            throw new CustomException("操作失败");
-        }
+        if (!temp1) throw new CustomException("操作失败");
 
         // 再启用制定的配置
         boolean temp2 = this.update(Wrappers.<Oss>update().lambda().set(Oss::getIsEnable, 1).eq(Oss::getId, id));
-        if (!temp2) {
-            throw new CustomException("操作失败");
-        }
+        if (!temp2) throw new CustomException("启用失败");
 
         Oss oss = this.getById(id);
         OssUtil.registerPlatform(oss);
+    }
+
+    @Override
+    public void disable(Integer id) {
+        boolean temp1 = this.update(Wrappers.<Oss>update().lambda().set(Oss::getIsEnable, 0));
+        if (!temp1) throw new CustomException("禁用失败");
+        OssUtil.removeStorage(OssUtil.getStorageList(), OssUtil.getPlatform());
+        OssUtil.setPlatformToDefault();
     }
 
     public Oss getEnableOss() {
@@ -58,44 +79,9 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         return ossMapper.selectOne(queryWrapper);
     }
 
-    @Override
-    public void disable(Integer id) {
-        boolean temp1 = this.update(Wrappers.<Oss>update().lambda().set(Oss::getIsEnable, 0));
-        if (!temp1) {
-            throw new CustomException("更新失败");
-        }
-        OssUtil.removeStorage(OssUtil.getStorageList(), OssUtil.getPlatform());
-        OssUtil.setPlatformToDefault();
-    }
-
-    @Override
-    public void delOss(Integer id) {
-        Oss oss = this.getById(id);
-        if (oss == null) {
-            throw new CustomException("删除失败");
-        }
-        boolean result = this.removeById(id);
-        if (result) {
-            OssUtil.removeStorage(OssUtil.getStorageList(), oss.getPlatform());
-        }
-    }
-
-    @Override
-    public void saveOss(Oss oss) {
-        // 判断是否有重复
-        Integer count = this.lambdaQuery()
-                .eq(Oss::getPlatform, oss.getPlatform())
-                .count();
-        if (count > 0) {
-            throw new CustomException("平台已存在");
-        }
-        this.save(oss);
-    }
-
-    public static String maskMiddleTen(String input) {
-        if (input.length() <= 10) {
-            return input; // 如果长度小于或等于10，不做处理
-        }
+    // 对数据中间10位数进行脱敏
+    public String maskMiddleTen(String input) {
+        if (input.length() <= 10) return input;
 
         int start = (input.length() - 10) / 2;
         int end = start + 10;
@@ -106,5 +92,23 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         }
 
         return masked.toString();
+    }
+
+    // 处理平台名称
+    public String platformName(String data) {
+        switch (data) {
+            case "huawei":
+                return "华为云";
+            case "aliyun":
+                return "阿里云";
+            case "qiniu":
+                return "七牛云";
+            case "tencent":
+                return "腾讯云";
+            case "minio":
+                return "Minio";
+        }
+
+        return data;
     }
 }

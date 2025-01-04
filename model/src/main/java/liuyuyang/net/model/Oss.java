@@ -1,6 +1,7 @@
 package liuyuyang.net.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,22 +17,26 @@ public class Oss {
     @ApiModelProperty(value = "存储平台")
     private String platform;
 
-    @ApiModelProperty(value = "access_key")
+    @ApiModelProperty(value = "平台名称")
+    @TableField(exist = false)
+    private String platformName;
+
+    @ApiModelProperty(value = "Access Key")
     private String accessKey;
 
-    @ApiModelProperty(value = "secret_key")
+    @ApiModelProperty(value = "Secret Key")
     private String secretKey;
 
-    @ApiModelProperty(value = "end_point")
+    @ApiModelProperty(value = "地域")
     private String endPoint;
 
-    @ApiModelProperty(value = "存储桶名称")
+    @ApiModelProperty(value = "存储桶")
     private String bucketName;
 
     @ApiModelProperty(value = "域名")
     private String domain;
 
-    @ApiModelProperty(value = "base_path")
+    @ApiModelProperty(value = "文件目录")
     private String basePath;
 
     /**
