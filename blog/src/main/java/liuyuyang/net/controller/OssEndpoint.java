@@ -13,6 +13,7 @@ import org.dromara.x.file.storage.core.FileStorageService;
 import org.dromara.x.file.storage.core.get.ListFilesResult;
 import org.dromara.x.file.storage.core.get.RemoteDirInfo;
 import org.dromara.x.file.storage.core.get.RemoteFileInfo;
+import org.dromara.x.file.storage.core.platform.FileStorage;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +41,8 @@ public class OssEndpoint {
     @ApiOperation("文件上传")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<Object> add(@RequestParam(defaultValue = "") String dir, @RequestParam MultipartFile[] files) throws IOException {
+        if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "请指定一个目录");
+
         List<String> urls = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -79,11 +82,7 @@ public class OssEndpoint {
     @ApiOperation("获取文件信息")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result<FileInfo> get(@RequestParam String filePath) throws QiniuException {
-        System.out.println(filePath);
-        System.out.println(44444);
         FileInfo fileInfo = fileStorageService.getFileInfoByUrl(filePath);
-        System.out.println(fileInfo);
-        System.out.println(55555);
         return Result.success(fileInfo);
     }
 
@@ -113,7 +112,7 @@ public class OssEndpoint {
     @ApiOperation("获取指定目录中的文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<List<Map>> getFileList(@RequestParam String dir) {
-        if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "目录名不能为空");
+        if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "请指定一个目录");
 
         ListFilesResult result = fileStorageService.listFiles()
                 .setPlatform(OssUtil.getPlatform())
