@@ -10,7 +10,9 @@ import liuyuyang.net.service.OssService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "对象存储管理")
 @RestController
@@ -82,9 +84,16 @@ public class OssController {
     }
 
     @GetMapping("/getEnableOss")
-    @ApiOperation("获取启用的oss配置")
+    @ApiOperation("获取当前启用的oss配置")
     @ApiOperationSupport(author = "laifeng", order = 8)
     public Result<Oss> getEnableOss() {
         return Result.success(ossService.getEnableOss());
+    }
+
+    @GetMapping("/platform")
+    @ApiOperation("获取目前支持的oss平台")
+    @ApiOperationSupport(author = "宇阳", order = 9)
+    public Result<List<Map>> getPlatform() {
+        return Result.success(ossService.getPlatform());
     }
 }

@@ -6,6 +6,7 @@ import liuyuyang.net.model.Oss;
 import liuyuyang.net.vo.PageVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OssService extends IService<Oss> {
     /**
@@ -32,4 +33,7 @@ public interface OssService extends IService<Oss> {
      * @param oss
      */
     void saveOss(Oss oss);
+
+    // 获取支持的平台
+    List<Map> getPlatform();
 }

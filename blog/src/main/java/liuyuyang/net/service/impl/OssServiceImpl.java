@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssService {
@@ -77,6 +80,21 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         QueryWrapper<Oss> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Oss::getIsEnable, 1);
         return ossMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public List<Map> getPlatform() {
+        List<Map> result = new ArrayList<>();
+        String[] list = {"huawei", "aliyun", "qiniu", "tencent", "minio"};
+
+        for (String item : list) {
+            Map<String, String> data = new HashMap<>();
+            data.put("name", platformName(item));
+            data.put("value", item);
+            result.add(data);
+        }
+
+        return result;
     }
 
     // 对数据中间10位数进行脱敏
