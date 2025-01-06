@@ -119,7 +119,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
 
     // 对数据中间10位数进行脱敏
     public String maskMiddleTen(String input) {
-        if (input.length() <= 10) return input;
+        if (input == null || input.length() <= 10) return input;
 
         int start = (input.length() - 10) / 2;
         int end = start + 10;
@@ -135,6 +135,8 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     // 处理平台名称
     public String platformName(String data) {
         switch (data) {
+            case "local-plus":
+                return "本地存储";
             case "huawei":
                 return "华为云";
             case "aliyun":
