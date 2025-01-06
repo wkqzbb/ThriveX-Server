@@ -71,13 +71,6 @@ public class OssController {
         return Result.success();
     }
 
-//    @PatchMapping("/disable/{id}")
-//    @ApiOperation("禁用oss配置")
-//    @ApiOperationSupport(author = "laifeng", order = 7)
-//    public Result disable(@PathVariable Integer id) {
-//        ossService.disable(id);
-//        return Result.success();
-//    }
 
     @GetMapping("/getEnableOss")
     @ApiOperation("获取当前启用的oss配置")

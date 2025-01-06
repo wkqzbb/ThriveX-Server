@@ -23,21 +23,21 @@ public class OssUtil {
     private static final FileStorageService fileStorageService = SpringUtil.getBean(FileStorageService.class);
 
     public static String getPlatform() {
-        if (platform == null) {
-            platform = DEFAULT_PLATFORM;
-        }
+        if (platform == null) platform = DEFAULT_PLATFORM;
         return platform;
     }
 
     public static void setPlatformToDefault(Oss oss) {
         // 获取存储平台 List
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
+
         FileStorageProperties.LocalPlusConfig config = new FileStorageProperties.LocalPlusConfig();
         config.setPlatform(DEFAULT_PLATFORM);
         config.setBasePath(oss.getBasePath());
         config.setDomain(oss.getDomain());
         config.setStoragePath(oss.getEndPoint());
         removeStorage(list, DEFAULT_PLATFORM);
+
         list.addAll(FileStorageServiceBuilder.buildLocalPlusFileStorage(Collections.singletonList(config)));
     }
 
