@@ -73,15 +73,11 @@ knife4j:
     footer-custom-content: 互联网从不缺乏天才，而努力才是最终的入场劵!
 
 dromara:
-  x-file-storage: # 文件存储配置
-    default-platform: local-plus # 默认使用的存储平台
-    thumbnail-suffix: ".min.jpg" # 缩略图后缀，例如【.min.jpg】【.png】
-    # 对应平台的配置写在这里，注意缩进要对齐
+  # 文件存储配置
+  x-file-storage:
+    default-platform: local-plus
     local-plus:
       - platform: local-plus # 存储平台标识
         enable-storage: true  # 启用存储
         enable-access: true # 启用访问（线上请使用 Nginx 配置，效率更高）
-        domain: http://127.0.0.1:8080/file/ # 访问域名，例如：“http://127.0.0.1:8030/file/”，注意后面要和 path-patterns 保持一致，“/”结尾，本地存储建议使用相对路径，方便后期更换域名
-        base-path: upload/ # 基础路径
-        path-patterns: /file/** # 访问路径
-        storage-path: ${user.dir}/ # 存储路径
+        path-patterns: /static/** # 访问路径

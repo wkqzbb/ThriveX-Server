@@ -1,0 +1,77 @@
+services:
+  # 数据库
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    networks:
+      # 加入网络
+      - thrive_network
+    environment:
+      # 数据库密码
+      MYSQL_ROOT_PASSWORD: yyds
+      # 创建数据库
+      MYSQL_DATABASE: ThriveX
+    volumes:
+      # 默认数据卷位置
+      # - mysql_data:/var/lib/mysql
+      # 将 mysql_data 映射到宿主机的当前目录
+      - ./mysql/mysql_data:/var/lib/mysql
+      # 执行当前目录data中的sql脚本（只在初始化时执行）
+      - ./mysql/data:/docker-entrypoint-initdb.d
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  # 备份服务
+  backup:
+    image: mysql:8.0
+    container_name: mysql_backup
+    # 每3小时自动备份数据
+    command: /bin/sh -c "while true; do mysqldump -h mysql -u root -pliuyuyang ThriveX > /backup/ThriveX_$(date +%F_%T).sql; sleep 10800; done"
+    # 将容器中的目录映射到当前目录
+    volumes:
+      - ./mysql/backup:/backup
+    networks:
+      - thrive_network
+    depends_on:
+      - mysql
+
+  # 后端项目
+  server:
+    container_name: server
+    build: ./program
+    ports:
+      - "对外端口:对内端口" # 示例："9003:9003"
+    networks:
+      - thrive_network
+    depends_on:
+      - mysql
+    environment:
+      PORT: 你的项目端口号 # 示例：9003
+      DB_INFO: mysql:3306/你的数据库名称 # 示例：mysql:3306/ThriveX
+      DB_USERNAME: 你的数据库用户名 # 示例：root
+      DB_PASSWORD: 你的数据库密码 # 示例：yyds
+      EMAIL_HOST: 邮箱服务器 # 示例：smtp.qq.com
+      EMAIL_PORT: 邮箱服务器端口号 # 示例：465
+      EMAIL_USERNAME: 你的邮箱账号 # 示例：liuyuyang1024@yeah.net
+      EMAIL_PASSWORD: 你的邮箱授权码 # 示例：aaaaaaaaaaaaaaaaaa
+      OSS_ACCESS_KEY: 你的七牛云对象存储Access # 示例：bbbbbbbbbbbbbbbbbb
+      OSS_SECRET_KEY: 你的七牛云对象存储Secret # 示例：cccccccccccccccccc
+      OSS_BUCKET: thrive
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - thrive_network
+    depends_on:
+      - server
+
+# 网络配置
+networks:
+  # 创建网络
+  thrive_network:

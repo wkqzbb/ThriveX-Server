@@ -29,8 +29,16 @@ public class OssUtil {
         return platform;
     }
 
-    public static void setPlatformToDefault() {
-        platform = DEFAULT_PLATFORM;
+    public static void setPlatformToDefault(Oss oss) {
+        // 获取存储平台 List
+        CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
+        FileStorageProperties.LocalPlusConfig config = new FileStorageProperties.LocalPlusConfig();
+        config.setPlatform(DEFAULT_PLATFORM);
+        config.setBasePath(oss.getBasePath());
+        config.setDomain(oss.getDomain());
+        config.setStoragePath(oss.getEndPoint());
+        removeStorage(list, DEFAULT_PLATFORM);
+        list.addAll(FileStorageServiceBuilder.buildLocalPlusFileStorage(Collections.singletonList(config)));
     }
 
     /**
@@ -50,8 +58,6 @@ public class OssUtil {
         config.setDomain(oss.getDomain());
         config.setBasePath(oss.getBasePath());
         removeStorage(list, oss.getPlatform());
-
-        // TODO 其它更多配置
         list.addAll(FileStorageServiceBuilder.buildHuaweiObsFileStorage(Collections.singletonList(config), null));
     }
 
@@ -70,7 +76,6 @@ public class OssUtil {
         config.setDomain(oss.getDomain());
         config.setBasePath(oss.getBasePath());
         removeStorage(list, oss.getPlatform());
-
         list.addAll(FileStorageServiceBuilder.buildAliyunOssFileStorage(Collections.singletonList(config), null));
     }
 
@@ -104,7 +109,6 @@ public class OssUtil {
         config.setDomain(oss.getDomain());
         config.setBasePath(oss.getBasePath());
         removeStorage(list, oss.getPlatform());
-
         list.addAll(FileStorageServiceBuilder.buildTencentCosFileStorage(Collections.singletonList(config), null));
     }
 
@@ -122,14 +126,15 @@ public class OssUtil {
         config.setDomain(oss.getDomain());
         config.setBasePath(oss.getBasePath());
         removeStorage(list, oss.getPlatform());
-
         list.addAll(FileStorageServiceBuilder.buildMinioFileStorage(Collections.singletonList(config), null));
     }
 
     // 加载指定的平台
     public static void registerPlatform(Oss oss) {
-
         switch (oss.getPlatform()) {
+            case "local-plus":
+                setPlatformToDefault(oss);
+                return;
             case "huawei":
                 setHuaweiConfig(oss);
                 platform = oss.getPlatform();
@@ -151,6 +156,7 @@ public class OssUtil {
                 platform = oss.getPlatform();
                 return;
         }
+
         throw new RuntimeException("暂不支持该平台");
     }
 
@@ -165,11 +171,10 @@ public class OssUtil {
      * 删除旧的存储平台
      */
     public static void removeStorage(CopyOnWriteArrayList<FileStorage> list, String platform) {
-        //删除
         FileStorage myStorage = fileStorageService.getFileStorage(platform);
         if (myStorage != null) {
             list.remove(myStorage);
-            myStorage.close();//释放资源
+            myStorage.close(); //释放资源
         }
     }
 }

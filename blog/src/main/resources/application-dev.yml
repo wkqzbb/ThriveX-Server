@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${DB_NAME}?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${DB_INFO}?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
@@ -19,3 +19,6 @@ lyy:
     accessKey: ${OSS_ACCESS_KEY}
     secretKey: ${OSS_SECRET_KEY}
     bucket: ${OSS_BUCKET}
+
+  storage:
+    domain: ${DOMAIN}
