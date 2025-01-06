@@ -44,10 +44,7 @@ public class OssController {
     @ApiOperation("更新oss配置")
     @ApiOperationSupport(author = "laifeng", order = 3)
     public Result<String> update(@RequestBody Oss oss) {
-        // if (oss.getIsEnable() == 1) return Result.error("删除oss配置失败：该配置正在使用中");
-        // 不允许更改平台
-        oss.setPlatform(null);
-        ossService.updateById(oss);
+        ossService.updateOss(oss);
         return Result.success();
     }
 
@@ -74,13 +71,13 @@ public class OssController {
         return Result.success();
     }
 
-    @PatchMapping("/disable/{id}")
-    @ApiOperation("禁用oss配置")
-    @ApiOperationSupport(author = "laifeng", order = 7)
-    public Result disable(@PathVariable Integer id) {
-        ossService.disable(id);
-        return Result.success();
-    }
+//    @PatchMapping("/disable/{id}")
+//    @ApiOperation("禁用oss配置")
+//    @ApiOperationSupport(author = "laifeng", order = 7)
+//    public Result disable(@PathVariable Integer id) {
+//        ossService.disable(id);
+//        return Result.success();
+//    }
 
     @GetMapping("/getEnableOss")
     @ApiOperation("获取当前启用的oss配置")
