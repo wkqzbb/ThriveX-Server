@@ -134,6 +134,7 @@ public class OssUtil {
         switch (oss.getPlatform()) {
             case "local-plus":
                 setPlatformToDefault(oss);
+                platform = oss.getPlatform();
                 return;
             case "huawei":
                 setHuaweiConfig(oss);

@@ -4,10 +4,13 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
+import liuyuyang.net.enums.EOssPlatform;
 import liuyuyang.net.model.Oss;
 import liuyuyang.net.result.Result;
 import liuyuyang.net.service.OssService;
+import liuyuyang.net.vo.oss.OssVo;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,8 +54,17 @@ public class OssController {
     @GetMapping("/{id}")
     @ApiOperation("获取oss配置")
     @ApiOperationSupport(author = "laifeng", order = 4)
-    public Result<Oss> get(@PathVariable Integer id) {
-        return Result.success(ossService.getById(id));
+    public Result<OssVo> get(@PathVariable Integer id) {
+        Oss oss = ossService.getById(id);
+        if (oss == null) {
+            return Result.error("获取oss配置失败：该配置不存在");
+        }
+        OssVo vo = new OssVo();
+        BeanUtils.copyProperties(oss, vo);
+        if (EOssPlatform.LOCAL_PLUS.getValue().equals(vo.getPlatform())) {
+            vo.setProjectPath(System.getProperty("user.dir"));
+        }
+        return Result.success(vo);
     }
 
     @PostMapping("/list")
