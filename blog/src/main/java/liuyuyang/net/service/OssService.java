@@ -20,14 +20,6 @@ public interface OssService extends IService<Oss> {
     Oss getEnableOss();
 
     /**
-     * 不再使用
-     *
-     * @param id
-     */
-    @Deprecated
-    void disable(Integer id);
-
-    /**
      * 删除
      */
     void delOss(Integer id);

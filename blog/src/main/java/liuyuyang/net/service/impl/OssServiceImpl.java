@@ -71,13 +71,6 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         OssUtil.registerPlatform(oss);
     }
 
-    @Override
-    public void disable(Integer id) {
-        boolean temp1 = this.update(Wrappers.<Oss>update().lambda().set(Oss::getIsEnable, 0));
-        if (!temp1) throw new CustomException("禁用失败");
-        OssUtil.removeStorage(OssUtil.getStorageList(), OssUtil.getPlatform());
-    }
-
     public Oss getEnableOss() {
         QueryWrapper<Oss> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Oss::getIsEnable, 1);

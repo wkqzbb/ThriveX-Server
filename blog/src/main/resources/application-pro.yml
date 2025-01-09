@@ -4,7 +4,6 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://mysql:3306/ThriveX?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
     url: jdbc:mysql://${DB_INFO}?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -15,11 +14,3 @@ lyy:
     port: ${EMAIL_PORT}
     username: ${EMAIL_USERNAME}
     password: ${EMAIL_PASSWORD}
-
-  oss:
-    accessKey: ${OSS_ACCESS_KEY}
-    secretKey: ${OSS_SECRET_KEY}
-    bucket: ${OSS_BUCKET}
-
-  storage:
-    domain: ${DOMAIN}
