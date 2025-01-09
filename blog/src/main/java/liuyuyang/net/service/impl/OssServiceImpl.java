@@ -135,7 +135,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     // 处理平台名称
     public String platformName(String data) {
         switch (data) {
-            case "local-plus":
+            case "local":
                 return "本地存储";
             case "huawei":
                 return "华为云";

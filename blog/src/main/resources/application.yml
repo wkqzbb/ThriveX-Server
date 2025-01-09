@@ -77,7 +77,7 @@ dromara:
   x-file-storage:
     default-platform: local-plus
     local-plus:
-      - platform: local-plus # 存储平台标识
+      - platform: local # 存储平台标识
         enable-storage: true  # 启用存储
         enable-access: true # 启用访问（线上请使用 Nginx 配置，效率更高）
         path-patterns: /static/** # 访问路径

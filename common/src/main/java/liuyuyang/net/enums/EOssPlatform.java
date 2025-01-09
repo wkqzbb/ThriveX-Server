@@ -20,7 +20,7 @@ public enum EOssPlatform implements BasicEnum<String> {
     ALIYUN("aliyun", "阿里云OSS"),
     TENCENT("tencent", "腾讯云COS"),
     MINIO("minio", "MinIO"),
-    LOCAL_PLUS("local-plus", "本地存储");
+    LOCAL_PLUS("local", "本地存储");
 
     private final String value;
     private final String desc;

@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Data
 public class OssUtil {
     private static String platform;
-    public static final String DEFAULT_PLATFORM = "local-plus";
+    public static final String DEFAULT_PLATFORM = "local";
     private static final FileStorageService fileStorageService = SpringUtil.getBean(FileStorageService.class);
 
     public static String getPlatform() {
@@ -132,7 +132,7 @@ public class OssUtil {
     // 加载指定的平台
     public static void registerPlatform(Oss oss) {
         switch (oss.getPlatform()) {
-            case "local-plus":
+            case "local":
                 setPlatformToDefault(oss);
                 platform = oss.getPlatform();
                 return;
