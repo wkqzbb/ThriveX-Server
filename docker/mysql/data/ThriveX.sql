@@ -236,6 +236,7 @@ CREATE TABLE `file_detail` (
 
 LOCK TABLES `file_detail` WRITE;
 /*!40000 ALTER TABLE `file_detail` DISABLE KEYS */;
+INSERT INTO `file_detail` VALUES ('1877320395464376322','localhost:9003/static/upload/article/677fb67b480efdcd8b709d33.png',260031,'677fb67b480efdcd8b709d33.png','PixPin_2025-01-08_00-00-27.png','upload/','article/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-09 19:43:56'),('1877320501886484481','localhost:9003/static/upload/article/677fb695480ec13246b57ede.png',260031,'677fb695480ec13246b57ede.png','PixPin_2025-01-08_00-00-27.png','upload/','article/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-09 19:44:21');
 /*!40000 ALTER TABLE `file_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -347,7 +348,7 @@ CREATE TABLE `oss` (
   `base_path` varchar(255) DEFAULT NULL,
   `is_enable` int DEFAULT NULL COMMENT '是否启用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='oss配置表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='oss配置表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -356,6 +357,7 @@ CREATE TABLE `oss` (
 
 LOCK TABLES `oss` WRITE;
 /*!40000 ALTER TABLE `oss` DISABLE KEYS */;
+INSERT INTO `oss` VALUES (1,'local',NULL,'','改成你的项目路径',NULL,'localhost:9003/static/','upload/',1);
 /*!40000 ALTER TABLE `oss` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -617,4 +619,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-31 17:36:48
+-- Dump completed on 2025-01-09 20:05:46
