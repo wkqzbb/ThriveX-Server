@@ -94,7 +94,6 @@ public class ArticleController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
     public Result paging(@RequestBody ArticleFillterVo filterVo, PageVo pageVo, @RequestHeader(value = "Authorization", required = false) String token) {
         Page<Article> list = articleService.paging(filterVo, pageVo, token);
-        System.out.println(list);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }

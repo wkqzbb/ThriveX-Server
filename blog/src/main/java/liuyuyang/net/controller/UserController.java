@@ -122,8 +122,6 @@ public class UserController {
         result.put("user", data);
         result.put("role", role);
 
-        System.out.println(result);
-
         return Result.success("登录成功", result);
     }
 

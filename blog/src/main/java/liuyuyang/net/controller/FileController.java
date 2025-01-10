@@ -125,9 +125,6 @@ public class FileController {
         List<Map> list = new ArrayList<>();
         List<RemoteFileInfo> fileList = result.getFileList();
 
-        System.out.println(fileList);
-        System.out.println(444444);
-
         for (RemoteFileInfo item : fileList) {
             // 如果是目录就略过
             if (Objects.equals(item.getExt(), "")) continue;
