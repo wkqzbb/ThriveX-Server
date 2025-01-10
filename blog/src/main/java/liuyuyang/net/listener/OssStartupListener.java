@@ -30,8 +30,6 @@ public class OssStartupListener implements ApplicationListener<ContextRefreshedE
             } else {
                 // 没有启用的 OSS 配置,报错
                 throw new RuntimeException("没有发现启用的OSS配置");
-//                OssUtil.setPlatformToDefault();
-//                log.info("没有发现启用的OSS配置,使用默认存储平台");
             }
         }
 

@@ -52,7 +52,9 @@ public class FileController {
                     .upload();
 
             if (result == null) throw new CustomException("上传文件失败");
-            urls.add(result.getUrl());
+
+            String url = result.getUrl();
+            urls.add(url.startsWith("https://") ? url : "https://" + url);
         }
 
         return Result.success("文件上传成功：", urls);
@@ -62,8 +64,8 @@ public class FileController {
     @ApiOperation("删除文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@RequestParam String filePath) {
-        boolean delete = fileStorageService.delete(filePath);
-        System.out.println(delete);
+        String url = filePath.startsWith("https://") ? filePath : "https://" + filePath;
+        boolean delete = fileStorageService.delete(url);
         return Result.status(delete);
     }
 
@@ -72,7 +74,7 @@ public class FileController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody String[] pathList) throws QiniuException {
         for (String url : pathList) {
-            boolean delete = fileStorageService.delete(url);
+            boolean delete = fileStorageService.delete(url.startsWith("https://") ? url : "https://" + url);
             if (!delete) throw new CustomException("删除文件失败");
         }
         return Result.success();
@@ -123,6 +125,9 @@ public class FileController {
         List<Map> list = new ArrayList<>();
         List<RemoteFileInfo> fileList = result.getFileList();
 
+        System.out.println(fileList);
+        System.out.println(444444);
+
         for (RemoteFileInfo item : fileList) {
             // 如果是目录就略过
             if (Objects.equals(item.getExt(), "")) continue;
@@ -135,7 +140,10 @@ public class FileController {
             data.put("name", item.getFilename());
             data.put("size", item.getSize());
             data.put("type", item.getExt());
-            data.put("url", item.getUrl());
+
+            String url = item.getUrl();
+            if (!url.startsWith("https://")) url = "https://" + url;
+            data.put("url", url);
 
             list.add(data);
         }

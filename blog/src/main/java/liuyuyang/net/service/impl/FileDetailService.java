@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.FileDetailMapper;
 import liuyuyang.net.model.FileDetail;
 import lombok.SneakyThrows;
@@ -16,7 +17,6 @@ import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.hash.HashInfo;
 import org.dromara.x.file.storage.core.recorder.FileRecorder;
 import org.dromara.x.file.storage.core.upload.FilePartInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -36,9 +36,7 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
     public boolean save(FileInfo info) {
         FileDetail detail = toFileDetail(info);
         boolean b = save(detail);
-        if (b) {
-            info.setId(detail.getId());
-        }
+        if (b) info.setId(detail.getId());
         return b;
     }
 
@@ -63,14 +61,15 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
     @SneakyThrows
     @Override
     public FileInfo getByUrl(String url) {
-        System.out.println(url);
-        return toFileInfo(getOne(new QueryWrapper<FileDetail>().lambda().eq(FileDetail::getUrl, url)));
+        FileDetail detail = getOne(new QueryWrapper<FileDetail>().lambda().eq(FileDetail::getUrl, url));
+        if (detail == null) throw new CustomException("文件不存在");
+        return toFileInfo(detail);
     }
 
     /**
      * 根据 url 删除文件信息
      */
-    @Override
+    // @Override
     public boolean delete(String url) {
         remove(new QueryWrapper<FileDetail>()
                 .lambda()
@@ -80,6 +79,7 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
 
     /**
      * 保存文件分片信息
+     *
      * @param filePartInfo 文件分片信息
      */
     @Override
@@ -97,9 +97,15 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
      * 将 FileInfo 转为 FileDetail
      */
     public FileDetail toFileDetail(FileInfo info) throws JsonProcessingException {
+        String url = info.getUrl();
+
+        // 如果前缀不带 https://，则自动补全
+        if (!url.startsWith("https://")) url = "https://" + url;
+
         FileDetail detail = BeanUtil.copyProperties(
                 info, FileDetail.class, "metadata", "userMetadata", "thMetadata", "thUserMetadata", "attr", "hashInfo");
 
+        detail.setUrl(url);
         // 这里手动获 元数据 并转成 json 字符串，方便存储在数据库中
         detail.setMetadata(valueToJson(info.getMetadata()));
         detail.setUserMetadata(valueToJson(info.getUserMetadata()));
@@ -144,7 +150,8 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
      */
     public Map<String, String> jsonToMetadata(String json) throws JsonProcessingException {
         if (StrUtil.isBlank(json)) return null;
-        return objectMapper.readValue(json, new TypeReference<Map<String, String>>() {});
+        return objectMapper.readValue(json, new TypeReference<Map<String, String>>() {
+        });
     }
 
     /**
