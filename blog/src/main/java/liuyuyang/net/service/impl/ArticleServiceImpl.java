@@ -182,6 +182,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 管理员可以查看任何权限的文章
         if (!isAdmin) {
+            if (data.getIsDel() == 1) {
+                throw new CustomException(404, "该文章已被删除");
+            }
+
             if ("hide".equals(config.getStatus())) {
                 throw new CustomException(611, "该文章已被隐藏");
             }
