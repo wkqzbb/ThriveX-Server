@@ -32,9 +32,6 @@ jwt:
   token-name: Authorization
 
 oss:
-  accessKey: ${lyy.oss.accessKey}
-  secretKey: ${lyy.oss.secretKey}
-  bucket: ${lyy.oss.bucket}
   # 目录白名单
   dirList:
     - default

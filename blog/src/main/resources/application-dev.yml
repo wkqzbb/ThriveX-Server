@@ -14,7 +14,3 @@ lyy:
     port: ${EMAIL_PORT}
     username: ${EMAIL_USERNAME}
     password: ${EMAIL_PASSWORD}
-
-  oss:
-    accessKey: ${OSS_ACCESS_KEY}
-    secretKey: ${OSS_SECRET_KEY}
