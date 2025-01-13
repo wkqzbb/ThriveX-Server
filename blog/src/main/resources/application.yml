@@ -31,15 +31,6 @@ jwt:
   # 设置前端传递过来的令牌名称
   token-name: Authorization
 
-oss:
-  # 目录白名单
-  dirList:
-    - default
-    - article
-    - record
-    - swiper
-    - footprint
-
 # API文档配置
 knife4j:
   enable: true
