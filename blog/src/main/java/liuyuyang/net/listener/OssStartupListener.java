@@ -12,9 +12,10 @@ import org.springframework.stereotype.Component;
 /**
  * 将启用的 OSS 配置注册到存储平台
  */
+
+@Slf4j
 @Component
 @AllArgsConstructor
-@Slf4j
 public class OssStartupListener implements ApplicationListener<ContextRefreshedEvent> {
     private final OssService ossService;
 
