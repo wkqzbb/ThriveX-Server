@@ -40,7 +40,7 @@ public class UserController {
     @Resource
     private RoleService roleService;
 
-    @CheckRole
+    @PremName("user:add")
     @PostMapping
     @ApiOperation("新增用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -49,7 +49,7 @@ public class UserController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("user:del")
     @DeleteMapping("/{id}")
     @ApiOperation("删除用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -58,7 +58,7 @@ public class UserController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("user:del")
     @DeleteMapping("/batch")
     @ApiOperation("批量删除用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -67,7 +67,7 @@ public class UserController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("user:edit")
     @PatchMapping
     @ApiOperation("编辑用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
@@ -85,7 +85,7 @@ public class UserController {
         return Result.success(data);
     }
 
-    @CheckRole
+    @PremName("user:list")
     @PostMapping("/list")
     @ApiOperation("获取用户列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
@@ -94,7 +94,7 @@ public class UserController {
         return Result.success(list);
     }
 
-    @CheckRole
+    @PremName("user:list")
     @PostMapping("/paging")
     @ApiOperation("分页查询用户列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
@@ -126,6 +126,7 @@ public class UserController {
         return Result.success("登录成功", result);
     }
 
+    @PremName("user:pass")
     @PatchMapping("/pass")
     @ApiOperation("修改用户密码")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)

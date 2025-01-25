@@ -5,8 +5,8 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.ArticleService;
@@ -28,15 +28,16 @@ public class ArticleController {
     @Resource
     private ArticleService articleService;
 
+    @PremName("article:add")
     @PostMapping
     @ApiOperation("新增文章")
-    @CheckRole({"author"})
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestBody Article article) {
         articleService.add(article);
         return Result.success();
     }
 
+    @PremName("article:del")
     @DeleteMapping("/{id}/{is_del}")
     @ApiOperation("删除文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -45,6 +46,7 @@ public class ArticleController {
         return Result.success();
     }
 
+    @PremName("article:reduction")
     @PatchMapping("/reduction/{id}")
     @ApiOperation("还原被删除的文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -53,6 +55,7 @@ public class ArticleController {
         return Result.success();
     }
 
+    @PremName("article:del")
     @DeleteMapping("/batch")
     @ApiOperation("批量删除文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
@@ -61,9 +64,9 @@ public class ArticleController {
         return Result.success();
     }
 
+    @PremName("article:edit")
     @PatchMapping
     @ApiOperation("编辑文章")
-    @CheckRole({"admin"})
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<String> edit(@RequestBody Article article) {
         articleService.edit(article);

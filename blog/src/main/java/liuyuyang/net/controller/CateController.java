@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.model.Cate;
 import liuyuyang.net.utils.Result;
 import liuyuyang.net.result.cate.CateArticleCount;
@@ -27,7 +28,7 @@ public class CateController {
     @Resource
     private CateService cateService;
 
-    @CheckRole
+    @PremName("cate:add")
     @PostMapping
     @ApiOperation("新增分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -36,12 +37,11 @@ public class CateController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("cate:del")
     @DeleteMapping("/{id}")
     @ApiOperation("删除分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@PathVariable Integer id) {
-        // 判断该分类中是否绑定了二级分类
         boolean e = cateService.exist(id);
         if (!e) return Result.error();
 
@@ -52,7 +52,7 @@ public class CateController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("cate:del")
     @DeleteMapping("/batch")
     @ApiOperation("批量删除分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -66,7 +66,7 @@ public class CateController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("cate:edit")
     @PatchMapping
     @ApiOperation("编辑分类")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)

@@ -5,6 +5,7 @@ import com.qiniu.common.QiniuException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.utils.Result;
 import liuyuyang.net.utils.OssUtils;
@@ -31,11 +32,11 @@ import java.util.*;
 @RestController
 @RequestMapping("/file")
 @Transactional
-@CheckRole
 public class FileController {
     @Resource
     private FileStorageService fileStorageService;
 
+    @PremName("file:add")
     @PostMapping
     @ApiOperation("文件上传")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -59,6 +60,7 @@ public class FileController {
         return Result.success("文件上传成功：", urls);
     }
 
+    @PremName("file:del")
     @DeleteMapping
     @ApiOperation("删除文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -68,6 +70,7 @@ public class FileController {
         return Result.status(delete);
     }
 
+    @PremName("file:del")
     @DeleteMapping("/batch")
     @ApiOperation("批量删除文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -79,6 +82,7 @@ public class FileController {
         return Result.success();
     }
 
+    @PremName("file:info")
     @GetMapping("/info")
     @ApiOperation("获取文件信息")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
@@ -87,6 +91,7 @@ public class FileController {
         return Result.success(fileInfo);
     }
 
+    @PremName("file:dir")
     @GetMapping("/dir")
     @ApiOperation("获取目录列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
@@ -109,6 +114,7 @@ public class FileController {
         return Result.success(list);
     }
 
+    @PremName("file:list")
     @GetMapping("/list")
     @ApiOperation("获取指定目录中的文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
