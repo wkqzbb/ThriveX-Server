@@ -1,8 +1,10 @@
 package liuyuyang.net.aspect;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.jsonwebtoken.Claims;
 import liuyuyang.net.annotation.PremId;
 import liuyuyang.net.execption.CustomException;
+import liuyuyang.net.model.RolePermission;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,8 @@ import java.util.Map;
 public class PremIdAspect {
     @Resource
     private JwtProperties jwtProperties;
+    @Resource
+    private RolePermissionMapper rolePermissionMapper;
 
     // 定义切点，支持类和方法上的注解
     @Pointcut("@within(liuyuyang.net.annotation.PremId) || @annotation(liuyuyang.net.annotation.PremId)")
@@ -60,6 +64,10 @@ public class PremIdAspect {
                     Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
                     System.out.println(claims);
                     role = (Map<String, Object>) claims.get("roleId");
+
+                    // 通过角色查询每个权限
+                    LambdaQueryWrapper<RolePermission> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+                    lambdaQueryWrapper.eq(RolePermission::getRoleId, id);
                 } catch (Exception e) {
                     response.setStatus(401);
                     throw new CustomException(401, "身份验证失败：无效或过期的token");
