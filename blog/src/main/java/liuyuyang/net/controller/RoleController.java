@@ -4,6 +4,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.Route;
 import liuyuyang.net.utils.Result;
@@ -22,7 +23,7 @@ public class RoleController {
     @Resource
     private RoleService roleService;
 
-    @CheckRole
+    @PremName("role:add")
     @PostMapping
     @ApiOperation("新增角色")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -31,7 +32,7 @@ public class RoleController {
         return res ? Result.success() : Result.error();
     }
 
-    @CheckRole
+    @PremName("role:del")
     @DeleteMapping("/{id}")
     @ApiOperation("删除角色")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -43,7 +44,7 @@ public class RoleController {
         return res ? Result.success() : Result.error();
     }
 
-    @CheckRole
+    @PremName("role:del")
     @DeleteMapping("/batch")
     @ApiOperation("批量删除角色")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -52,7 +53,7 @@ public class RoleController {
         return res ? Result.success() : Result.error();
     }
 
-    @CheckRole
+    @PremName("role:edit")
     @PatchMapping
     @ApiOperation("编辑角色")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
@@ -61,7 +62,7 @@ public class RoleController {
         return res ? Result.success() : Result.error();
     }
 
-    @CheckRole({"admin", "author", "user"})
+    @PremName("role:info")
     @GetMapping("/{id}")
     @ApiOperation("获取角色")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
@@ -70,7 +71,7 @@ public class RoleController {
         return Result.success(data);
     }
 
-    @CheckRole
+    @PremName("role:list")
     @GetMapping
     @ApiOperation("获取角色列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
@@ -79,7 +80,7 @@ public class RoleController {
         return Result.success(data);
     }
 
-    @CheckRole({"admin", "author", "user"})
+    @PremName("role:getRouteList")
     @GetMapping("/route/{id}")
     @ApiOperation("获取指定角色的路由列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
@@ -88,7 +89,7 @@ public class RoleController {
         return Result.success(list);
     }
 
-    @CheckRole
+    @PremName("role:bindingRoute")
     @PatchMapping("/bindingRoute/{id}")
     @ApiOperation("分配角色权限")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)

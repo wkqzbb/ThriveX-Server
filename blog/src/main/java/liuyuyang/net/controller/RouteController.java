@@ -4,6 +4,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Route;
 import liuyuyang.net.utils.Result;
@@ -22,7 +23,7 @@ public class RouteController {
     @Resource
     private RouteService routeService;
 
-    @CheckRole
+    @PremName("route:add")
     @PostMapping
     @ApiOperation("新增路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -36,7 +37,7 @@ public class RouteController {
         }
     }
 
-    @CheckRole
+    @PremName("route:del")
     @DeleteMapping("/{id}")
     @ApiOperation("删除路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -49,7 +50,7 @@ public class RouteController {
         return res ? Result.success() : Result.error();
     }
 
-    @CheckRole
+    @PremName("route:del")
     @DeleteMapping("/batch")
     @ApiOperation("批量删除路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -59,7 +60,7 @@ public class RouteController {
         return res ? Result.success() : Result.error();
     }
 
-    @CheckRole
+    @PremName("route:edit")
     @PatchMapping
     @ApiOperation("编辑路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
@@ -73,7 +74,7 @@ public class RouteController {
         }
     }
 
-    @CheckRole({"admin", "author", "user"})
+    @PremName("route:info")
     @GetMapping("/{id}")
     @ApiOperation("获取路由")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
@@ -82,7 +83,7 @@ public class RouteController {
         return Result.success(data);
     }
 
-    @CheckRole
+    @PremName("route:list")
     @GetMapping
     @ApiOperation("获取路由列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)

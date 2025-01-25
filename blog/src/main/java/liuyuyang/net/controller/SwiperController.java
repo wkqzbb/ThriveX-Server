@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Swiper;
 import liuyuyang.net.utils.Result;
@@ -25,7 +26,7 @@ public class SwiperController {
     @Resource
     private SwiperService swiperService;
 
-    @CheckRole
+    @PremName("swiper:add")
     @PostMapping
     @ApiOperation("新增轮播图")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -39,7 +40,7 @@ public class SwiperController {
         }
     }
 
-    @CheckRole
+    @PremName("swiper:del")
     @DeleteMapping("/{id}")
     @ApiOperation("删除轮播图")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -52,7 +53,7 @@ public class SwiperController {
         return res ? Result.success() : Result.error();
     }
 
-    @CheckRole
+    @PremName("swiper:del")
     @DeleteMapping("/batch")
     @ApiOperation("批量删除轮播图")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -62,7 +63,7 @@ public class SwiperController {
         return res ? Result.success() : Result.error();
     }
 
-    @CheckRole
+    @PremName("swiper:edit")
     @PatchMapping
     @ApiOperation("编辑轮播图")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)

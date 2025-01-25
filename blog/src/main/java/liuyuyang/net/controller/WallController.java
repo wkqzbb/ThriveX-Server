@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Wall;
 import liuyuyang.net.model.WallCate;
@@ -38,7 +38,7 @@ public class WallController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("wall:del")
     @DeleteMapping("/{id}")
     @ApiOperation("删除留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
@@ -49,7 +49,7 @@ public class WallController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("wall:del")
     @DeleteMapping("/batch")
     @ApiOperation("批量删除留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
@@ -58,7 +58,7 @@ public class WallController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremName("wall:edit")
     @PatchMapping
     @ApiOperation("编辑留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
@@ -112,7 +112,7 @@ public class WallController {
         return Result.success(list);
     }
 
-    @CheckRole
+    @PremName("wall:audit")
     @PatchMapping("/audit/{id}")
     @ApiOperation("审核指定留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
