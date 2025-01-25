@@ -16,6 +16,6 @@ public interface RoleMapper extends BaseMapper<Role> {
     public List<Route> getRouteList(Integer id);
 
     // 查询指定角色的所有权限
-    @Select("select p.* from permission p, role r where p.role_id = r.id and r.id = #{id}")
+    @Select("select p.* from role r, permission p, role_permission rp where  r.id = rp.role_id and p.id = rp.permission_id and r.id = #{id}")
     public List<Permission> getPermissionList(Integer id);
 }

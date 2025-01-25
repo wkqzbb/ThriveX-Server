@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.PremName;
+import liuyuyang.net.dto.role.BindRouteAndPermission;
 import liuyuyang.net.model.Permission;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.Route;
@@ -103,8 +104,8 @@ public class RoleController {
     @PatchMapping("/bindingRoute/{id}")
     @ApiOperation("分配角色权限")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
-    public Result<String> bindingRoute(@PathVariable Integer id, @RequestBody List<Integer> ids) {
-        roleService.bindingRoute(id, ids);
+    public Result<String> bindingRoute(@PathVariable Integer id, @RequestBody BindRouteAndPermission data) {
+        roleService.binding(id, data);
         return Result.success();
     }
 }

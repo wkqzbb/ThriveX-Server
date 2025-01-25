@@ -1,6 +1,7 @@
 package liuyuyang.net.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import liuyuyang.net.dto.role.BindRouteAndPermission;
 import liuyuyang.net.model.Permission;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.Route;
@@ -11,5 +12,5 @@ public interface RoleService extends IService<Role> {
     List<Route> getRouteList(Integer id);
     List<Permission> getPermissionList(Integer id);
 
-    void bindingRoute(Integer id, List<Integer> ids);
+    void binding(Integer id, BindRouteAndPermission data);
 }
