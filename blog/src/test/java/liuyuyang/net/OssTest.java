@@ -1,16 +1,12 @@
 package liuyuyang.net;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import liuyuyang.net.model.Oss;
 import liuyuyang.net.service.OssService;
-import liuyuyang.net.utils.OssUtil;
-import liuyuyang.net.vo.PageVo;
+import liuyuyang.net.utils.OssUtils;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
 import org.dromara.x.file.storage.core.get.ListFilesResult;
 import org.dromara.x.file.storage.core.get.RemoteDirInfo;
 import org.dromara.x.file.storage.core.get.RemoteFileInfo;
-import org.dromara.x.file.storage.core.platform.FileStorage;
 import org.dromara.x.file.storage.core.upload.UploadPretreatment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +37,7 @@ public class OssTest {
     @Test
     public void testUpload() {
         FileInfo upload = fileStorageService.of(new File("E:\\aaa\\jiang_test.jpeg"))
-                .setPlatform(OssUtil.getPlatform())
+                .setPlatform(OssUtils.getPlatform())
                 .upload();
         System.out.println(upload);
     }
@@ -73,7 +69,7 @@ public class OssTest {
         fileInfo.setFilename("Oss_test.txt");
 
         // 删除地址为 basePath + path + filename 可以直接这只fileName值删除
-        boolean delete = fileStorageService.getFileStorage(OssUtil.getPlatform()).delete(fileInfo);
+        boolean delete = fileStorageService.getFileStorage(OssUtils.getPlatform()).delete(fileInfo);
         System.out.println(delete);
     }
 
@@ -83,12 +79,12 @@ public class OssTest {
     @Test
     public void testList() {
         UploadPretreatment uploadPretreatment = fileStorageService.of()
-                .setPlatform(OssUtil.getPlatform());
+                .setPlatform(OssUtils.getPlatform());
         System.out.println("-----------");
         Map<String, String> metadata = uploadPretreatment.getMetadata();
         System.out.println(metadata);
         ListFilesResult result = fileStorageService.listFiles()
-                .setPlatform(OssUtil.getPlatform())
+                .setPlatform(OssUtils.getPlatform())
                 .setPath("upload/") // 指定目录
                 .listFiles();
         // 获取目录列表

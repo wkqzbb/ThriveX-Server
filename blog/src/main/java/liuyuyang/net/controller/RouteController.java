@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Route;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.RouteService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;

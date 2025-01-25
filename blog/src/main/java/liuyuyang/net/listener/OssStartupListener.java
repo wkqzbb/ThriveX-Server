@@ -2,7 +2,7 @@ package liuyuyang.net.listener;
 
 import liuyuyang.net.model.Oss;
 import liuyuyang.net.service.OssService;
-import liuyuyang.net.utils.OssUtil;
+import liuyuyang.net.utils.OssUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
@@ -37,6 +37,6 @@ public class OssStartupListener implements ApplicationListener<ContextRefreshedE
     }
 
     private void registerOssToPlatform(Oss oss) {
-        OssUtil.registerPlatform(oss);
+        OssUtils.registerPlatform(oss);
     }
 }

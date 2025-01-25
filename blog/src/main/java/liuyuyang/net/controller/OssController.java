@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.enums.EOssPlatform;
 import liuyuyang.net.model.Oss;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.OssService;
 import liuyuyang.net.vo.oss.OssVo;
 import lombok.AllArgsConstructor;

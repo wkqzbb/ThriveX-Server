@@ -17,10 +17,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @date 2024/12/10 21:21
  */
 @Data
-public class OssUtil {
+public class OssUtils {
     private static String platform;
     public static final String DEFAULT_PLATFORM = "local";
-    private static final FileStorageService fileStorageService = SpringUtil.getBean(FileStorageService.class);
+    private static final FileStorageService fileStorageService = SpringUtils.getBean(FileStorageService.class);
 
     public static String getPlatform() {
         if (platform == null) platform = DEFAULT_PLATFORM;

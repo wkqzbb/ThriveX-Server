@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Rss;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.RssService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

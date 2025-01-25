@@ -8,7 +8,7 @@ import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Tag;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.TagService;
 import liuyuyang.net.utils.Paging;
 import org.springframework.transaction.annotation.Transactional;

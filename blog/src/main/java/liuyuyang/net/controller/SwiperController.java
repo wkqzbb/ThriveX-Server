@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Swiper;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.SwiperService;
 import liuyuyang.net.utils.Paging;
 import org.springframework.transaction.annotation.Transactional;

@@ -8,7 +8,7 @@ import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Comment;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.CommentService;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;

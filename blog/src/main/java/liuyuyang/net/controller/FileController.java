@@ -6,14 +6,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.execption.CustomException;
-import liuyuyang.net.result.Result;
-import liuyuyang.net.utils.OssUtil;
+import liuyuyang.net.utils.Result;
+import liuyuyang.net.utils.OssUtils;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
 import org.dromara.x.file.storage.core.get.ListFilesResult;
 import org.dromara.x.file.storage.core.get.RemoteDirInfo;
 import org.dromara.x.file.storage.core.get.RemoteFileInfo;
-import org.dromara.x.file.storage.core.platform.FileStorage;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +46,7 @@ public class FileController {
 
         for (MultipartFile file : files) {
             FileInfo result = fileStorageService.of(file)
-                    .setPlatform(OssUtil.getPlatform())
+                    .setPlatform(OssUtils.getPlatform())
                     .setPath(dir + '/')
                     .upload();
 
@@ -93,7 +92,7 @@ public class FileController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     public Result<List<Map>> getDirList() {
         ListFilesResult result = fileStorageService.listFiles()
-                .setPlatform(OssUtil.getPlatform())
+                .setPlatform(OssUtils.getPlatform())
                 .listFiles();
 
         // 获取文件列表
@@ -117,7 +116,7 @@ public class FileController {
         if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "请指定一个目录");
 
         ListFilesResult result = fileStorageService.listFiles()
-                .setPlatform(OssUtil.getPlatform())
+                .setPlatform(OssUtils.getPlatform())
                 .setPath(dir + '/')
                 .listFiles();
 

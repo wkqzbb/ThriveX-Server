@@ -8,7 +8,7 @@ import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.OssMapper;
 import liuyuyang.net.model.Oss;
 import liuyuyang.net.service.OssService;
-import liuyuyang.net.utils.OssUtil;
+import liuyuyang.net.utils.OssUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +38,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         // 如果是默认的平台，提示不可删除
         if (oss.getPlatform().equals(EOssPlatform.LOCAL_PLUS.getValue())) throw new CustomException("默认平台不可删除");
         boolean result = this.removeById(id);
-        if (result) OssUtil.removeStorage(OssUtil.getStorageList(), oss.getPlatform());
+        if (result) OssUtils.removeStorage(OssUtils.getStorageList(), oss.getPlatform());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         if (!temp2) throw new CustomException("启用失败");
 
         Oss oss = this.getById(id);
-        OssUtil.registerPlatform(oss);
+        OssUtils.registerPlatform(oss);
     }
 
     public Oss getEnableOss() {
@@ -106,7 +106,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         boolean result = this.updateById(oss);
         if (result) {
             oss.setPlatform(platform);
-            OssUtil.registerPlatform(oss);
+            OssUtils.registerPlatform(oss);
         }
     }
 

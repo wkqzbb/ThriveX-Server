@@ -9,7 +9,7 @@ import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.model.Wall;
 import liuyuyang.net.model.WallCate;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.WallService;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;

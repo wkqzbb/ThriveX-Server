@@ -1,4 +1,4 @@
-package liuyuyang.net.result;
+package liuyuyang.net.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

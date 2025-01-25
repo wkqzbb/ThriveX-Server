@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiParam;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Cate;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.result.cate.CateArticleCount;
 import liuyuyang.net.service.CateService;
 import liuyuyang.net.utils.Paging;

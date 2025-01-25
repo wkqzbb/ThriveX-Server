@@ -10,7 +10,7 @@ import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
 import liuyuyang.net.model.LinkType;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.LinkService;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;

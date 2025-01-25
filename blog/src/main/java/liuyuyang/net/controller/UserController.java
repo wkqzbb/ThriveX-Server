@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
+import liuyuyang.net.annotation.PremId;
 import liuyuyang.net.dto.user.EditPassDTO;
 import liuyuyang.net.dto.user.UserDTO;
 import liuyuyang.net.dto.user.UserInfoDTO;
@@ -12,7 +13,7 @@ import liuyuyang.net.dto.user.UserLoginDTO;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.User;
 import liuyuyang.net.properties.JwtProperties;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.RoleService;
 import liuyuyang.net.service.UserService;
 import liuyuyang.net.utils.JwtUtils;
@@ -75,7 +76,7 @@ public class UserController {
         return Result.success();
     }
 
-    @CheckRole
+    @PremId("user:info")
     @GetMapping("/{id}")
     @ApiOperation("获取用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)

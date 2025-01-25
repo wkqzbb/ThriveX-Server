@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Record;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.RecordService;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.FilterVo;

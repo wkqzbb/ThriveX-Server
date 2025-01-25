@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.model.Footprint;
-import liuyuyang.net.result.Result;
+import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.FootprintService;
 import liuyuyang.net.vo.FilterVo;
 import org.springframework.transaction.annotation.Transactional;
