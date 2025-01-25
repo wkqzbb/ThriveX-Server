@@ -3,8 +3,10 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.execption.CustomException;
+import liuyuyang.net.mapper.PermissionMapper;
 import liuyuyang.net.mapper.RoleMapper;
 import liuyuyang.net.mapper.RouteRoleMapper;
+import liuyuyang.net.model.Permission;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.Route;
 import liuyuyang.net.model.RouteRole;
@@ -26,6 +28,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<Route> getRouteList(Integer id) {
         return roleMapper.getRouteList(id);
+    }
+
+    @Override
+    public List<Permission> getPermissionList(Integer id) {
+        return roleMapper.getPermissionList(id);
     }
 
     @Override

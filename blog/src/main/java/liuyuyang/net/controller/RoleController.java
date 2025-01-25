@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.PremName;
+import liuyuyang.net.model.Permission;
 import liuyuyang.net.model.Role;
 import liuyuyang.net.model.Route;
 import liuyuyang.net.utils.Result;
@@ -89,10 +90,19 @@ public class RoleController {
         return Result.success(list);
     }
 
+    @PremName("role:getPermissionList")
+    @GetMapping("/permission/{id}")
+    @ApiOperation("获取指定角色的权限列表")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
+    public Result<List<Permission>>getPermissionList (@PathVariable Integer id) {
+        List<Permission> list = roleService.getPermissionList(id);
+        return Result.success(list);
+    }
+
     @PremName("role:bindingRoute")
     @PatchMapping("/bindingRoute/{id}")
     @ApiOperation("分配角色权限")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
     public Result<String> bindingRoute(@PathVariable Integer id, @RequestBody List<Integer> ids) {
         roleService.bindingRoute(id, ids);
         return Result.success();
