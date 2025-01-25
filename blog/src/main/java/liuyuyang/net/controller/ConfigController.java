@@ -20,7 +20,7 @@ public class ConfigController {
     @Resource
     private ConfigService configService;
 
-    @PremName("config:info")
+    // @PremName("config:info")
     @GetMapping("/{name}")
     @ApiOperation("获取指定项目配置")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
@@ -28,7 +28,7 @@ public class ConfigController {
         return Result.success(configService.get(name));
     }
 
-    @PremName("config:list")
+    // @PremName("config:list")
     @GetMapping("/list/{group}")
     @ApiOperation("获取项目配置列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
