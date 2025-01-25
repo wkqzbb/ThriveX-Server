@@ -5,7 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.CheckRole;
-import liuyuyang.net.annotation.PremId;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.dto.user.EditPassDTO;
 import liuyuyang.net.dto.user.UserDTO;
 import liuyuyang.net.dto.user.UserInfoDTO;
@@ -76,7 +76,7 @@ public class UserController {
         return Result.success();
     }
 
-    @PremId("user:info")
+    @PremName("user:info")
     @GetMapping("/{id}")
     @ApiOperation("获取用户")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)

@@ -2,10 +2,10 @@ package liuyuyang.net.aspect;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.jsonwebtoken.Claims;
-import liuyuyang.net.annotation.PremId;
+import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.execption.CustomException;
-import liuyuyang.net.mapper.RolePermissionMapper;
-import liuyuyang.net.model.RolePermission;
+import liuyuyang.net.mapper.PermissionMapper;
+import liuyuyang.net.model.Permission;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -21,28 +21,29 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Aspect
 @Component
-public class PremIdAspect {
+public class PremNameAspect {
     @Resource
     private JwtProperties jwtProperties;
     @Resource
-    private RolePermissionMapper rolePermissionMapper;
+    private PermissionMapper permissionMapper;
 
     // 定义切点，支持类和方法上的注解
-    @Pointcut("@within(liuyuyang.net.annotation.PremId) || @annotation(liuyuyang.net.annotation.PremId)")
+    @Pointcut("@within(liuyuyang.net.annotation.PremName) || @annotation(liuyuyang.net.annotation.PremName)")
     private void cut() {
     }
 
     @Before("cut()")
     public void before(JoinPoint joinPoint) {
-        PremId id = getMethodAnnotation(joinPoint);
+        PremName name = getMethodAnnotation(joinPoint);
 
-        if (id != null) {
-            String prem = id.value();
+        if (name != null) {
+            String prem = name.value();
             log.info("权限名称：{}", prem);
 
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -64,14 +65,18 @@ public class PremIdAspect {
                 try {
                     Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
                     System.out.println(claims);
-                    role = (Map<String, Object>) claims.get("roleId");
+                    role = (Map<String, Object>) claims.get("role");
 
                     // 通过角色查询每个权限
-                    LambdaQueryWrapper<RolePermission> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-                    lambdaQueryWrapper.eq(RolePermission::getRoleId, id);
+                    LambdaQueryWrapper<Permission> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+                    lambdaQueryWrapper.eq(Permission::getRoleId, role.get("id")).eq(Permission::getName, prem);
+                    List<Permission> permissions = permissionMapper.selectList(lambdaQueryWrapper);
+
+                    if(permissions == null || permissions.isEmpty()) throw new CustomException("暂无权限，请联系管理员");
                 } catch (Exception e) {
+                    e.printStackTrace();
                     response.setStatus(401);
-                    throw new CustomException(401, "身份验证失败：无效或过期的token");
+                    throw new CustomException(401, e.getMessage());
                 }
 
                 log.info("角色ID：{}", role.get("id"));
@@ -80,10 +85,10 @@ public class PremIdAspect {
     }
 
     // 获取当前方法上的 @PermName 注解
-    private PremId getMethodAnnotation(JoinPoint joinPoint) {
+    private PremName getMethodAnnotation(JoinPoint joinPoint) {
         Method method = getCurrentMethod(joinPoint);
         if (method != null) {
-            return method.getAnnotation(PremId.class);
+            return method.getAnnotation(PremName.class);
         }
         return null;
     }

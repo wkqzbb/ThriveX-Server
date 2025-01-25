@@ -1,6 +1,7 @@
 package liuyuyang.net.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,6 +20,10 @@ public class Permission {
     @ApiModelProperty(value = "权限描述", example = "新增用户", required = true)
     private String description;
 
+    @TableField("`group`")
     @ApiModelProperty(value = "权限分组", example = "user", required = true)
     private String group;
+
+    @ApiModelProperty(value = "角色ID", example = "1", required = true)
+    private Integer roleId;
 }
