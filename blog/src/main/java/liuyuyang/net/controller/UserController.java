@@ -33,8 +33,6 @@ import java.util.Map;
 @Transactional
 public class UserController {
     @Resource
-    private JwtProperties jwtProperties;
-    @Resource
     private UserService userService;
     @Resource
     private RoleService roleService;
@@ -106,22 +104,8 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation("用户登录")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result login(@RequestBody UserLoginDTO user) {
-        User data = userService.login(user);
-        data.setPassword("只有聪明的人才能看到密码");
-
-        Role role = roleService.getById(data.getRoleId());
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("user", data);
-        claims.put("role", role);
-        String token = JwtUtils.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("token", token);
-        result.put("user", data);
-        result.put("role", role);
-
+    public Result<Map> login(@RequestBody UserLoginDTO user) {
+        Map<String, Object> result = userService.login(user);
         return Result.success("登录成功", result);
     }
 

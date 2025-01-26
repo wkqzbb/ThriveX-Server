@@ -11,7 +11,9 @@ import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.RoleMapper;
 import liuyuyang.net.mapper.UserMapper;
 import liuyuyang.net.model.*;
+import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.service.UserService;
+import liuyuyang.net.utils.JwtUtils;
 import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.user.UserFilterVo;
@@ -22,7 +24,9 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.web.context.request.RequestContextHolder;
@@ -31,6 +35,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Service
 @Transactional
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+    @Resource
+    private JwtProperties jwtProperties;
     @Resource
     private YuYangUtils yuYangUtils;
     @Resource
@@ -116,7 +122,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User login(UserLoginDTO user) {
+    public Map<String, Object> login(UserLoginDTO user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", user.getUsername());
         queryWrapper.eq("password", DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
@@ -125,7 +131,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         if (data == null) throw new CustomException(400, "用户名或密码错误");
 
-        return data;
+        data.setPassword("只有聪明的人才能看到密码");
+
+        Role role = roleMapper.selectById(data.getRoleId());
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("user", data);
+        claims.put("role", role);
+        String token = JwtUtils.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("user", data);
+        result.put("role", role);
+
+        return result;
     }
 
     @Override

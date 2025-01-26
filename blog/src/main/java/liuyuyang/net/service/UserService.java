@@ -11,6 +11,7 @@ import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.user.UserFilterVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService extends IService<User> {
     User get(Integer id);
@@ -20,7 +21,7 @@ public interface UserService extends IService<User> {
     void edit(UserInfoDTO data);
     List<User> list(UserFilterVo filterVo);
     Page<User> paging(UserFilterVo filterVo, PageVo pageVo);
-    User login(UserLoginDTO user);
+    Map<String, Object> login(UserLoginDTO user);
     void editPass(EditPassDTO data);
     void check(String token);
 }
