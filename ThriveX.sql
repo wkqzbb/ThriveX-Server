@@ -605,6 +605,32 @@ INSERT INTO `user` VALUES (1,'admin','E10ADC3949BA59ABBE56E057F20F883E','宇阳'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_token`
+--
+
+DROP TABLE IF EXISTS `user_token`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_token` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `uid` int NOT NULL COMMENT '用户 ID',
+  `token` text NOT NULL COMMENT '用户token',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_token_pk_2` (`id`),
+  UNIQUE KEY `user_token_pk_3` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户 token';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_token`
+--
+
+LOCK TABLES `user_token` WRITE;
+/*!40000 ALTER TABLE `user_token` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_token` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `wall`
 --
 
@@ -671,4 +697,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-25 20:32:39
+-- Dump completed on 2025-01-26 15:08:15
