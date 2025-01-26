@@ -81,7 +81,6 @@ public class RoleController {
         return Result.success(data);
     }
 
-    @PremName("role:getRouteList")
     @GetMapping("/route/{id}")
     @ApiOperation("获取指定角色的路由列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
@@ -90,7 +89,6 @@ public class RoleController {
         return Result.success(list);
     }
 
-    @PremName("role:getPermissionList")
     @GetMapping("/permission/{id}")
     @ApiOperation("获取指定角色的权限列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
