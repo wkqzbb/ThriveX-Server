@@ -4,7 +4,6 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.annotation.PremName;
-import liuyuyang.net.enums.EOssPlatform;
 import liuyuyang.net.model.Oss;
 import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.OssService;
@@ -64,7 +63,7 @@ public class OssController {
         }
         OssVo vo = new OssVo();
         BeanUtils.copyProperties(oss, vo);
-        if (EOssPlatform.LOCAL_PLUS.getValue().equals(vo.getPlatform())) {
+        if ("local".equals(vo.getPlatform())) {
             vo.setProjectPath(System.getProperty("user.dir"));
         }
         return Result.success(vo);

@@ -3,7 +3,6 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liuyuyang.net.enums.EOssPlatform;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.OssMapper;
 import liuyuyang.net.model.Oss;
@@ -36,7 +35,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         Oss oss = this.getById(id);
         if (oss == null) throw new CustomException("删除失败");
         // 如果是默认的平台，提示不可删除
-        if (oss.getPlatform().equals(EOssPlatform.LOCAL_PLUS.getValue())) throw new CustomException("默认平台不可删除");
+        if (oss.getPlatform().equals("local")) throw new CustomException("默认平台不可删除");
         boolean result = this.removeById(id);
         if (result) OssUtils.removeStorage(OssUtils.getStorageList(), oss.getPlatform());
     }
@@ -95,7 +94,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     @Override
     public void updateOss(Oss oss) {
         String platform = oss.getPlatform();
-        if (EOssPlatform.LOCAL_PLUS.getValue().equals(platform)) {
+        if ("local".equals(platform)) {
             // domin 后缀必须是 /static/
             if (!oss.getDomain().endsWith("/static/")) {
                 throw new CustomException("本地存储域名必须以 /static/ 结尾");

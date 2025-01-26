@@ -90,6 +90,8 @@ public class YuYangUtils {
                 if (userTokens != null && !userTokens.isEmpty()) {
                     Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
                     return true;
+                } else {
+                    return false;
                 }
             }
         } catch (Exception e) {
