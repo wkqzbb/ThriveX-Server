@@ -1,5 +1,6 @@
 package liuyuyang.net.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,6 +11,7 @@ import liuyuyang.net.dto.user.UserLoginDTO;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.mapper.RoleMapper;
 import liuyuyang.net.mapper.UserMapper;
+import liuyuyang.net.mapper.UserTokenMapper;
 import liuyuyang.net.model.*;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.service.UserService;
@@ -43,6 +45,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
     @Resource
     private RoleMapper roleMapper;
+    @Resource
+    private UserTokenMapper userTokenMapper;
 
     @Override
     public void add(UserDTO user) {
@@ -122,28 +126,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Map<String, Object> login(UserLoginDTO user) {
+    public Map<String, Object> login(UserLoginDTO userDTO) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", user.getUsername());
-        queryWrapper.eq("password", DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        queryWrapper.eq("username", userDTO.getUsername());
+        queryWrapper.eq("password", DigestUtils.md5DigestAsHex(userDTO.getPassword().getBytes()));
 
-        User data = userMapper.selectOne(queryWrapper);
+        User user = userMapper.selectOne(queryWrapper);
+        if (user == null) throw new CustomException(400, "用户名或密码错误");
+        user.setPassword("只有聪明的人才能看到密码");
 
-        if (data == null) throw new CustomException(400, "用户名或密码错误");
-
-        data.setPassword("只有聪明的人才能看到密码");
-
-        Role role = roleMapper.selectById(data.getRoleId());
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("user", data);
-        claims.put("role", role);
-        String token = JwtUtils.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
+        Role role = roleMapper.selectById(user.getRoleId());
 
         Map<String, Object> result = new HashMap<>();
-        result.put("token", token);
-        result.put("user", data);
+        result.put("user", user);
         result.put("role", role);
+        String token = JwtUtils.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), result);
+        result.put("token", token);
+
+        // 先删除用户的token
+        LambdaQueryWrapper<UserToken> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(UserToken::getUid,user.getId());
+        userTokenMapper.delete(userLambdaQueryWrapper);
+        // 再存储用户的token
+        UserToken userToken = new UserToken();
+        userToken.setUid(user.getId());
+        userToken.setToken(token);
+        userTokenMapper.insert(userToken);
 
         return result;
     }
@@ -166,7 +174,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void check(String token) {
-        // boolean isCheck = yuYangUtils.isAdmin(token);
         boolean isCheck = yuYangUtils.check(token);
 
         if (!isCheck) {

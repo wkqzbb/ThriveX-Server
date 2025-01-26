@@ -1,19 +1,24 @@
 package liuyuyang.net.interceptor;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.jsonwebtoken.Claims;
 import liuyuyang.net.annotation.NoTokenRequired;
 import liuyuyang.net.execption.CustomException;
+import liuyuyang.net.mapper.UserTokenMapper;
+import liuyuyang.net.model.UserToken;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * jwt令牌校验的拦截器
@@ -21,20 +26,12 @@ import java.lang.reflect.Method;
 @Component
 @Slf4j
 public class JwtTokenAdminInterceptor implements HandlerInterceptor {
-
-    @Autowired
+    @Resource
     private JwtProperties jwtProperties;
+    @Resource
+    private UserTokenMapper userTokenMapper;
 
-    /**
-     * 校验jwt
-     *
-     * @param request
-     * @param response
-     * @param handler
-     * @return
-     * @throws Exception
-     */
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         // 从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getTokenName());
 
@@ -61,23 +58,30 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
                 if (token != null) {
                     if (token.startsWith("Bearer ")) token = token.substring(7);
                     JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
-                    return true;
-                } else {
-                    return true;
                 }
+                return true;
             }
 
             // 处理Authorization的Bearer
             if (token.startsWith("Bearer ")) token = token.substring(7);
-            Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
 
-            // 放行
-            return true;
+            LambdaQueryWrapper<UserToken> userTokenLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            userTokenLambdaQueryWrapper.eq(UserToken::getToken, token);
+            List<UserToken> userTokens = userTokenMapper.selectList(userTokenLambdaQueryWrapper);
+
+            // 如果跟之前的token相匹配则进一步判断token是否有效
+            if (userTokens != null && !userTokens.isEmpty()) {
+                Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
+                return true;
+            } else {
+                throw new CustomException(401, "该账号已在另一台设备登录");
+            }
         } catch (Exception ex) {
             System.out.println("校验失败：" + ex);
             // 校验失败，响应401状态码
             response.setStatus(401);
-            throw new CustomException(401, "身份验证失败：无效或过期的token");
+            String message = ex.getMessage() != null ? ex.getMessage() : "无效或过期的token";
+            throw new CustomException(401, message);
         }
     }
 }
