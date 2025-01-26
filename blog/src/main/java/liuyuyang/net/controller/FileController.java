@@ -4,7 +4,6 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.qiniu.common.QiniuException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.execption.CustomException;
 import liuyuyang.net.utils.Result;

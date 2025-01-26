@@ -3,8 +3,6 @@ package liuyuyang.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.dto.role.BindRouteAndPermission;
-import liuyuyang.net.execption.CustomException;
-import liuyuyang.net.mapper.PermissionMapper;
 import liuyuyang.net.mapper.RoleMapper;
 import liuyuyang.net.mapper.RolePermissionMapper;
 import liuyuyang.net.mapper.RouteRoleMapper;

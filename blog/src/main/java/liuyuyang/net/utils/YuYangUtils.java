@@ -1,8 +1,11 @@
 package liuyuyang.net.utils;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.jsonwebtoken.Claims;
+import liuyuyang.net.mapper.UserTokenMapper;
+import liuyuyang.net.model.UserToken;
 import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.vo.FilterVo;
 import liuyuyang.net.vo.PageVo;
@@ -16,6 +19,9 @@ import java.util.Map;
 public class YuYangUtils {
     @Resource
     private JwtProperties jwtProperties;
+
+    @Resource
+    private UserTokenMapper userTokenMapper;
 
     // 分页查询逻辑
     public <T> Page<T> getPageData(PageVo pageVo, List<T> list) {
@@ -75,13 +81,21 @@ public class YuYangUtils {
         try {
             if (token != null) {
                 if (token.startsWith("Bearer ")) token = token.substring(7);
-                JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
-                return true;
-            } else {
-                return false;
+
+                LambdaQueryWrapper<UserToken> userTokenLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                userTokenLambdaQueryWrapper.eq(UserToken::getToken, token);
+                List<UserToken> userTokens = userTokenMapper.selectList(userTokenLambdaQueryWrapper);
+
+                // 如果跟之前的token相匹配则进一步判断token是否有效
+                if (userTokens != null && !userTokens.isEmpty()) {
+                    Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
+                    return true;
+                }
             }
         } catch (Exception e) {
             return false;
         }
+
+        return false;
     }
 }

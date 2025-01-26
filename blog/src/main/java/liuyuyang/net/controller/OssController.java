@@ -3,7 +3,6 @@ package liuyuyang.net.controller;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liuyuyang.net.annotation.CheckRole;
 import liuyuyang.net.annotation.PremName;
 import liuyuyang.net.enums.EOssPlatform;
 import liuyuyang.net.model.Oss;

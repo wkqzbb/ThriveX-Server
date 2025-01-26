@@ -9,13 +9,10 @@ import liuyuyang.net.dto.user.EditPassDTO;
 import liuyuyang.net.dto.user.UserDTO;
 import liuyuyang.net.dto.user.UserInfoDTO;
 import liuyuyang.net.dto.user.UserLoginDTO;
-import liuyuyang.net.model.Role;
 import liuyuyang.net.model.User;
-import liuyuyang.net.properties.JwtProperties;
 import liuyuyang.net.utils.Result;
 import liuyuyang.net.service.RoleService;
 import liuyuyang.net.service.UserService;
-import liuyuyang.net.utils.JwtUtils;
 import liuyuyang.net.utils.Paging;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.user.UserFilterVo;
@@ -23,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

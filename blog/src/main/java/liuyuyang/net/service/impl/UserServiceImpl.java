@@ -39,6 +39,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
     private JwtProperties jwtProperties;
+
     @Resource
     private YuYangUtils yuYangUtils;
     @Resource
