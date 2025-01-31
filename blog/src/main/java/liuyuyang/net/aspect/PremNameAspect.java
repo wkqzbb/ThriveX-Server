@@ -65,8 +65,14 @@ public class PremNameAspect {
                 String token = request.getHeader("Authorization");
                 log.debug("Authorization Header: {}", token);
 
+                // 如果 token 为 null，跳过权限校验
+                if (token == null) {
+                    log.info("Token为空，跳过权限校验");
+                    return; // 跳过权限校验
+                }
+
                 // 去掉 Bearer 前缀
-                if (token != null && token.startsWith("Bearer ")) {
+                if (token.startsWith("Bearer ")) {
                     token = token.substring(7);
                 }
 
@@ -116,7 +122,7 @@ public class PremNameAspect {
     // 获取当前方法上的 @PremName 注解
     private Optional<PremName> getMethodAnnotation(JoinPoint joinPoint) {
         return Optional.ofNullable(getCurrentMethod(joinPoint))
-                       .map(method -> method.getAnnotation(PremName.class));
+                .map(method -> method.getAnnotation(PremName.class));
     }
 
     // 获取当前执行的方法对象
