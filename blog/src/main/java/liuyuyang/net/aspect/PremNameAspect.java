@@ -68,7 +68,7 @@ public class PremNameAspect {
                 // 如果 token 为 null，跳过权限校验
                 if (token == null) {
                     log.info("Token为空，跳过权限校验");
-                    return; // 跳过权限校验
+                    throw new CustomException("Token 不能为空");
                 }
 
                 // 去掉 Bearer 前缀
