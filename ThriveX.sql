@@ -15,9 +15,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE DATABASE IF NOT EXISTS ThriveX;
-use ThriveX;
-
 --
 -- Table structure for table `article`
 --
@@ -239,7 +236,7 @@ CREATE TABLE `file_detail` (
 
 LOCK TABLES `file_detail` WRITE;
 /*!40000 ALTER TABLE `file_detail` DISABLE KEYS */;
-INSERT INTO `file_detail` VALUES ('1877698163112960001','https://localhost:9003/static/upload/record/6781164e480e60e617a0b2d7.png',230807,'6781164e480e60e617a0b2d7.png','PixPin_2025-01-08_00-00-27.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:45:03'),('1877698990066130945','https://localhost:9003/static/upload/record/67811713480e60e617a0b2d8.png',150715,'67811713480e60e617a0b2d8.png','PixPin_2025-01-07_23-37-33.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:48:20'),('1877699825252720642','https://localhost:9003/static/upload/record/678117da480e60e617a0b2d9.png',150715,'678117da480e60e617a0b2d9.png','PixPin_2025-01-07_23-37-33.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:51:39'),('1877700016034832386','https://localhost:9003/static/upload/record/67811808480e60e617a0b2da.png',150715,'67811808480e60e617a0b2da.png','PixPin_2025-01-07_23-37-33.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:52:24'),('1877700590117609473','https://localhost:9003/static/upload/record/67811891480e60e617a0b2db.png',230807,'67811891480e60e617a0b2db.png','PixPin_2025-01-08_00-00-27.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:54:41');
+INSERT INTO `file_detail` VALUES ('1877698163112960001','https://localhost:9003/static/upload/record/6781164e480e60e617a0b2d7.png',230807,'6781164e480e60e617a0b2d7.png','PixPin_2025-01-08_00-00-27.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:45:03'),('1877698990066130945','https://localhost:9003/static/upload/record/67811713480e60e617a0b2d8.png',150715,'67811713480e60e617a0b2d8.png','PixPin_2025-01-07_23-37-33.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:48:20'),('1877699825252720642','https://localhost:9003/static/upload/record/678117da480e60e617a0b2d9.png',150715,'678117da480e60e617a0b2d9.png','PixPin_2025-01-07_23-37-33.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:51:39'),('1877700016034832386','https://localhost:9003/static/upload/record/67811808480e60e617a0b2da.png',150715,'67811808480e60e617a0b2da.png','PixPin_2025-01-07_23-37-33.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:52:24'),('1877700590117609473','https://localhost:9003/static/upload/record/67811891480e60e617a0b2db.png',230807,'67811891480e60e617a0b2db.png','PixPin_2025-01-08_00-00-27.png','upload/','record/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-01-10 20:54:41'),('1886755416432463874','https://localhost:9003/static/upload/article/67a20988480ea7b8878f259d.png',11639,'67a20988480ea7b8878f259d.png','image.png','upload/','article/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-02-04 20:35:20'),('1886755630367133697','https://localhost:9003/static/upload/article/67a209bb480ea7b8878f259e.png',32696,'67a209bb480ea7b8878f259e.png','image.png','upload/','article/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-02-04 20:36:11'),('1886756001865129986','https://localhost:9003/static/upload/article/67a20a13480e5f5c41c025d1.png',30048,'67a20a13480e5f5c41c025d1.png','image.png','upload/','article/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-02-04 20:37:40'),('1886760127541927937','https://localhost:9003/static/upload/article/67a20deb480e5f5c41c025d2.png',52067,'67a20deb480e5f5c41c025d2.png','image.png','upload/','article/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-02-04 20:54:03'),('1886762730984169474','https://localhost:9003/static/upload/article/67a21058480e5f5c41c025d3.png',17058,'67a21058480e5f5c41c025d3.png','image.png','upload/','article/','png','image/png','local',NULL,NULL,NULL,NULL,NULL,NULL,'{}','{}','{}','{}','{}',NULL,NULL,'{}',NULL,NULL,'2025-02-04 21:04:24');
 /*!40000 ALTER TABLE `file_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -376,10 +373,9 @@ CREATE TABLE `permission` (
   `name` varchar(100) NOT NULL COMMENT '权限标识',
   `description` varchar(255) NOT NULL COMMENT '权限介绍',
   `group` varchar(50) NOT NULL COMMENT '权限分组',
-  `role_id` int NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Permission_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色权限';
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色权限';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -388,7 +384,7 @@ CREATE TABLE `permission` (
 
 LOCK TABLES `permission` WRITE;
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
-INSERT INTO `permission` VALUES (1,'user:add','新增用户','user',1),(2,'user:del','删除用户','user',1),(3,'user:edit','编辑用户','user',1),(4,'user:info','获取用户','user',1),(5,'user:list','获取用户列表','user',1),(6,'user:pass','修改用户密码','user',1),(7,'data:add','新增数据','data',1),(8,'data:del','删除数据','data',1),(9,'article:add','新增文章','article',1),(10,'article:del','删除文章','article',1),(11,'article:reduction','还原被删除的文章','article',1),(12,'article:del','批量删除文章','article',1),(13,'article:edit','编辑文章','article',1),(14,'cate:add','新增分类','cate',1),(15,'cate:del','删除分类','cate',1),(16,'cate:edit','编辑分类','cate',1),(17,'comment:del','删除评论','comment',1),(18,'comment:edit','编辑评论','comment',1),(19,'comment:audit','审核评论','comment',1),(20,'config:info','获取项目配置','config',1),(21,'config:list','获取项目配置列表','config',1),(22,'config:edit','修改项目配置','config',1),(23,'email:dismiss','驳回通知邮件','email',1),(24,'file:info','获取文件信息','file',1),(25,'file:dir','获取目录列表','file',1),(26,'file:list','获取文件列表','file',1),(27,'file:add','文件上传','file',1),(28,'file:del','删除文件','file',1),(29,'oss:add','新增oss配置','oss',1),(30,'oss:del','删除oss配置','oss',1),(31,'oss:edit','更新oss配置','oss',1),(32,'oss:info','获取oss配置','oss',1),(33,'oss:list','获取oss配置列表','oss',1),(34,'oss:enable','启用oss配置','oss',1),(35,'oss:getEnableOss','获取当前启用的oss配置','oss',1),(36,'oss:getPlatform','获取支持的oss平台','oss',1),(37,'record:add','新增说说','record',1),(38,'record:del','删除说说','record',1),(39,'record:edit','编辑说说','record',1),(40,'role:add','新增角色','role',1),(41,'role:del','删除角色','role',1),(42,'role:edit','编辑角色','role',1),(43,'role:info','获取角色','role',1),(44,'role:list','获取角色列表','role',1),(45,'role:getRouteList','获取角色路由列表','role',1),(46,'role:bindingRoute','分配角色权限','role',1),(47,'route:add','新增路由','route',1),(48,'route:del','删除路由','route',1),(49,'route:edit','编辑路由','route',1),(50,'route:info','获取路由','route',1),(51,'route:list','获取路由列表','route',1),(52,'swiper:add','新增轮播图','swiper',1),(53,'swiper:del','删除轮播图','swiper',1),(54,'swiper:edit','编辑轮播图','swiper',1),(55,'tag:add','新增标签','tag',1),(56,'tag:del','删除标签','tag',1),(57,'tag:edit','编辑标签','tag',1),(58,'wall:del','删除留言','wall',1),(59,'wall:edit','编辑留言','wall',1),(60,'wall:audit','审核留言','wall',1),(61,'role:getPermissionList','获取角色路由列表','role',1),(62,'permission:add','新增权限','permission',1),(63,'permission:del','删除权限','permission',1),(64,'permission:edit','编辑权限','permission',1),(65,'permission:info','获取权限','permission',1),(66,'permission:list','获取权限列表','permission',1);
+INSERT INTO `permission` VALUES (1,'user:add','新增用户','user'),(2,'user:del','删除用户','user'),(3,'user:edit','编辑用户','user'),(4,'user:info','获取用户','user'),(5,'user:list','获取用户列表','user'),(6,'user:pass','修改用户密码','user'),(7,'data:add','新增数据','data'),(8,'data:del','删除数据','data'),(9,'article:add','新增文章','article'),(10,'article:del','删除文章','article'),(11,'article:reduction','还原被删除的文章','article'),(12,'article:del','批量删除文章','article'),(13,'article:edit','编辑文章','article'),(14,'cate:add','新增分类','cate'),(15,'cate:del','删除分类','cate'),(16,'cate:edit','编辑分类','cate'),(17,'comment:del','删除评论','comment'),(18,'comment:edit','编辑评论','comment'),(19,'comment:audit','审核评论','comment'),(22,'config:edit','修改项目配置','config'),(23,'email:dismiss','驳回通知邮件','email'),(24,'file:info','获取文件信息','file'),(25,'file:dir','获取目录列表','file'),(26,'file:list','获取文件列表','file'),(27,'file:add','文件上传','file'),(28,'file:del','删除文件','file'),(29,'oss:add','新增oss配置','oss'),(30,'oss:del','删除oss配置','oss'),(31,'oss:edit','更新oss配置','oss'),(32,'oss:info','获取oss配置','oss'),(33,'oss:list','获取oss配置列表','oss'),(34,'oss:enable','启用oss配置','oss'),(35,'oss:getEnableOss','获取当前启用的oss配置','oss'),(36,'oss:getPlatform','获取支持的oss平台','oss'),(37,'record:add','新增说说','record'),(38,'record:del','删除说说','record'),(39,'record:edit','编辑说说','record'),(40,'role:add','新增角色','role'),(41,'role:del','删除角色','role'),(42,'role:edit','编辑角色','role'),(43,'role:info','获取角色','role'),(44,'role:list','获取角色列表','role'),(46,'role:bindingRoute','分配角色权限','role'),(47,'route:add','新增路由','route'),(48,'route:del','删除路由','route'),(49,'route:edit','编辑路由','route'),(50,'route:info','获取路由','route'),(51,'route:list','获取路由列表','route'),(52,'swiper:add','新增轮播图','swiper'),(53,'swiper:del','删除轮播图','swiper'),(54,'swiper:edit','编辑轮播图','swiper'),(55,'tag:add','新增标签','tag'),(56,'tag:del','删除标签','tag'),(57,'tag:edit','编辑标签','tag'),(58,'wall:del','删除留言','wall'),(59,'wall:edit','编辑留言','wall'),(60,'wall:audit','审核留言','wall'),(62,'permission:add','新增权限','permission'),(63,'permission:del','删除权限','permission'),(64,'permission:edit','编辑权限','permission'),(65,'permission:info','获取权限','permission'),(66,'permission:list','获取权限列表','permission'),(67,'link:del','删除网站','link'),(68,'link:edit','编辑网站','link'),(69,'link:audit','审核网站','link');
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -458,7 +454,7 @@ CREATE TABLE `role_permission` (
   `permission_id` int NOT NULL COMMENT '权限ID',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_permission_pk_2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色权限';
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色权限';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -467,7 +463,7 @@ CREATE TABLE `role_permission` (
 
 LOCK TABLES `role_permission` WRITE;
 /*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
-INSERT INTO `role_permission` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,1,11),(12,1,12),(13,1,13),(14,1,14),(15,1,15),(16,1,16),(17,1,17),(18,1,18),(19,1,19),(20,1,20),(21,1,21),(22,1,22),(23,1,23),(24,1,24),(25,1,25),(26,1,26),(27,1,27),(28,1,28),(29,1,29),(30,1,30),(31,1,31),(32,1,32),(33,1,33),(34,1,34),(35,1,35),(36,1,36),(37,1,37),(38,1,38),(39,1,39),(40,1,40),(41,1,41),(42,1,42),(43,1,43),(44,1,44),(45,1,45),(46,1,46),(47,1,61),(48,1,47),(49,1,48),(50,1,49),(51,1,50),(52,1,51),(53,1,52),(54,1,53),(55,1,54),(56,1,55),(57,1,56),(58,1,57),(59,1,58),(60,1,59),(61,1,60),(62,1,62),(63,1,63),(64,1,64),(65,1,65),(66,1,66),(67,2,1),(68,2,2),(69,2,3),(70,2,5),(71,2,7),(72,2,8),(73,2,9),(74,2,10),(75,2,11),(76,2,12),(77,2,13),(78,2,9),(79,2,24),(80,2,25),(81,2,26),(82,2,27);
+INSERT INTO `role_permission` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,1,11),(12,1,12),(13,1,13),(14,1,14),(15,1,15),(16,1,16),(17,1,17),(18,1,18),(19,1,19),(20,1,20),(21,1,21),(22,1,22),(23,1,23),(24,1,24),(25,1,25),(26,1,26),(27,1,27),(28,1,28),(29,1,29),(30,1,30),(31,1,31),(32,1,32),(33,1,33),(34,1,34),(35,1,35),(36,1,36),(37,1,37),(38,1,38),(39,1,39),(40,1,40),(41,1,41),(42,1,42),(43,1,43),(44,1,44),(45,1,45),(46,1,46),(47,1,61),(48,1,47),(49,1,48),(50,1,49),(51,1,50),(52,1,51),(53,1,52),(54,1,53),(55,1,54),(56,1,55),(57,1,56),(58,1,57),(59,1,58),(60,1,59),(61,1,60),(62,1,62),(63,1,63),(64,1,64),(65,1,65),(66,1,66),(67,2,1),(68,2,2),(69,2,3),(70,2,5),(71,2,7),(72,2,8),(73,2,9),(74,2,10),(75,2,11),(76,2,12),(77,2,13),(78,2,9),(79,2,24),(80,2,25),(81,2,26),(82,2,27),(83,1,67),(84,1,68),(85,1,69);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -621,7 +617,7 @@ CREATE TABLE `user_token` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_token_pk_2` (`id`),
   UNIQUE KEY `user_token_pk_3` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户 token';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户 token';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -630,6 +626,7 @@ CREATE TABLE `user_token` (
 
 LOCK TABLES `user_token` WRITE;
 /*!40000 ALTER TABLE `user_token` DISABLE KEYS */;
+INSERT INTO `user_token` VALUES (3,1,'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjp7ImlkIjoxLCJuYW1lIjoi566h55CG5ZGYIiwibWFyayI6ImFkbWluIiwiZGVzY3JpcHRpb24iOiLmnIDpq5jmnYPpmZAifSwiZXhwIjoxNzM4OTMwODgwLCJ1c2VyIjp7ImlkIjoxLCJjcmVhdGVUaW1lIjoiMTcyMzUzMzIwNjYxMyIsInVzZXJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IuWPquacieiBquaYjueahOS6uuaJjeiDveeci-WIsOWvhueggSIsIm5hbWUiOiLlrofpmLMiLCJpbmZvIjoiVGhyaXZlWCDljZrlrqLnrqHnkIbns7vnu5_kvZzogIUiLCJlbWFpbCI6IjMzMTExMTg4ODFAcXEuY29tIiwiYXZhdGFyIjoiaHR0cHM6Ly9idS5kdXNheXMuY29tLzIwMjQvMTEvMTcvNjczOWFkZjE4OGY2NC5wbmciLCJyb2xlSWQiOiIxIiwicm9sZSI6bnVsbH19.Vg039Z_HV3a2iI44qKi_9z_uiINaTGgNpFG5NFK3I9g');
 /*!40000 ALTER TABLE `user_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -700,4 +697,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-26 15:08:15
+-- Dump completed on 2025-03-01 15:12:16
