@@ -24,6 +24,6 @@ public class Permission {
     @ApiModelProperty(value = "权限分组", example = "user", required = true)
     private String group;
 
-    @ApiModelProperty(value = "角色ID", example = "1", required = true)
-    private Integer roleId;
+    // @ApiModelProperty(value = "角色ID", example = "1", required = true)
+    // private Integer roleId;
 }
