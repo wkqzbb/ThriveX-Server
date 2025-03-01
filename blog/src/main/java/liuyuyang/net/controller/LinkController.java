@@ -32,7 +32,6 @@ public class LinkController {
     @Resource
     private LinkTypeMapper linkTypeMapper;
 
-    @PremName("link:add")
     @PostMapping
     @NoTokenRequired
     @ApiOperation("新增网站")
