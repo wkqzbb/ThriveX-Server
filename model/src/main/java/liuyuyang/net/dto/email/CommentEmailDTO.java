@@ -8,7 +8,7 @@ public class CommentEmailDTO extends EmailDTO {
     @ApiModelProperty(value = "文章标题", example = "这是一段标题", required = true)
     String title;
     @ApiModelProperty(value = "发送方", example = "神秘人", required = true)
-    String reviewers;
+    String recipient;
     @ApiModelProperty(value = "评论时间", example = "2024年10月15日 14:44", required = true)
     String time;
     @ApiModelProperty(value = "评论内容", example = "这是一段内容", required = true)

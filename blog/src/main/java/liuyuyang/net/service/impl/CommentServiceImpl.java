@@ -62,7 +62,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 处理邮件模板
         Context context = new Context();
         context.setVariable("title", title);
-        context.setVariable("reviewers", comment.getName());
+        context.setVariable("recipient", comment.getName());
 
         // 获取当前时间
         LocalDateTime now = LocalDateTime.now();
@@ -85,12 +85,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 如果是一级评论则邮件提醒管理员，否则邮件提醒被回复人和管理员
         String emailTitle = (email != null) ? "您有最新回复~" : title;
         emailUtils.send(email, emailTitle, template);
-
-        // if (email != null) {
-        //     emailUtils.send(email, "您有最新回复~", template);
-        // } else {
-        //     emailUtils.send(null, title, template);
-        // }
     }
 
     @Override

@@ -2,7 +2,7 @@ spring:
   application:
     name: service-system
   profiles:
-    active: pro
+    active: local
   # 约束文件上传大小
   servlet.multipart.max-file-size: 10MB
   servlet.multipart.max-request-size: 100MB

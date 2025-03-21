@@ -15,7 +15,6 @@
         <module>model</module>
         <!-- 核心业务 -->
         <module>blog</module>
-        <module>common</module>
     </modules>
 
     <parent>
