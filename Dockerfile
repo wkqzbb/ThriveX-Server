@@ -25,4 +25,4 @@ COPY RUN.sh /server/RUN.sh
 RUN chmod +x /server/RUN.sh
 
 # 设置启动命令
-ENTRYPOINT ["/thrive/RUN.sh"]
+ENTRYPOINT ["/server/RUN.sh"]
