@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 set -e
+# 判断文件是否存在
+if [ ! -f "/server/app.jar" ]; then
+  echo "ERROR: Found no /server/app.jar file."
+  exit 1
+fi
 # 检查端口是否设置标准端口(整数且大于或等于80)
 if [ -z "${PORT}" ]; then
   echo "ERROR: Please set the PORT environment variable."
@@ -31,7 +36,7 @@ java -version
 ## 程序版本
 echo "VERSION: ${VERSION}"
 ## 文件MD5
-echo "[ /server/app.jar ]MD5: $(md5sum /server/app.jar)"
+echo "MD5: $(md5sum /server/app.jar)"
 cmd="java -jar /server/app.jar --PORT=${PORT} --DB_INFO=${DB_INFO} --DB_USERNAME=${DB_USERNAME} --DB_PASSWORD=${DB_PASSWORD} --EMAIL_HOST=${EMAIL_HOST} --EMAIL_PORT=${EMAIL_PORT} --EMAIL_USERNAME=${EMAIL_USERNAME} --EMAIL_PASSWORD=${EMAIL_PASSWORD}"
 echo "Running: $cmd"
 eval $cmd
