@@ -1,5 +1,5 @@
 # 设置基础镜像
-FROM openjdk:11.0-jre-buster
+FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/openjdk
 # 设置应用程序的网络端口配置
 ENV PORT 9003
 
