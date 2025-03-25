@@ -19,7 +19,7 @@ ARG VERSION=2.4.7
 # 设置工作目录
 WORKDIR /server
 # 添加jar包
-ADD https://gitee.com/liumou_site/ThriveX-Server-Docker/releases/download/v1.0/blog-1.0-SNAPSHOT.jar /server/app.jar
+ADD https://github.com/LiuYuYang01/ThriveX-Server/releases/download/${VERSION}/blog.jar /server/app.jar
 # 添加启动脚本
 COPY RUN.sh /server/RUN.sh
 # 设置权限
