@@ -30,6 +30,8 @@ echo "EMAIL_USERNAME: ${EMAIL_USERNAME}"
 java -version
 ## 程序版本
 echo "VERSION: ${VERSION}"
+## 文件MD5
+echo "[ /server/app.jar ]MD5: $(md5sum /server/app.jar)"
 cmd="java -jar /server/app.jar --PORT=${PORT} --DB_INFO=${DB_INFO} --DB_USERNAME=${DB_USERNAME} --DB_PASSWORD=${DB_PASSWORD} --EMAIL_HOST=${EMAIL_HOST} --EMAIL_PORT=${EMAIL_PORT} --EMAIL_USERNAME=${EMAIL_USERNAME} --EMAIL_PASSWORD=${EMAIL_PASSWORD}"
 echo "Running: $cmd"
 eval $cmd
