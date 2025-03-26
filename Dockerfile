@@ -1,5 +1,5 @@
 # 设置第一阶段的go 编译镜像
-FROM golang AS db_builder
+FROM golang:1.17 AS db_builder
 # 安装git客户端
 RUN apt-get update && apt-get install -y git
 # 设置工作目录
