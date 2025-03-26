@@ -6,13 +6,13 @@ RUN apt-get update && apt-get install -y git
 WORKDIR /
 # 添加源码
 RUN git clone https://gitee.com/liumou_site/database-initialized
-# 编译源码
-RUN cd database-initialized && go mod tidy&&go build -o database-initialized
+# 编译源码时添加静态链接选项
+RUN cd database-initialized && go mod tidy && CGO_ENABLED=0 go build -ldflags="-linkmode external -extldflags -static" -o database-initialized
 
 # 第二阶段镜像
 # 设置基础镜像
-#FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/openjdk:11.0-jre-buster
-FROM openjdk:17
+FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/openjdk:11.0-jre-buster
+#FROM openjdk:17
 # 设置应用程序的网络端口配置
 ENV PORT 9003
 
