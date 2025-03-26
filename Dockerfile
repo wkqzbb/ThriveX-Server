@@ -17,9 +17,12 @@ FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/openjdk:11.0-jre-buster
 ENV PORT 9003
 
 # 配置数据库连接参数（数据库地址/端口、数据库名称）
-ENV DB_INFO localhost:3306/thrive
+ENV DB_PORT 3306
+ENV DB_NAME ThriveX
+ENV DB_HOST 127.0.0.1
 ENV DB_USERNAME root
 ENV DB_PASSWORD root
+ENV DB_INFO ${DB_HOST}:${DB_PORT}/${DB_NAME}
 
 # 配置邮件服务器连接参数（SMTP服务器地址、端口及认证信息）
 ENV EMAIL_HOST mail.qq.com

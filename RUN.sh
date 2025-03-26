@@ -46,8 +46,7 @@ echo "MD5: $(md5sum /server/app.jar)"
 # 开始执行 /server/database-initialized
 echo "Starting..."
 echo "Starting database-initialized..."
-host=$(echo ${DB_INFO} | cut -d ':' -f 1)
-/server/database-initialized -user ${DB_USERNAME} -password ${DB_PASSWORD} -host ${host} -port 3306 -dbname ${DB_USERNAME} -file /server/ThriveX.sql
+/server/database-initialized -user ${DB_USERNAME} -password ${DB_PASSWORD} -host ${DB_HOST} -port ${DB_PORT} -dbname ${DB_NAME} -file /server/ThriveX.sql
 echo "Finished database-initialized."
 # 启动程序
 echo "Starting app.jar..."
