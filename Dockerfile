@@ -1,3 +1,15 @@
+# 设置第一阶段的go 编译镜像
+FROM golang AS db_builder
+# 安装git客户端
+RUN apt-get update && apt-get install -y git
+# 设置工作目录
+WORKDIR /
+# 添加源码
+RUN git clone https://gitee.com/liumou_site/database-initialized
+# 编译源码
+RUN cd database-initialized && go mod tidy&&go build -o database-initialized
+
+# 第二阶段镜像
 # 设置基础镜像
 FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/openjdk:11.0-jre-buster
 
@@ -18,12 +30,16 @@ ARG VERSION=2.4.7
 
 # 设置工作目录
 WORKDIR /server
+# 添加第一阶段编译好的源码
+COPY --from=db_builder /database-initialized/database-initialized /server/database-initialized
 # 添加jar包
 ADD https://github.com/LiuYuYang01/ThriveX-Server/releases/download/${VERSION}/blog.jar /server/app.jar
 # 添加启动脚本
 COPY RUN.sh /server/RUN.sh
+# 添加SQL脚本
+COPY ThriveX.sql /server/ThriveX.sql
 # 设置权限
-RUN chmod +x /server/RUN.sh
+RUN chmod +x /server/RUN.sh && chmod +x /server/database-initialized
 
 # 设置启动命令
 ENTRYPOINT ["/server/RUN.sh"]
