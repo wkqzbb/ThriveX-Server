@@ -28,6 +28,7 @@ if [ -z "${DB_PASSWORD}" ]; then
   echo "ERROR: Please set the DB_PASSWORD environment variable."
   exit 1
 fi
+export DB_INFO=${DB_HOST}:${DB_PORT}/${DB_NAME}
 # 信息打印
 echo "PORT: ${PORT}"
 echo "DB_INFO: ${DB_INFO}"
