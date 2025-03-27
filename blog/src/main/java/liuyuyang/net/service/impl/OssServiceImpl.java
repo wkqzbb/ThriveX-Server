@@ -27,6 +27,16 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         // 判断是否有重复
         Integer count = this.lambdaQuery().eq(Oss::getPlatform, oss.getPlatform()).count();
         if (count > 0) throw new CustomException("该平台已存在，请勿重复添加");
+
+        if ("local".equals(oss.getPlatform())) {
+            // 如果后缀不是 /static/ 则拼接
+            if (!oss.getDomain().endsWith("static/")) oss.setDomain(oss.getDomain() + "static/");
+
+            // 获取当前项目的路径
+            String projectPath = System.getProperty("user.dir");
+            oss.setEndPoint(projectPath + "/");
+        }
+
         this.save(oss);
     }
 
@@ -96,10 +106,6 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         String platform = oss.getPlatform();
 
         if ("local".equals(platform)) {
-            // if (oss.getDomain().contains("localhost") || oss.getDomain().contains("127.0.0.1")) {
-            //     throw new CustomException("不支持的域名");
-            // }
-
             // 如果后缀不是 /static/ 则拼接
             if (!oss.getDomain().endsWith("static/")) oss.setDomain(oss.getDomain() + "static/");
 

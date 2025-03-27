@@ -2,10 +2,12 @@ package liuyuyang.net.config;
 
 import liuyuyang.net.interceptor.JwtTokenAdminInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
@@ -16,6 +18,8 @@ import java.util.Set;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    @Value("${file.dir}") // 从配置文件中读取上传目录
+    private String uploadDir;
 
     private static final Set<String> EXCLUDED_PATHS = new HashSet<>(Arrays.asList(
             "/",
@@ -46,5 +50,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/user/login");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/upload/**")
+                .addResourceLocations("file:" + uploadDir);
     }
 }
