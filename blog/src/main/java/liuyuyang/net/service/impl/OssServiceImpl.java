@@ -29,9 +29,6 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         if (count > 0) throw new CustomException("该平台已存在，请勿重复添加");
 
         if ("local".equals(oss.getPlatform())) {
-            // 如果后缀不是 /static/ 则拼接
-            if (!oss.getDomain().endsWith("static/")) oss.setDomain(oss.getDomain() + "static/");
-
             // 获取当前项目的路径
             String projectPath = System.getProperty("user.dir");
             oss.setEndPoint(projectPath + "/");
@@ -106,8 +103,8 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         String platform = oss.getPlatform();
 
         if ("local".equals(platform)) {
-            // 如果后缀不是 /static/ 则拼接
-            if (!oss.getDomain().endsWith("static/")) oss.setDomain(oss.getDomain() + "static/");
+            // // 如果后缀不是 /static/ 则拼接
+            // if (!oss.getDomain().endsWith("static/")) oss.setDomain(oss.getDomain() + "static/");
 
             // 获取当前项目的路径
             String projectPath = System.getProperty("user.dir");
