@@ -53,8 +53,6 @@ public class FileController {
             if (result == null) throw new CustomException("上传文件失败");
 
             String url = result.getUrl();
-            System.out.println(url);
-            System.out.println(7777);
             urls.add(url.startsWith("https://") ? url : "https://" + url);
         }
 
