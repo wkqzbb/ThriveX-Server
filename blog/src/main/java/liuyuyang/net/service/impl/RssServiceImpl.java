@@ -41,7 +41,7 @@ public class RssServiceImpl implements RssService {
         List<String> feedUrls = linkList.stream().map(Link::getRss).collect(Collectors.toList());
 
         for (String feedUrl : feedUrls) {
-            if(feedUrl == null) continue;
+            if (feedUrl == null) continue;
 
             QueryWrapper<Link> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("rss", feedUrl);
@@ -67,7 +67,12 @@ public class RssServiceImpl implements RssService {
                     rss.setType(lt.getName());
                     rss.setAuthor(data.getAuthor());
                     rss.setTitle(data.getTitle());
-                    rss.setDescription(data.getDescription().getValue());
+                    if (data.getDescription() != null) {
+                        rss.setDescription(data.getDescription().getValue());
+                    } else {
+                        rss.setDescription("");
+                    }
+
                     rss.setUrl(data.getLink());
                     rss.setCreateTime(String.valueOf(data.getPublishedDate().getTime()));
                     rssList.add(rss);
