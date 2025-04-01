@@ -1,6 +1,6 @@
 package liuyuyang.net;
 
-import liuyuyang.net.service.OssService;
+import liuyuyang.net.web.service.OssService;
 import liuyuyang.net.utils.OssUtils;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
