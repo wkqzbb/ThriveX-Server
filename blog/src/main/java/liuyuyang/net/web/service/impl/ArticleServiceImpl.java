@@ -135,16 +135,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public void delBatch(List<Integer> ids) {
         for (Integer id : ids) {
-            // // 删除绑定的分类
-            // QueryWrapper<ArticleCate> queryWrapperArticleCate = new QueryWrapper<>();
-            // queryWrapperArticleCate.in("article_id", id);
-            // articleCateMapper.delete(queryWrapperArticleCate);
-            //
-            // // 删除绑定的标签
-            // QueryWrapper<ArticleTag> queryWrapperArticleTag = new QueryWrapper<>();
-            // queryWrapperArticleTag.in("article_id", id);
-            // articleTagMapper.delete(queryWrapperArticleTag);
-
             // 删除文章关联的数据
             delArticleCorrelationData(id);
         }
@@ -491,9 +481,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         // 根据分类id过滤
-        if (filterVo.getCateIds() != null && !filterVo.getCateIds().isEmpty()) {
+        if (filterVo.getCateId() != null) {
             QueryWrapper<ArticleCate> queryWrapperArticleIds = new QueryWrapper<>();
-            queryWrapperArticleIds.in("cate_id", filterVo.getCateIds());
+            queryWrapperArticleIds.in("cate_id", filterVo.getCateId());
             List<Integer> articleIds = articleCateMapper.selectList(queryWrapperArticleIds).stream().map(ArticleCate::getArticleId).collect(Collectors.toList());
 
             if (!articleIds.isEmpty()) {
@@ -506,7 +496,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 根据标签id过滤
         if (filterVo.getTagId() != null) {
-            queryWrapper.like("tag_ids", "%" + filterVo.getTagId() + "%");
+            QueryWrapper<ArticleTag> queryWrapperArticleIds = new QueryWrapper<>();
+            queryWrapperArticleIds.in("tag_id", filterVo.getTagId());
+            List<Integer> articleIds = articleTagMapper.selectList(queryWrapperArticleIds).stream().map(ArticleTag::getArticleId).collect(Collectors.toList());
+
+            if (!articleIds.isEmpty()) {
+                queryWrapper.in("id", articleIds);
+            } else {
+                // 添加一个始终为假的条件
+                queryWrapper.in("id", -1); // -1 假设为不存在的ID
+            }
         }
 
         return queryWrapper;

@@ -31,13 +31,8 @@ public class TagController {
     @ApiOperation("新增标签")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<String> add(@RequestBody Tag tag) {
-        try {
-            boolean res = tagService.save(tag);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new CustomException(400, e.getMessage());
-        }
+        tagService.save(tag);
+        return Result.success();
     }
 
     @PremName("tag:del")
@@ -47,10 +42,8 @@ public class TagController {
     public Result<String> del(@PathVariable Integer id) {
         Tag data = tagService.getById(id);
         if (data == null) return Result.error("该数据不存在");
-
-        Boolean res = tagService.removeById(id);
-
-        return res ? Result.success() : Result.error();
+        tagService.removeById(id);
+        return Result.success();
     }
 
     @PremName("tag:del")
@@ -58,9 +51,8 @@ public class TagController {
     @ApiOperation("批量删除标签")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result batchDel(@RequestBody List<Integer> ids) {
-        Boolean res = tagService.removeByIds(ids);
-
-        return res ? Result.success() : Result.error();
+        tagService.removeByIds(ids);
+        return Result.success();
     }
 
     @PremName("tag:edit")
@@ -68,13 +60,8 @@ public class TagController {
     @ApiOperation("编辑标签")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     public Result<String> edit(@RequestBody Tag tag) {
-        try {
-            boolean res = tagService.updateById(tag);
-
-            return res ? Result.success() : Result.error();
-        } catch (Exception e) {
-            throw new CustomException(400, e.getMessage());
-        }
+        tagService.updateById(tag);
+        return Result.success();
     }
 
     @GetMapping("/{id}")
