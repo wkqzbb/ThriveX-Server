@@ -104,15 +104,24 @@ public class ArticleController {
     @GetMapping("/cate/{cate_id}")
     @ApiOperation("获取指定分类的文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
-    public Result getArticleList(@PathVariable Integer cate_id, PageVo pageVo) {
+    public Result getCateArticleList(@PathVariable Integer cate_id, PageVo pageVo) {
         Page<Article> list = articleService.getCateArticleList(cate_id, pageVo);
+        Map<String, Object> result = Paging.filter(list);
+        return Result.success(result);
+    }
+
+    @GetMapping("/tag/{tag_id}")
+    @ApiOperation("获取指定标签的文章")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
+    public Result getTagArticleList(@PathVariable Integer tag_id, PageVo pageVo) {
+        Page<Article> list = articleService.getTagArticleList(tag_id, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
     }
 
     @GetMapping("/random")
     @ApiOperation("随机获取文章数据")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 11)
     public Result<List<Article>> getRandomArticles(@ApiParam(value = "默认随机获取5篇文章，可以通过count指定数量") @RequestParam(defaultValue = "5") Integer count) {
         List<Article> data = articleService.getRandomArticles(count);
         return Result.success(data);
@@ -120,7 +129,7 @@ public class ArticleController {
 
     @GetMapping("/hot")
     @ApiOperation("获取热门文章数据")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 11)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 12)
     public Result<List<Article>> getRecommendedArticles(@ApiParam(value = "默认浏览量最高的5篇文章，可以通过count指定数量") @RequestParam(defaultValue = "5") Integer count) {
         List<Article> data = articleService.getRecommendedArticles(count);
         return Result.success(data);
@@ -128,7 +137,7 @@ public class ArticleController {
 
     @GetMapping("/view/{article_id}")
     @ApiOperation("递增文章浏览量")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 12)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 13)
     public Result<String> recordView(@PathVariable Integer article_id) {
         articleService.recordView(article_id);
         return Result.success();

@@ -302,11 +302,50 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public Page<Article> getCateArticleList(Integer id, PageVo pageVo) {
-        // 先通过分类id查询出所有文章id
+        // 通过分类 id 查询出所有文章id
         QueryWrapper<ArticleCate> queryWrapperArticleCate = new QueryWrapper<>();
         queryWrapperArticleCate.in("cate_id", id);
         List<Integer> articleIds = articleCateMapper.selectList(queryWrapperArticleCate).stream()
                 .map(ArticleCate::getArticleId)
+                .collect(Collectors.toList());
+
+        // 有数据就查询，没有就返回空数组
+        if (articleIds.isEmpty()) {
+            return new Page<>(pageVo.getPage(), pageVo.getSize(), 0);
+        }
+
+        // 构建文章查询条件
+        QueryWrapper<Article> queryWrapperArticle = new QueryWrapper<>();
+        queryWrapperArticle.in("id", articleIds)
+                .eq("is_draft", 0)
+                .eq("is_del", 0)
+                .orderByDesc("create_time");
+
+        // 查询文章列表
+        Page<Article> page = new Page<>(pageVo.getPage(), pageVo.getSize());
+        articleMapper.selectPage(page, queryWrapperArticle);
+
+        // 绑定数据并处理加密文章
+        page.setRecords(page.getRecords().stream().map(article -> {
+            Article boundArticle = bindingData(article.getId());
+            // 如果有密码，设置描述和内容为提示信息
+            if (boundArticle.getIsEncrypt() == 1) {
+                boundArticle.setDescription("该文章是加密的");
+                boundArticle.setContent("该文章是加密的");
+            }
+            return boundArticle;
+        }).collect(Collectors.toList()));
+
+        return page;
+    }
+
+    @Override
+    public Page<Article> getTagArticleList(Integer id, PageVo pageVo) {
+        // 通过标签 id 查询出所有文章 id
+        QueryWrapper<ArticleTag> queryWrapperArticleTag = new QueryWrapper<>();
+        queryWrapperArticleTag.in("tag_id", id);
+        List<Integer> articleIds = articleTagMapper.selectList(queryWrapperArticleTag).stream()
+                .map(ArticleTag::getArticleId)
                 .collect(Collectors.toList());
 
         // 有数据就查询，没有就返回空数组

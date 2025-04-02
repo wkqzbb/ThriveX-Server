@@ -27,6 +27,8 @@ public interface ArticleService extends IService<Article> {
 
     Page<Article> getCateArticleList(Integer id, PageVo pageVo);
 
+    Page<Article> getTagArticleList(Integer id, PageVo pageVo);
+
     List<Article> getRandomArticles(Integer count);
 
     List<Article> getRecommendedArticles(Integer count);
