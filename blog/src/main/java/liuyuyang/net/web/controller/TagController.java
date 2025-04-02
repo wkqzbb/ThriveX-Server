@@ -90,4 +90,13 @@ public class TagController {
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }
+
+    // 统计文章数量
+    @GetMapping("/article/count")
+    @ApiOperation("统计每个标签下的文章数量")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
+    public Result staticArticleCount() {
+        List<Tag> list = tagService.staticArticleCount();
+        return Result.success(list);
+    }
 }

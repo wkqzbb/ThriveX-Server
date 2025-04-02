@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 @Transactional
@@ -26,5 +27,10 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         TagMapper.selectPage(result, queryWrapper);
 
         return result;
+    }
+
+    @Override
+    public List<Tag> staticArticleCount() {
+        return TagMapper.staticArticleCount();
     }
 }
