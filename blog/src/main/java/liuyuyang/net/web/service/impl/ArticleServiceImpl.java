@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.execption.CustomException;
+import liuyuyang.net.model.*;
 import liuyuyang.net.web.mapper.*;
-import liuyuyang.net.model.Article;
-import liuyuyang.net.model.ArticleCate;
-import liuyuyang.net.model.ArticleConfig;
-import liuyuyang.net.model.Cate;
 import liuyuyang.net.web.service.ArticleCateService;
 import liuyuyang.net.web.service.ArticleService;
+import liuyuyang.net.web.service.ArticleTagService;
 import liuyuyang.net.web.service.CateService;
 import liuyuyang.net.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
@@ -28,11 +26,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private ArticleMapper articleMapper;
     @Resource
+    private ArticleTagMapper articleTagMapper;
+    @Resource
+    private ArticleTagService articleTagService;
+    @Resource
     private ArticleCateMapper articleCateMapper;
     @Resource
     private ArticleCateService articleCateService;
     @Resource
     private ArticleConfigMapper articleConfigMapper;
+    @Resource
+    private TagMapper tagMapper;
     @Resource
     private CateMapper cateMapper;
     @Resource
@@ -59,16 +63,25 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             articleCateService.saveBatch(cateArrayList);
         }
 
+        // 新增标签
+        List<Integer> tagIdList = article.getTagIds();
+        if (!tagIdList.isEmpty()) {
+            ArrayList<ArticleTag> tagArrayList = new ArrayList<>(tagIdList.size());
+            for (Integer id : tagIdList) {
+                ArticleTag articleTag = new ArticleTag();
+                articleTag.setArticleId(article.getId());
+                articleTag.setTagId(id);
+                tagArrayList.add(articleTag);
+            }
+            articleTagService.saveBatch(tagArrayList);
+        }
+
         // 新增文章配置
         ArticleConfig config = article.getConfig();
         ArticleConfig articleConfig = new ArticleConfig();
         articleConfig.setArticleId(article.getId());
         articleConfig.setStatus(config.getStatus());
         articleConfig.setPassword(config.getPassword());
-
-        // 如果密码不等于空则加密
-        // if (!config.getPassword().isEmpty())
-        //     articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
 
         articleConfigMapper.insert(articleConfig);
     }
@@ -77,24 +90,32 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void del(Integer id, Integer is_del) {
         Article article = articleMapper.selectById(id);
 
+        // 严格删除：直接从数据库删除
         if (is_del == 0) {
-            // 严格删除：直接从数据库删除
-            // 删除之前绑定的分类
-            QueryWrapper<ArticleCate> queryWrapper = new QueryWrapper<>();
-            queryWrapper.in("article_id", id);
-            articleCateMapper.delete(queryWrapper);
+            // // 删除绑定的分类
+            // QueryWrapper<ArticleCate> queryWrapperCate = new QueryWrapper<>();
+            // queryWrapperCate.in("article_id", id);
+            // articleCateMapper.delete(queryWrapperCate);
+            //
+            // // 删除绑定的标签
+            // QueryWrapper<ArticleTag> queryWrapperTag = new QueryWrapper<>();
+            // queryWrapperTag.in("article_id", id);
+            // articleTagMapper.delete(queryWrapperTag);
+            //
+            // // 删除文章配置
+            // QueryWrapper<ArticleConfig> queryWrapperArticleConfig = new QueryWrapper<>();
+            // queryWrapperArticleConfig.in("article_id", article.getId());
+            // articleConfigMapper.delete(queryWrapperArticleConfig);
 
-            // 删除文章配置
-            QueryWrapper<ArticleConfig> queryArticleConfigWrapper = new QueryWrapper<>();
-            queryArticleConfigWrapper.in("article_id", article.getId());
-            articleConfigMapper.delete(queryArticleConfigWrapper);
+            // 删除文章关联的数据
+            delArticleCorrelationData(id);
 
             // 删除当前文章
             articleMapper.deleteById(id);
         }
 
+        // 普通删除：更改 is_del 字段，到时候可以通过更改字段恢复
         if (is_del == 1) {
-            // 普通删除：更改 is_del 字段，到时候可以通过更改字段恢复
             article.setIsDel(1);
             articleMapper.updateById(article);
         }
@@ -113,14 +134,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public void delBatch(List<Integer> ids) {
-        // 先删除之前绑定的分类
         for (Integer id : ids) {
-            QueryWrapper<ArticleCate> queryWrapperArticleCate = new QueryWrapper<>();
-            queryWrapperArticleCate.in("article_id", id);
-            articleCateMapper.delete(queryWrapperArticleCate);
+            // // 删除绑定的分类
+            // QueryWrapper<ArticleCate> queryWrapperArticleCate = new QueryWrapper<>();
+            // queryWrapperArticleCate.in("article_id", id);
+            // articleCateMapper.delete(queryWrapperArticleCate);
+            //
+            // // 删除绑定的标签
+            // QueryWrapper<ArticleTag> queryWrapperArticleTag = new QueryWrapper<>();
+            // queryWrapperArticleTag.in("article_id", id);
+            // articleTagMapper.delete(queryWrapperArticleTag);
+
+            // 删除文章关联的数据
+            delArticleCorrelationData(id);
         }
 
-        // 再批量删除文章
+        // 批量删除文章
         QueryWrapper<Article> queryWrapperArticle = new QueryWrapper<>();
         queryWrapperArticle.in("id", ids);
         articleMapper.delete(queryWrapperArticle);
@@ -130,15 +159,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void edit(Article article) {
         if (article.getCateIds() == null) throw new CustomException(400, "编辑失败：请绑定分类");
 
-        // 删除之前绑定的分类
-        QueryWrapper<ArticleCate> queryArticleCateWrapper = new QueryWrapper<>();
-        queryArticleCateWrapper.in("article_id", article.getId());
-        articleCateMapper.delete(queryArticleCateWrapper);
-
-        // 删除之前绑定的文章配置
-        QueryWrapper<ArticleConfig> queryArticleConfigWrapper = new QueryWrapper<>();
-        queryArticleConfigWrapper.in("article_id", article.getId());
-        articleConfigMapper.delete(queryArticleConfigWrapper);
+        // 删除文章关联的数据
+        delArticleCorrelationData(article.getId());
 
         // 重新绑定分类
         for (Integer id : article.getCateIds()) {
@@ -148,16 +170,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             articleCateMapper.insert(articleCate);
         }
 
+        // 重新绑定标签
+        for (Integer id : article.getTagIds()) {
+            ArticleTag articleTag = new ArticleTag();
+            articleTag.setArticleId(article.getId());
+            articleTag.setTagId(id);
+            articleTagMapper.insert(articleTag);
+        }
+
         // 重新绑定文章配置
         ArticleConfig config = article.getConfig();
         ArticleConfig articleConfig = new ArticleConfig();
         articleConfig.setArticleId(article.getId());
         articleConfig.setStatus(config.getStatus());
         articleConfig.setPassword(config.getPassword());
-
-        // 如果密码不等于空则加密
-        // if (!config.getPassword().isEmpty())
-        //     articleConfig.setPassword(DigestUtils.md5DigestAsHex(config.getPassword().getBytes()));
         articleConfigMapper.insert(articleConfig);
 
         // 修改文章
@@ -171,7 +197,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         String description = data.getDescription();
         String content = data.getContent();
 
-        Boolean isAdmin = !"".equals(token) && yuYangUtils.isAdmin(token);
+        boolean isAdmin = !"".equals(token) && yuYangUtils.isAdmin(token);
 
         ArticleConfig config = data.getConfig();
 
@@ -245,7 +271,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         queryWrapper.eq("is_del", filterVo.getIsDel());
         List<Article> list = articleMapper.selectList(queryWrapper);
 
-        Boolean isAdmin = yuYangUtils.isAdmin(token);
+        boolean isAdmin = yuYangUtils.isAdmin(token);
         list = list.stream()
                 .map(article -> bindingData(article.getId()))
                 // 如果是普通用户则不显示隐藏的文章，如果是管理员则显示
@@ -266,7 +292,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public Page<Article> paging(ArticleFillterVo filterVo, PageVo pageVo, String token) {
         List<Article> list = list(filterVo, token);
-        Boolean isAdmin = yuYangUtils.isAdmin(token);
+        boolean isAdmin = yuYangUtils.isAdmin(token);
         if (!isAdmin) {
             list = list.stream().filter(k -> !Objects.equals(k.getConfig().getStatus(), "no_home")).collect(Collectors.toList());
         }
@@ -372,17 +398,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 查询当前文章的分类ID
         QueryWrapper<ArticleCate> queryWrapperCateIds = new QueryWrapper<>();
         queryWrapperCateIds.eq("article_id", id);
-        List<Integer> cids = articleCateMapper.selectList(queryWrapperCateIds).stream().map(ArticleCate::getCateId).collect(Collectors.toList());
+        List<Integer> cate_ids = articleCateMapper.selectList(queryWrapperCateIds).stream().map(ArticleCate::getCateId).collect(Collectors.toList());
 
         // 如果有分类，则绑定分类信息
-        if (!cids.isEmpty()) {
+        if (!cate_ids.isEmpty()) {
             QueryWrapper<Cate> queryWrapperCateList = new QueryWrapper<>();
-            queryWrapperCateList.in("id", cids);
+            queryWrapperCateList.in("id", cate_ids);
             List<Cate> cates = cateService.buildCateTree(cateMapper.selectList(queryWrapperCateList), 0);
             data.setCateList(cates);
         }
 
-        data.setTagList(articleMapper.getTagList(id));
+        // 查询当前文章的标签ID
+        QueryWrapper<ArticleTag> queryWrapperTagIds = new QueryWrapper<>();
+        queryWrapperTagIds.eq("article_id", id);
+        List<Integer> tag_ids = articleTagMapper.selectList(queryWrapperTagIds).stream().map(ArticleTag::getTagId).collect(Collectors.toList());
+
+        if (!tag_ids.isEmpty()) {
+            QueryWrapper<Tag> queryWrapperTagList = new QueryWrapper<>();
+            queryWrapperTagList.in("id", tag_ids);
+            List<Tag> tags = tagMapper.selectList(queryWrapperTagList);
+            data.setTagList(tags);
+        }
+
         data.setComment(commentMapper.getCommentList(id).size());
 
         // 查找文章配置
@@ -434,5 +471,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         return queryWrapper;
+    }
+
+    // 删除文章关联的数据
+    public void delArticleCorrelationData(Integer id) {
+        QueryWrapper<ArticleCate> queryWrapperCate = new QueryWrapper<>();
+        queryWrapperCate.in("article_id", id);
+        articleCateMapper.delete(queryWrapperCate);
+
+        // 删除绑定的标签
+        QueryWrapper<ArticleTag> queryWrapperTag = new QueryWrapper<>();
+        queryWrapperTag.in("article_id", id);
+        articleTagMapper.delete(queryWrapperTag);
+
+        // 删除文章配置
+        QueryWrapper<ArticleConfig> queryWrapperArticleConfig = new QueryWrapper<>();
+        queryWrapperArticleConfig.in("article_id", id);
+        articleConfigMapper.delete(queryWrapperArticleConfig);
     }
 }
