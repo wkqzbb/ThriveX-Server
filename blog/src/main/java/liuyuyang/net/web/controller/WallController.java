@@ -125,4 +125,13 @@ public class WallController {
         wallService.updateById(data);
         return Result.success();
     }
+
+    @PremName("wall:choice")
+    @PatchMapping("/choice/{id}")
+    @ApiOperation("设置与取消精选留言")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 11)
+    public Result updateChoice(@PathVariable Integer id) {
+        wallService.updateChoice(id);
+        return Result.success();
+    }
 }

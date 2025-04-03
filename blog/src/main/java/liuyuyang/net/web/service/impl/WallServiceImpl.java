@@ -97,4 +97,19 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
         List<WallCate> list = wallCateMapper.selectList(queryWrapper);
         return list;
     }
+
+    @Override
+    public void updateChoice(Integer id) {
+        Wall wall = wallMapper.selectById(id);
+        if (wall == null) throw new CustomException("没有这条留言");
+
+        // 如果是精选则取消，否则设置
+        if (wall.getIsChoice() == 0) {
+            wall.setIsChoice(1);
+        } else {
+            wall.setIsChoice(0);
+        }
+
+        wallMapper.updateById(wall);
+    }
 }
