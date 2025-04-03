@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -72,8 +73,17 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
 
     @Override
     public Page<Wall> getCateWallList(Integer cateId, PageVo pageVo) {
+        WallCate wallCate = wallCateMapper.selectById(cateId);
+
         QueryWrapper<Wall> queryWrapper = new QueryWrapper<>();
-        if (cateId != 1) queryWrapper.eq("cate_id", cateId);
+        if (!Objects.equals(wallCate.getMark(), "all")) {
+            if (Objects.equals(wallCate.getMark(), "choice")) {
+                queryWrapper.eq("is_choice", 1);
+            } else {
+                queryWrapper.eq("cate_id", cateId);
+            }
+        }
+
         queryWrapper.eq("audit_status", 1);
         queryWrapper.orderByDesc("create_time");
 
@@ -81,6 +91,8 @@ public class WallServiceImpl extends ServiceImpl<WallMapper, Wall> implements Wa
         wallMapper.selectPage(page, queryWrapper);
 
         List<Wall> list = page.getRecords();
+        System.out.println(list);
+        System.out.println(7777);
 
         // 绑定数据
         for (Wall wall : list) {
