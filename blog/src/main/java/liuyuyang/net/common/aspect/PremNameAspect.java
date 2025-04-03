@@ -1,15 +1,15 @@
-package liuyuyang.net.aspect;
+package liuyuyang.net.common.aspect;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.jsonwebtoken.Claims;
-import liuyuyang.net.annotation.PremName;
-import liuyuyang.net.execption.CustomException;
+import liuyuyang.net.common.annotation.PremName;
+import liuyuyang.net.common.execption.CustomException;
 import liuyuyang.net.web.mapper.PermissionMapper;
 import liuyuyang.net.web.mapper.RolePermissionMapper;
 import liuyuyang.net.model.Permission;
 import liuyuyang.net.model.RolePermission;
-import liuyuyang.net.properties.JwtProperties;
-import liuyuyang.net.utils.JwtUtils;
+import liuyuyang.net.common.properties.JwtProperties;
+import liuyuyang.net.common.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -41,7 +41,7 @@ public class PremNameAspect {
     private RolePermissionMapper rolePermissionMapper;
 
     // 定义切点，支持类和方法上的注解
-    @Pointcut("@within(liuyuyang.net.annotation.PremName) || @annotation(liuyuyang.net.annotation.PremName)")
+    @Pointcut("@within(liuyuyang.net.common.annotation.PremName) || @annotation(liuyuyang.net.common.annotation.PremName)")
     private void cut() {
     }
 
