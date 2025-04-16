@@ -92,21 +92,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 严格删除：直接从数据库删除
         if (is_del == 0) {
-            // // 删除绑定的分类
-            // QueryWrapper<ArticleCate> queryWrapperCate = new QueryWrapper<>();
-            // queryWrapperCate.in("article_id", id);
-            // articleCateMapper.delete(queryWrapperCate);
-            //
-            // // 删除绑定的标签
-            // QueryWrapper<ArticleTag> queryWrapperTag = new QueryWrapper<>();
-            // queryWrapperTag.in("article_id", id);
-            // articleTagMapper.delete(queryWrapperTag);
-            //
-            // // 删除文章配置
-            // QueryWrapper<ArticleConfig> queryWrapperArticleConfig = new QueryWrapper<>();
-            // queryWrapperArticleConfig.in("article_id", article.getId());
-            // articleConfigMapper.delete(queryWrapperArticleConfig);
-
             // 删除文章关联的数据
             delArticleCorrelationData(id);
 
@@ -317,14 +302,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 绑定数据并处理加密文章
         page.setRecords(page.getRecords().stream().map(article -> {
-            Article boundArticle = bindingData(article.getId());
-            // 如果有密码，设置描述和内容为提示信息
-            if (boundArticle.getIsEncrypt() == 1) {
-                boundArticle.setDescription("该文章是加密的");
-                boundArticle.setContent("该文章是加密的");
-            }
-            return boundArticle;
-        }).collect(Collectors.toList()));
+                    Article boundArticle = bindingData(article.getId());
+                    // 如果有密码，设置描述和内容为提示信息
+                    if (boundArticle.getIsEncrypt() == 1) {
+                        boundArticle.setDescription("该文章是加密的");
+                        boundArticle.setContent("该文章是加密的");
+                    }
+                    return boundArticle;
+                }).filter(article -> Objects.equals(article.getConfig().getStatus(), "hide"))
+                .collect(Collectors.toList()));
 
         return page;
     }
@@ -356,14 +342,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 绑定数据并处理加密文章
         page.setRecords(page.getRecords().stream().map(article -> {
-            Article boundArticle = bindingData(article.getId());
-            // 如果有密码，设置描述和内容为提示信息
-            if (boundArticle.getIsEncrypt() == 1) {
-                boundArticle.setDescription("该文章是加密的");
-                boundArticle.setContent("该文章是加密的");
-            }
-            return boundArticle;
-        }).collect(Collectors.toList()));
+                    Article boundArticle = bindingData(article.getId());
+                    // 如果有密码，设置描述和内容为提示信息
+                    if (boundArticle.getIsEncrypt() == 1) {
+                        boundArticle.setDescription("该文章是加密的");
+                        boundArticle.setContent("该文章是加密的");
+                    }
+                    return boundArticle;
+                })
+                .filter(article -> Objects.equals(article.getConfig().getStatus(), "hide"))
+                .collect(Collectors.toList()));
 
         return page;
     }
@@ -513,6 +501,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     // 删除文章关联的数据
     public void delArticleCorrelationData(Integer id) {
+        // 删除绑定的分类
         QueryWrapper<ArticleCate> queryWrapperCate = new QueryWrapper<>();
         queryWrapperCate.in("article_id", id);
         articleCateMapper.delete(queryWrapperCate);
