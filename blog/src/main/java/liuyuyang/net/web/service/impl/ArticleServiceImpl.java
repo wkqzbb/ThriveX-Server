@@ -13,6 +13,7 @@ import liuyuyang.net.web.service.CateService;
 import liuyuyang.net.common.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,10 +120,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public void delBatch(List<Integer> ids) {
-        for (Integer id : ids) {
-            // 删除文章关联的数据
-            delArticleCorrelationData(id);
-        }
+        // for (Integer id : ids) {
+        //     // 删除文章关联的数据
+        //     delArticleCorrelationData(id);
+        // }
+
+        delArticleCorrelationData(ids);
 
         // 批量删除文章
         QueryWrapper<Article> queryWrapperArticle = new QueryWrapper<>();
@@ -451,22 +454,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     // 过滤文章数据
     @Override
     public QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo) {
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_time");
-
-        // 根据关键字通过标题过滤出对应文章数据
-        if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {
-            queryWrapper.like("title", "%" + filterVo.getKey() + "%");
-        }
-
-        // 根据开始与结束时间过滤
-        if (filterVo.getStartDate() != null && filterVo.getEndDate() != null) {
-            queryWrapper.between("create_time", filterVo.getStartDate(), filterVo.getEndDate());
-        } else if (filterVo.getStartDate() != null) {
-            queryWrapper.ge("create_time", filterVo.getStartDate());
-        } else if (filterVo.getEndDate() != null) {
-            queryWrapper.le("create_time", filterVo.getEndDate());
-        }
+        QueryWrapper<Article> queryWrapper = getArticleQueryWrapper(filterVo);
 
         // 根据分类id过滤
         if (filterVo.getCateId() != null) {
@@ -499,6 +487,27 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return queryWrapper;
     }
 
+    @NotNull
+    private static QueryWrapper<Article> getArticleQueryWrapper(ArticleFillterVo filterVo) {
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("create_time");
+
+        // 根据关键字通过标题过滤出对应文章数据
+        if (filterVo.getKey() != null && !filterVo.getKey().isEmpty()) {
+            queryWrapper.like("title", "%" + filterVo.getKey() + "%");
+        }
+
+        // 根据开始与结束时间过滤
+        if (filterVo.getStartDate() != null && filterVo.getEndDate() != null) {
+            queryWrapper.between("create_time", filterVo.getStartDate(), filterVo.getEndDate());
+        } else if (filterVo.getStartDate() != null) {
+            queryWrapper.ge("create_time", filterVo.getStartDate());
+        } else if (filterVo.getEndDate() != null) {
+            queryWrapper.le("create_time", filterVo.getEndDate());
+        }
+        return queryWrapper;
+    }
+
     // 删除文章关联的数据
     public void delArticleCorrelationData(Integer id) {
         // 删除绑定的分类
@@ -514,6 +523,23 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         // 删除文章配置
         QueryWrapper<ArticleConfig> queryWrapperArticleConfig = new QueryWrapper<>();
         queryWrapperArticleConfig.in("article_id", id);
+        articleConfigMapper.delete(queryWrapperArticleConfig);
+    }
+
+    public void delArticleCorrelationData(List<Integer> ids) {
+        // 删除绑定的分类
+        QueryWrapper<ArticleCate> queryWrapperCate = new QueryWrapper<>();
+        queryWrapperCate.in("article_id", ids);
+        articleCateMapper.delete(queryWrapperCate);
+
+        // 删除绑定的标签
+        QueryWrapper<ArticleTag> queryWrapperTag = new QueryWrapper<>();
+        queryWrapperTag.in("article_id", ids);
+        articleTagMapper.delete(queryWrapperTag);
+
+        // 删除文章配置
+        QueryWrapper<ArticleConfig> queryWrapperArticleConfig = new QueryWrapper<>();
+        queryWrapperArticleConfig.in("article_id", ids);
         articleConfigMapper.delete(queryWrapperArticleConfig);
     }
 }
