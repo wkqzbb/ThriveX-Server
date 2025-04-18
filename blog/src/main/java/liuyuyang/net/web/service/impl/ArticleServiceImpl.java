@@ -238,7 +238,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             QueryWrapper<ArticleConfig> prevConfigWrapper = new QueryWrapper<>();
             prevConfigWrapper.eq("article_id", prevArticle.getId()).eq("is_del", 0);
             ArticleConfig prevConfig = articleConfigMapper.selectOne(prevConfigWrapper);
-            
+
             if (prevConfig != null) {
                 Map<String, Object> resultPrev = new HashMap<>();
                 resultPrev.put("id", prevArticle.getId());
@@ -251,12 +251,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         QueryWrapper<Article> nextQueryWrapper = new QueryWrapper<>();
         nextQueryWrapper.gt("create_time", createTime).orderByAsc("create_time").last("LIMIT 1");
         Article nextArticle = articleMapper.selectOne(nextQueryWrapper);
+
         if (nextArticle != null) {
             // 检查文章配置
             QueryWrapper<ArticleConfig> nextConfigWrapper = new QueryWrapper<>();
             nextConfigWrapper.eq("article_id", nextArticle.getId()).eq("is_del", 0);
             ArticleConfig nextConfig = articleConfigMapper.selectOne(nextConfigWrapper);
-            
+
             if (nextConfig != null) {
                 Map<String, Object> resultNext = new HashMap<>();
                 resultNext.put("id", nextArticle.getId());
@@ -440,16 +441,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public List<Article> getRandomArticles(Integer count) {
         List<Integer> ids = articleMapper.selectList(null).stream()
                 // 不能是加密文章，且能够正常显示
-                .filter(k -> {
+                .map(Article::getId)
+                .filter(id -> {
                     QueryWrapper<ArticleConfig> articleConfigQueryWrapper = new QueryWrapper<>();
-                    articleConfigQueryWrapper.eq("article_id", k.getId());
+                    articleConfigQueryWrapper.eq("article_id", id);
                     ArticleConfig config = articleConfigMapper.selectOne(articleConfigQueryWrapper);
                     return "".equals(config.getPassword()) && Objects.equals(config.getStatus(), "default");
                 })
-                // 不能是已删除或草稿
-                .filter(k -> k.getConfig().getIsDel() == 0 && k.getConfig().getIsDraft() == 0)
-                .map(Article::getId)
                 .collect(Collectors.toList());
+        System.out.println(ids);
+
+        // 不能是已删除或草稿
+        LambdaQueryWrapper<ArticleConfig> articleConfigLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        articleConfigLambdaQueryWrapper.in(ArticleConfig::getArticleId, ids);
+        articleConfigLambdaQueryWrapper.eq(ArticleConfig::getIsDraft, 0);
+        articleConfigLambdaQueryWrapper.eq(ArticleConfig::getIsDel, 0);
+        ids = articleConfigMapper.selectList(articleConfigLambdaQueryWrapper).stream().map(ArticleConfig::getArticleId).collect(Collectors.toList());
 
         if (ids.size() <= count) {
             // 如果文章数量少于或等于需要的数量，直接返回所有文章
