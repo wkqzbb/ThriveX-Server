@@ -230,24 +230,39 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 查询上一篇文章
         QueryWrapper<Article> prevQueryWrapper = new QueryWrapper<>();
-        prevQueryWrapper.lt("create_time", createTime).eq("is_del", 0).orderByDesc("create_time").last("LIMIT 1");
+        prevQueryWrapper.lt("create_time", createTime).orderByDesc("create_time").last("LIMIT 1");
         Article prevArticle = articleMapper.selectOne(prevQueryWrapper);
+
         if (prevArticle != null) {
-            Map<String, Object> resultPrev = new HashMap<>();
-            resultPrev.put("id", prevArticle.getId());
-            resultPrev.put("title", prevArticle.getTitle());
-            data.setPrev(resultPrev);
+            // 检查文章配置
+            QueryWrapper<ArticleConfig> prevConfigWrapper = new QueryWrapper<>();
+            prevConfigWrapper.eq("article_id", prevArticle.getId()).eq("is_del", 0);
+            ArticleConfig prevConfig = articleConfigMapper.selectOne(prevConfigWrapper);
+            
+            if (prevConfig != null) {
+                Map<String, Object> resultPrev = new HashMap<>();
+                resultPrev.put("id", prevArticle.getId());
+                resultPrev.put("title", prevArticle.getTitle());
+                data.setPrev(resultPrev);
+            }
         }
 
         // 查询下一篇文章
         QueryWrapper<Article> nextQueryWrapper = new QueryWrapper<>();
-        nextQueryWrapper.gt("create_time", createTime).eq("is_del", 0).orderByAsc("create_time").last("LIMIT 1");
+        nextQueryWrapper.gt("create_time", createTime).orderByAsc("create_time").last("LIMIT 1");
         Article nextArticle = articleMapper.selectOne(nextQueryWrapper);
         if (nextArticle != null) {
-            Map<String, Object> resultNext = new HashMap<>();
-            resultNext.put("id", nextArticle.getId());
-            resultNext.put("title", nextArticle.getTitle());
-            data.setNext(resultNext);
+            // 检查文章配置
+            QueryWrapper<ArticleConfig> nextConfigWrapper = new QueryWrapper<>();
+            nextConfigWrapper.eq("article_id", nextArticle.getId()).eq("is_del", 0);
+            ArticleConfig nextConfig = articleConfigMapper.selectOne(nextConfigWrapper);
+            
+            if (nextConfig != null) {
+                Map<String, Object> resultNext = new HashMap<>();
+                resultNext.put("id", nextArticle.getId());
+                resultNext.put("title", nextArticle.getTitle());
+                data.setNext(resultNext);
+            }
         }
 
         return data;
