@@ -95,6 +95,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void del(Integer id, Integer is_del) {
         Article article = articleMapper.selectById(id);
 
+        LambdaQueryWrapper<ArticleConfig> articleConfigLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        articleConfigLambdaQueryWrapper.eq(ArticleConfig::getArticleId, id);
+        ArticleConfig articleConfig = articleConfigMapper.selectOne(articleConfigLambdaQueryWrapper);
+
         // 严格删除：直接从数据库删除
         if (is_del == 0) {
             // 删除文章关联的数据
@@ -106,8 +110,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 普通删除：更改 is_del 字段，到时候可以通过更改字段恢复
         if (is_del == 1) {
-            article.getConfig().setIsDel(1);
-            articleConfigMapper.updateById(article.getConfig());
+            articleConfig.setIsDel(1);
+            articleConfigMapper.updateById(articleConfig);
         }
 
         if (is_del != 0 && is_del != 1) {
