@@ -117,7 +117,11 @@ public class FileController {
     @GetMapping("/list")
     @ApiOperation("获取指定目录中的文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<List<Map>> getFileList(@RequestParam String dir) {
+    public Result<Map<String, Object>> getFileList(
+            @RequestParam String dir,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "20") Integer size
+    ) {
         if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "请指定一个目录");
 
         ListFilesResult result = fileStorageService.listFiles()
@@ -126,29 +130,48 @@ public class FileController {
                 .listFiles();
 
         // 获取文件列表
-        List<Map> list = new ArrayList<>();
-        List<RemoteFileInfo> fileList = result.getFileList();
+        List<Map<String, Object>> fileList = new ArrayList<>();
+        List<RemoteFileInfo> remoteFileList = result.getFileList();
 
-        for (RemoteFileInfo item : fileList) {
+        // 按lastModified时间降序排序（最新的在前）
+        remoteFileList.sort((a, b) -> b.getLastModified().compareTo(a.getLastModified()));
+
+        // 计算分页参数
+        int total = remoteFileList.size();
+        int startIndex = (page - 1) * size;
+        int endIndex = Math.min(startIndex + size, total);
+        
+        // 分页处理
+        List<RemoteFileInfo> pageList = remoteFileList.subList(startIndex, endIndex);
+
+        for (RemoteFileInfo item : pageList) {
             // 如果是目录就略过
             if (Objects.equals(item.getExt(), "")) continue;
 
             Map<String, Object> data = new HashMap<>();
-
             data.put("basePath", item.getBasePath());
             data.put("dir", dir);
             data.put("path", item.getBasePath() + item.getPath() + item.getFilename());
             data.put("name", item.getFilename());
             data.put("size", item.getSize());
             data.put("type", item.getExt());
+            data.put("date", item.getLastModified());
 
             String url = item.getUrl();
             if (!url.startsWith("https://")) url = "https://" + url;
             data.put("url", url);
 
-            list.add(data);
+            fileList.add(data);
         }
 
-        return Result.success(list);
+        // 构建分页结果
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result", fileList);
+        resultMap.put("size", size);
+        resultMap.put("page", page);
+        resultMap.put("pages", (total + size - 1) / size);
+        resultMap.put("total", total);
+
+        return Result.success(resultMap);
     }
 }
