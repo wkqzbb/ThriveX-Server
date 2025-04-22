@@ -91,7 +91,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
     public List<Cate> list(String pattern) {
         // 分类排序
         LambdaQueryWrapper<Cate> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.orderByDesc(Cate::getOrder);
+        lambdaQueryWrapper.orderByAsc(Cate::getOrder);
 
         // 查询所有分类
         List<Cate> list = cateMapper.selectList(lambdaQueryWrapper);
@@ -111,7 +111,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements Ca
     public Page<Cate> paging(Integer page, Integer size) {
         // 分类排序
         LambdaQueryWrapper<Cate> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.orderByDesc(Cate::getOrder);
+        lambdaQueryWrapper.orderByAsc(Cate::getOrder);
 
         // 查询所有分类
         List<Cate> list = cateMapper.selectList(lambdaQueryWrapper);

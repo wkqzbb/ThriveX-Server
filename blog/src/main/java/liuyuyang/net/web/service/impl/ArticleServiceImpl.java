@@ -17,8 +17,12 @@ import liuyuyang.net.vo.article.ArticleFillterVo;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,7 +71,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 新增标签
         List<Integer> tagIdList = article.getTagIds();
-        if (!tagIdList.isEmpty()) {
+
+        if (tagIdList != null && !tagIdList.isEmpty()) {
             ArrayList<ArticleTag> tagArrayList = new ArrayList<>(tagIdList.size());
             for (Integer id : tagIdList) {
                 ArticleTag articleTag = new ArticleTag();
@@ -533,6 +538,112 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         data.setConfig(articleConfig);
 
         return data;
+    }
+
+    @Override
+    public void importArticle(MultipartFile[] list) throws IOException {
+        // 首先验证所有文件格式
+        for (MultipartFile file : list) {
+            if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".md")) {
+                throw new CustomException(400, "导入失败：存在非 Markdown 格式文件，请确保所有文件都是 .md 格式");
+            }
+        }
+
+        // 如果所有文件格式都正确，则继续处理
+        for (MultipartFile file : list) {
+            // 读取文件内容
+            String content = new String(file.getBytes(), StandardCharsets.UTF_8);
+
+            // 解析 Markdown 内容
+            String[] lines = content.split("\n");
+            String title = "";
+            String description = "";
+            StringBuilder articleContent = new StringBuilder();
+
+            // 提取标题（第一个 # 开头的行）
+            for (String line : lines) {
+                if (line.startsWith("# ")) {
+                    title = line.substring(2).trim();
+                    break;
+                }
+            }
+
+            // 提取描述（第一个空行后的第一段）
+            boolean foundDescription = false;
+            for (String line : lines) {
+                if (line.trim().isEmpty()) {
+                    foundDescription = true;
+                    continue;
+                }
+                if (foundDescription && !line.startsWith("#")) {
+                    description = line.trim();
+                    break;
+                }
+            }
+
+            // 提取文章内容（跳过标题和描述后的所有内容）
+            boolean startContent = false;
+            for (String line : lines) {
+                if (line.trim().isEmpty()) {
+                    startContent = true;
+                    continue;
+                }
+                if (startContent) {
+                    articleContent.append(line).append("\n");
+                }
+            }
+
+            // 创建文章对象
+            Article article = new Article();
+            article.setTitle(title);
+            article.setDescription(description);
+            article.setContent(articleContent.toString().trim());
+            article.setView(0);
+            article.setComment(0);
+            article.setCreateTime(String.valueOf(LocalDateTime.now()));
+
+            // 设置默认分类（这里假设使用 ID 为 1 的分类）
+            article.setCateIds(Collections.singletonList(1));
+
+            // 设置默认文章配置
+            ArticleConfig config = new ArticleConfig();
+            config.setStatus("default");
+            config.setPassword("");
+            config.setIsDraft(0);
+            config.setIsEncrypt(0);
+            config.setIsDel(0);
+            article.setConfig(config);
+
+            // 保存文章
+            add(article);
+        }
+    }
+
+    @Override
+    public String exportArticle(Integer id) {
+        // 获取文章数据
+        Article article = articleMapper.selectById(id);
+        if (article == null) {
+            throw new CustomException(404, "文章不存在");
+        }
+
+        // 构建 Markdown 格式内容
+        StringBuilder markdown = new StringBuilder();
+        
+        // 添加标题
+        markdown.append("# ").append(article.getTitle()).append("\n\n");
+        
+        // 添加描述
+        if (article.getDescription() != null && !article.getDescription().isEmpty()) {
+            markdown.append(article.getDescription()).append("\n\n");
+        }
+        
+        // 添加正文内容
+        if (article.getContent() != null) {
+            markdown.append(article.getContent());
+        }
+
+        return markdown.toString();
     }
 
     // 过滤文章数据
