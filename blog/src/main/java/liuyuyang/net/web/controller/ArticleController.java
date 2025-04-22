@@ -14,6 +14,7 @@ import liuyuyang.net.web.service.ArticleService;
 import liuyuyang.net.common.utils.Paging;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -152,5 +153,12 @@ public class ArticleController {
     public Result<String> importArticle(@RequestParam MultipartFile[] list) throws IOException {
         articleService.importArticle(list);
         return Result.success();
+    }
+
+    @PostMapping("/export")
+    @ApiOperation("批量导出文章")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 15)
+    public ResponseEntity<byte[]> exportArticle(@RequestBody List<Integer> ids) {
+        return articleService.exportArticle(ids);
     }
 }

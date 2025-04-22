@@ -7,6 +7,7 @@ import liuyuyang.net.model.Article;
 import liuyuyang.net.model.File;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -42,6 +43,9 @@ public interface ArticleService extends IService<Article> {
     Article bindingData(Integer id);
 
     void importArticle(MultipartFile[] list) throws IOException;
+
+    // void exportArticle(List<Integer> ids);
+    ResponseEntity<byte[]> exportArticle(List<Integer> ids);
 
     QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo);
 }
