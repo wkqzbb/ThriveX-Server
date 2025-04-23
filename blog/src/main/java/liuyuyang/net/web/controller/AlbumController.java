@@ -6,9 +6,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.common.annotation.NoTokenRequired;
 import liuyuyang.net.common.annotation.PremName;
-import liuyuyang.net.model.Album;
+import liuyuyang.net.model.AlbumCate;
 import liuyuyang.net.common.utils.Result;
-import liuyuyang.net.web.service.AlbumService;
+import liuyuyang.net.web.service.AlbumCateService;
 import liuyuyang.net.common.utils.Paging;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +23,14 @@ import java.util.Map;
 @Transactional
 public class AlbumController {
     @Resource
-    private AlbumService albumService;
+    private AlbumCateService albumCateService;
 
     @PremName("album:add")
     @PostMapping
     @ApiOperation("新增相册")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody Album album) {
-        albumService.add(album);
+    public Result<String> add(@RequestBody AlbumCate albumCate) {
+        albumCateService.add(albumCate);
         return Result.success();
     }
 
@@ -39,7 +39,7 @@ public class AlbumController {
     @ApiOperation("删除相册")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<String> del(@PathVariable Integer id) {
-        albumService.del(id);
+        albumCateService.del(id);
         return Result.success();
     }
 
@@ -48,7 +48,7 @@ public class AlbumController {
     @ApiOperation("批量删除相册")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     public Result<String> batchDel(@RequestBody List<Integer> ids) {
-        albumService.batchDel(ids);
+        albumCateService.batchDel(ids);
         return Result.success();
     }
 
@@ -56,26 +56,26 @@ public class AlbumController {
     @PatchMapping
     @ApiOperation("编辑相册")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-    public Result<String> edit(@RequestBody Album album) {
-        albumService.edit(album);
+    public Result<String> edit(@RequestBody AlbumCate albumCate) {
+        albumCateService.edit(albumCate);
         return Result.success();
     }
 
     @GetMapping("/{id}")
     @ApiOperation("获取相册")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<Album> get(@PathVariable Integer id) {
-        Album album = albumService.get(id);
-        return Result.success(album);
+    public Result<AlbumCate> get(@PathVariable Integer id) {
+        AlbumCate albumCate = albumCateService.get(id);
+        return Result.success(albumCate);
     }
 
     @NoTokenRequired
     @PostMapping("/list")
     @ApiOperation("获取相册列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-    public Result<List<Album>> list() {
-        List<Album> albums = albumService.list();
-        return Result.success(albums);
+    public Result<List<AlbumCate>> list() {
+        List<AlbumCate> albumCates = albumCateService.list();
+        return Result.success(albumCates);
     }
 
     @NoTokenRequired
@@ -83,7 +83,7 @@ public class AlbumController {
     @ApiOperation("分页查询相册列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
-        Page<Album> data = albumService.paging(page, size);
+        Page<AlbumCate> data = albumCateService.paging(page, size);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }
