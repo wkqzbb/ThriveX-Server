@@ -27,7 +27,7 @@ public class AlbumImageServiceImpl extends ServiceImpl<AlbumImageMapper, AlbumIm
     @Override
     public void del(Integer id) {
         AlbumImage albumImage = albumImageMapper.selectById(id);
-        if (albumImage == null) throw new CustomException(400, "该相册不存在");
+        if (albumImage == null) throw new CustomException(400, "该照片不存在");
         albumImageMapper.deleteById(id);
     }
 
@@ -39,14 +39,14 @@ public class AlbumImageServiceImpl extends ServiceImpl<AlbumImageMapper, AlbumIm
     @Override
     public void edit(AlbumImage albumImage) {
         AlbumImage existAlbumImage = albumImageMapper.selectById(albumImage.getId());
-        if (existAlbumImage == null) throw new CustomException(400, "该相册不存在");
+        if (existAlbumImage == null) throw new CustomException(400, "该照片不存在");
         updateById(albumImage);
     }
 
     @Override
     public AlbumImage get(Integer id) {
         AlbumImage albumImage = albumImageMapper.selectById(id);
-        if (albumImage == null) throw new CustomException(400, "该相册不存在");
+        if (albumImage == null) throw new CustomException(400, "该照片不存在");
         return albumImage;
     }
 

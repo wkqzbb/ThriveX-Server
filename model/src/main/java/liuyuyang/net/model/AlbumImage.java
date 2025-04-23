@@ -15,4 +15,7 @@ public class AlbumImage extends BaseModel {
 
     @ApiModelProperty(value = "相册地址", example = "http://123.com/images/example.jpg")
     private String image;
+
+    @ApiModelProperty(value = "相册ID", example = "1")
+    private Integer cateId;
 }

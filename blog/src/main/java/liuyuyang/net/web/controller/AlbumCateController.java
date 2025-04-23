@@ -8,6 +8,7 @@ import liuyuyang.net.common.annotation.NoTokenRequired;
 import liuyuyang.net.common.annotation.PremName;
 import liuyuyang.net.model.AlbumCate;
 import liuyuyang.net.common.utils.Result;
+import liuyuyang.net.model.AlbumImage;
 import liuyuyang.net.web.service.AlbumCateService;
 import liuyuyang.net.common.utils.Paging;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +20,9 @@ import java.util.Map;
 
 @Api(tags = "相册管理")
 @RestController
-@RequestMapping("/album")
+@RequestMapping("/album/cate")
 @Transactional
-public class AlbumController {
+public class AlbumCateController {
     @Resource
     private AlbumCateService albumCateService;
 
@@ -84,6 +85,16 @@ public class AlbumController {
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
     public Result paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         Page<AlbumCate> data = albumCateService.paging(page, size);
+        Map<String, Object> result = Paging.filter(data);
+        return Result.success(result);
+    }
+
+    @NoTokenRequired
+    @GetMapping("/{id}/images")
+    @ApiOperation("获取指定相册中的所有照片")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
+    public Result getImagesByAlbumId(@PathVariable Integer id, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+        Page<AlbumImage> data = albumCateService.getImagesByAlbumId(id, page, size);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
     }

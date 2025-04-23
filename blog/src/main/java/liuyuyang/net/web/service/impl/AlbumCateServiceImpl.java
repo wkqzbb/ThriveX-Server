@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.common.execption.CustomException;
 import liuyuyang.net.model.AlbumCate;
+import liuyuyang.net.model.AlbumImage;
 import liuyuyang.net.web.mapper.AlbumCateMapper;
+import liuyuyang.net.web.mapper.AlbumImageMapper;
 import liuyuyang.net.web.service.AlbumCateService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import java.util.List;
 public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate> implements AlbumCateService {
     @Resource
     private AlbumCateMapper albumCateMapper;
+    @Resource
+    private AlbumImageMapper albumImageMapper;
 
     @Override
     public void add(AlbumCate albumCate) {
@@ -62,5 +66,14 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
         LambdaQueryWrapper<AlbumCate> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(AlbumCate::getId);
         return page(new Page<>(page, size), lambdaQueryWrapper);
+    }
+
+
+    @Override
+    public Page<AlbumImage> getImagesByAlbumId(Integer id, Integer page, Integer size) {
+        LambdaQueryWrapper<AlbumImage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AlbumImage::getCateId, id);
+        lambdaQueryWrapper.orderByDesc(AlbumImage::getId);
+        return albumImageMapper.selectPage(new Page<>(page, size), lambdaQueryWrapper);
     }
 }
