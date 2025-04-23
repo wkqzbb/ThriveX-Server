@@ -22,40 +22,33 @@ public class AlbumServiceImpl extends ServiceImpl<AlbumMapper, Album> implements
     @Override
     public void add(Album album) {
         System.out.println(album);
-        save(album);
+        albumMapper.insert(album);
     }
 
     @Override
     public void del(Integer id) {
         Album album = albumMapper.selectById(id);
-        if (album == null) {
-            throw new CustomException(400, "该相册不存在");
-        }
-        removeById(id);
+        if (album == null) throw new CustomException(400, "该相册不存在");
+        albumMapper.deleteById(id);
     }
 
     @Override
     public void batchDel(List<Integer> ids) {
-        for (Integer id : ids) {
-            del(id);
-        }
+        albumMapper.deleteBatchIds(ids);
     }
 
     @Override
     public void edit(Album album) {
         Album existAlbum = albumMapper.selectById(album.getId());
-        if (existAlbum == null) {
-            throw new CustomException(400, "该相册不存在");
-        }
+        if (existAlbum == null) throw new CustomException(400, "该相册不存在");
         updateById(album);
     }
 
     @Override
     public Album get(Integer id) {
         Album album = albumMapper.selectById(id);
-        if (album == null) {
-            throw new CustomException(400, "该相册不存在");
-        }
+        System.out.println(album);
+        if (album == null) throw new CustomException(400, "该相册不存在");
         return album;
     }
 
@@ -63,7 +56,7 @@ public class AlbumServiceImpl extends ServiceImpl<AlbumMapper, Album> implements
     public List<Album> list() {
         LambdaQueryWrapper<Album> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(Album::getId);
-        return list(lambdaQueryWrapper);
+        return albumMapper.selectList(lambdaQueryWrapper);
     }
 
     @Override

@@ -11,7 +11,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@TableName("album")
+@TableName(value = "album", autoResultMap = true)
 public class Album {
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "ID")
