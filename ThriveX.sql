@@ -210,7 +210,7 @@ CREATE TABLE `cate` (
 
 LOCK TABLES `cate` WRITE;
 /*!40000 ALTER TABLE `cate` DISABLE KEYS */;
-INSERT INTO `cate` VALUES (1,'默认分类','💻','/','kfbj',0,1,'cate'),(67,'首页','💎','/','home',0,0,'nav'),(68,'足迹','⛳️','/footprint','zj',0,9,'nav'),(69,'关于我','👋','/my','my',0,16,'nav'),(70,'朋友圈','😇','/friend','pyq',0,10,'nav'),(71,'留言墙','💌','/wall/all','wall',0,11,'nav'),(72,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav'),(73,'统计','📊','/data','data',0,8,'nav'),(74,'闪念','🏕️','/record','record',0,9,'nav'),(77,'我的设备','📷','/equipment','wdsb',0,14,'nav'),(78,'标签墙','🏷️','/tags','bqy',0,12,'nav'),(79,'我的履历','💪','/resume','wdll',0,15,'nav'),(80,'照片墙','📷︎','/album','zpq',0,13,'nav');
+INSERT INTO `cate` VALUES (1,'默认分类','💻','/','kfbj',0,1,'cate'),(67,'首页','💎','/','home',0,0,'nav'),(68,'足迹','⛳️','/footprint','zj',0,9,'nav'),(69,'关于我','👋','/my','my',0,16,'nav'),(70,'朋友圈','😇','/friend','pyq',0,10,'nav'),(71,'留言墙','💌','/wall/all','wall',0,11,'nav'),(72,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav'),(73,'统计','📊','/data','data',0,8,'nav'),(74,'闪念','🏕️','/record','record',0,9,'nav'),(77,'我的设备','🔭','/equipment','wdsb',0,14,'nav'),(78,'标签墙','🏷️','/tags','bqy',0,12,'nav'),(79,'我的履历','💪','/resume','wdll',0,15,'nav'),(80,'照片墙','📷︎','/album','zpq',0,13,'nav');
 /*!40000 ALTER TABLE `cate` ENABLE KEYS */;
 UNLOCK TABLES;
 
