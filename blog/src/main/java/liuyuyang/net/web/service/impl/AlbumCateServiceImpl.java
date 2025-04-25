@@ -75,7 +75,18 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
     public Page<AlbumCate> paging(Integer page, Integer size) {
         LambdaQueryWrapper<AlbumCate> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(AlbumCate::getId);
-        return page(new Page<>(page, size), lambdaQueryWrapper);
+
+        Page<AlbumCate> list = page(new Page<>(page, size), lambdaQueryWrapper);
+
+        for (AlbumCate cate : list.getRecords()) {
+            LambdaQueryWrapper<AlbumImage> lambdaQueryAlbumImageWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryAlbumImageWrapper.eq(AlbumImage::getCateId, cate.getId());
+            lambdaQueryAlbumImageWrapper.orderByDesc(AlbumImage::getId);
+            List<AlbumImage> albumImageList = albumImageMapper.selectList(lambdaQueryAlbumImageWrapper);
+            cate.setCount(albumImageList.size());
+        }
+
+        return list;
     }
 
     @Override
