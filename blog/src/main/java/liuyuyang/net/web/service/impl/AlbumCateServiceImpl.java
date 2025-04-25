@@ -56,9 +56,19 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
 
     @Override
     public List<AlbumCate> list() {
-        LambdaQueryWrapper<AlbumCate> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.orderByDesc(AlbumCate::getId);
-        return albumCateMapper.selectList(lambdaQueryWrapper);
+        LambdaQueryWrapper<AlbumCate> lambdaQueryAlbumCateWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryAlbumCateWrapper.orderByDesc(AlbumCate::getId);
+        List<AlbumCate> list = albumCateMapper.selectList(lambdaQueryAlbumCateWrapper);
+
+        for (AlbumCate cate : list) {
+            LambdaQueryWrapper<AlbumImage> lambdaQueryAlbumImageWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryAlbumImageWrapper.eq(AlbumImage::getCateId, cate.getId());
+            lambdaQueryAlbumImageWrapper.orderByDesc(AlbumImage::getId);
+            List<AlbumImage> albumImageList = albumImageMapper.selectList(lambdaQueryAlbumImageWrapper);
+            cate.setCount(albumImageList.size());
+        }
+
+        return list;
     }
 
     @Override
@@ -68,12 +78,12 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
         return page(new Page<>(page, size), lambdaQueryWrapper);
     }
 
-
     @Override
     public Page<AlbumImage> getImagesByAlbumId(Integer id, Integer page, Integer size) {
         LambdaQueryWrapper<AlbumImage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(AlbumImage::getCateId, id);
         lambdaQueryWrapper.orderByDesc(AlbumImage::getId);
+
         return albumImageMapper.selectPage(new Page<>(page, size), lambdaQueryWrapper);
     }
 }
