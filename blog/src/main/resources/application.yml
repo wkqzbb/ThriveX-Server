@@ -2,7 +2,7 @@ spring:
   application:
     name: service-system
   profiles:
-    active: local
+    active: pro
   # 约束文件上传大小
   servlet.multipart.max-file-size: 10MB
   servlet.multipart.max-request-size: 100MB
@@ -72,12 +72,3 @@ dromara:
 
 file:
   dir: ./upload/
-
-# CORS配置
-cors:
-  allowed-origins:
-    # 配置成你的前端域名，否则会导致前端无法访问后端服务
-    - https://liuyuyang.net
-    - https://www.liuyuyang.net
-    - https://blog.liuyuyang.net
-    - https://admin.liuyuyang.net
