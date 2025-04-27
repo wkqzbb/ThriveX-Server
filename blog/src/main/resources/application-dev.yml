@@ -15,3 +15,6 @@ lyy:
     username: ${EMAIL_USERNAME}
     password: ${EMAIL_PASSWORD}
 
+cors:
+  allowed-origins:
+    - http://localhost:3000

@@ -1,28 +1,21 @@
 package liuyuyang.net.common.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import liuyuyang.net.common.properties.CorsProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.Resource;
+
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
-    // @Value("${cors.allowed-origins}")
-    // private String[] allowedOrigins;
-
-    private String[] allowedOrigins = {
-        "http://localhost:3000",
-        "https://liuyuyang.net",
-        "https://www.liuyuyang.net",
-        "https://blog.liuyuyang.net"
-    };
+    @Resource
+    private CorsProperties corsProperties;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        System.out.println(registry);
-
         registry.addMapping("/**")
-                .allowedOrigins(allowedOrigins)
+                .allowedOrigins(corsProperties.getAllowedOrigins().toArray(new String[0]))
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
