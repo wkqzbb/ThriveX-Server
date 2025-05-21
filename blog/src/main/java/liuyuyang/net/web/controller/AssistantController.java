@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "AI")
+@Api(tags = "助手管理")
 @RestController
-@RequestMapping("/ai")
+@RequestMapping("/assistant")
 @Transactional
-public class AiController {
+public class AssistantController {
     @GetMapping
     @NoTokenRequired
     @ApiOperation("AI")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public String test() {
+    public String add() {
         return "AI";
     }
 }
