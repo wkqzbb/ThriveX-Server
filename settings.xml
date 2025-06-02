@@ -11,7 +11,7 @@
         </mirror>
     </mirrors>
     <!-- 指定本地仓库的位置 -->
-    <localRepository>C:\Users\21129\.m2\repository</localRepository>
+    <localRepository>/root/.m2/repository</localRepository>
     <servers>
         <server>
             <id>2256961-release-uvdbXC</id>
