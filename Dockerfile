@@ -1,5 +1,5 @@
 # 第一阶段：构建阶段
-FROM registry.cn-hangzhou.aliyuncs.com/wkq_repositroy/java-maven:laster AS build
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/maven:latest AS build
 WORKDIR /build
 
 # 复制Maven配置
