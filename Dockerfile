@@ -1,5 +1,5 @@
 # 第一阶段：构建阶段
-FROM maven:3.8-openjdk-17 AS build
+FROM registry.cn-hangzhou.aliyuncs.com/wkq_repositroy/java-maven:laster AS build
 WORKDIR /build
 
 # 复制Maven配置
@@ -17,7 +17,7 @@ RUN mvn clean package -DskipTests
 RUN find /build/blog/target -name "*.jar" -not -name "*sources.jar" -not -name "*javadoc.jar" -not -name "*tests.jar" -exec cp {} /build/app.jar \;
 
 # 第二阶段：运行阶段
-FROM openjdk:17-oracle
+FROM registry.cn-hangzhou.aliyuncs.com/wkq_repositroy/java-maven:laster
 
 # 设置应用程序的网络端口配置
 ENV PORT 9003
@@ -28,7 +28,7 @@ ENV DB_NAME myblog
 ENV DB_HOST 127.0.0.1
 ENV DB_USERNAME root
 ENV DB_PASSWORD Zbb010719!
-ENV DB_INFO ${DB_HOST}:${DB_PORT}/${DB_NAME}
+ENV DB_INFO=${DB_HOST}:${DB_PORT}/${DB_NAME}
 
 # 配置邮件服务器连接参数（SMTP服务器地址、端口及认证信息）
 ENV EMAIL_HOST smtp.qq.com
