@@ -1,50 +1,49 @@
-# 设置第一阶段的go 编译镜像
-FROM golang:1.22.0 AS db_builder
-# 安装git客户端
-RUN apt-get update && apt-get install -y git
-# 设置工作目录
-WORKDIR /
-# 添加源码
-RUN git clone https://gitee.com/liumou_site/database-initialized
-# 编译源码时添加静态链接选项
-RUN cd database-initialized && go mod tidy && CGO_ENABLED=1 go build -ldflags="-linkmode external -extldflags -static" -o database-initialized
+# 第一阶段：构建阶段
+FROM maven:3.8-openjdk-17 AS build
+WORKDIR /build
 
-# 第二阶段镜像
-# 设置基础镜像
-FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/openjdk:11.0-jre-buster
-#FROM openjdk:17
+# 复制Maven配置
+COPY settings.xml /root/.m2/settings.xml
+
+# 复制源代码
+COPY pom.xml /build/
+COPY model/ /build/model/
+COPY blog/ /build/blog/
+
+# 使用Maven打包
+RUN mvn clean package -DskipTests
+
+# 查找构建产物并重命名为app.jar
+RUN find /build/blog/target -name "*.jar" -not -name "*sources.jar" -not -name "*javadoc.jar" -not -name "*tests.jar" -exec cp {} /build/app.jar \;
+
+# 第二阶段：运行阶段
+FROM openjdk:17-oracle
+
 # 设置应用程序的网络端口配置
 ENV PORT 9003
 
 # 配置数据库连接参数（数据库地址/端口、数据库名称）
 ENV DB_PORT 3306
-ENV DB_NAME ThriveX
+ENV DB_NAME myblog
 ENV DB_HOST 127.0.0.1
-ENV DB_USERNAME thrive
-ENV DB_PASSWORD ThriveX@123?
+ENV DB_USERNAME root
+ENV DB_PASSWORD Zbb010719!
 ENV DB_INFO ${DB_HOST}:${DB_PORT}/${DB_NAME}
 
 # 配置邮件服务器连接参数（SMTP服务器地址、端口及认证信息）
-ENV EMAIL_HOST mail.qq.com
+ENV EMAIL_HOST smtp.qq.com
 ENV EMAIL_PORT 465
-ENV EMAIL_USERNAME 123456789@qq.com
-ENV EMAIL_PASSWORD 123456789
-ARG VERSION=2.5.2
-ENV VERSION=${VERSION}
+ENV EMAIL_USERNAME wang.kaiqi@foxmail.com
+ENV EMAIL_PASSWORD jcibunfsgpfuecje
 
 # 设置工作目录
 WORKDIR /server
-# 添加第一阶段编译好的源码
-COPY --from=db_builder /database-initialized/database-initialized /server/database-initialized
-# 添加jar包
-ADD https://github.com/LiuYuYang01/ThriveX-Server/releases/download/${VERSION}/blog.jar /server/app.jar
+
+# 从构建阶段复制打包好的JAR文件
+COPY --from=build /build/app.jar /server/app.jar
+
 # 添加启动脚本
 COPY RUN.sh /server/RUN.sh
-# 添加SQL脚本
-COPY ThriveX.sql /server/ThriveX.sql
-# 设置权限
-RUN chmod +x /server/RUN.sh && chmod +x /server/database-initialized
-# 尝试运行
-RUN /server/database-initialized -h
+
 # 设置启动命令
 ENTRYPOINT ["/server/RUN.sh"]
