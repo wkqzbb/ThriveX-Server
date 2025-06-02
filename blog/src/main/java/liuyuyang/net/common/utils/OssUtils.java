@@ -156,6 +156,10 @@ public class OssUtils {
                 setMinioConfig(oss);
                 platform = oss.getPlatform();
                 return;
+            case "aliyun-oss":
+                setAliyunConfig(oss);
+                platform = oss.getPlatform();
+                return;
         }
 
         throw new RuntimeException("暂不支持该平台");

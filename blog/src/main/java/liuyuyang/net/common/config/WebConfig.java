@@ -18,8 +18,8 @@ import java.util.Set;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
-    @Value("${file.dir}") // 从配置文件中读取上传目录
-    private String uploadDir;
+//    @Value("${file.dir}") // 从配置文件中读取上传目录
+//    private String uploadDir;
 
     private static final Set<String> EXCLUDED_PATHS = new HashSet<>(Arrays.asList(
             "/",
@@ -55,6 +55,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/upload/**")
-                .addResourceLocations("file:" + uploadDir);
+                /*.addResourceLocations("file:" + uploadDir)*/;
     }
 }
